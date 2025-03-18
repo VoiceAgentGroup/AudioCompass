@@ -6,3 +6,5 @@
 
 2. **Evaluate** => Result file
     - various metrics (based on the name of answer file)
+
+- [ ] merge evaluate.py and api_judge.py

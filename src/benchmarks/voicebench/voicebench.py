@@ -1,4 +1,4 @@
-from datasets import load_dataset, Audio
+from benchmarks import load_benchmark, Audio
 from loguru import logger
 from tqdm import tqdm
 
@@ -10,7 +10,7 @@ class VoiceBench:
         self.dataset = self.load_data()
     
     def load_data(self):
-        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split)
+        dataset = load_benchmark('hlt-lab/voicebench', self.subset_name, split=self.split)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     
