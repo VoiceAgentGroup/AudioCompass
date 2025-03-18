@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 import json
-from src.evaluator import evaluator_mapping
+from evaluator import evaluator_mapping
 from loguru import logger
 
 

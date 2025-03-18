@@ -1,6 +1,8 @@
 from benchmarks import load_benchmark, Audio
 from loguru import logger
 from tqdm import tqdm
+import json
+import os
 
 class VoiceBench:
     def __init__(self, subset_name, split):
@@ -14,7 +16,7 @@ class VoiceBench:
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     
-    def generate(self, model):
+    def generate(self, model, output_dir):
         logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
 
         results = []
@@ -31,8 +33,19 @@ class VoiceBench:
                 logger.error(e)
                 logger.error('====================================')
                 continue
-
         if len(self.dataset) > len(results):
             logger.warning(f"Some data failed to process. {len(self.dataset) - len(results)} items were skipped.")
 
-        return results  
+        os.makedirs(output_dir, exist_ok=True)
+        output_file = os.path.join(output_dir, f'{model.model_name}-{self.name}-{self.subset_name}-{self.split}.jsonl')
+        with open(output_file, 'w') as f:
+            for record in results:
+                json_line = json.dumps(record)
+                f.write(json_line + '\n')
+
+        return results
+    
+    
+    def evaluate(self, results):
+        # Implement evaluation logic here
+        pass
