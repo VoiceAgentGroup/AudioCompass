@@ -55,7 +55,6 @@ if __name__ == "__main__":
     output_key = 'model_output' # The key that contains model output
     no_pred_count = 0
     matched_outputs = []
-    new_data = []
 
     for idx, sample in enumerate(tqdm(input_data)):
         
@@ -95,7 +94,6 @@ if __name__ == "__main__":
             sample['match'] = 0
 
         total += 1
-        new_data.append(sample)
         task_metrics[task][1] += 1
         diff_metrics[difficulty][1] += 1
         if subcat is not None:

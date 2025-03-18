@@ -41,14 +41,6 @@ class VoiceBench(BaseBenchmark):
         if len(self.dataset) > len(results):
             logger.warning(f"Some data failed to process. {len(self.dataset) - len(results)} items were skipped.")
 
-        os.makedirs(output_dir, exist_ok=True)
-        output_file = os.path.join(output_dir, f'{model.model_name}-{self.name}-{self.subset_name}-{self.split}.jsonl')
-        with open(output_file, 'w') as f:
-            for record in results:
-                json_line = json.dumps(record)
-                f.write(json_line + '\n')
-        logger.info(f"Results saved to {output_file}.")
-
         return results
     
     
@@ -56,9 +48,21 @@ class VoiceBench(BaseBenchmark):
         evaluated_results = _evaluate(data)
         logger.info("Evaluation completed.")
         return evaluated_results
+    
+
+    def save_generated_results(self, results, output_dir, model_name):
+        os.makedirs(output_dir, exist_ok=True)
+        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.subset_name}-{self.split}.jsonl')
+        with open(output_file, 'w') as f:
+            for record in results:
+                json_line = json.dumps(record)
+                f.write(json_line + '\n')
+        logger.info(f"Generated results saved to {output_file}.")
 
 
     def run(self, model, output_dir):
-        results = self.generate(model, output_dir)
-        evaluated_results = self.evaluate(results)
+        generated_results = self.generate(model, output_dir)
+        self.save_generated_results(generated_results, output_dir, model.model_name)
+        evaluated_results = self.evaluate(generated_results)
+        logger.info("Run completed.")
         return evaluated_results
