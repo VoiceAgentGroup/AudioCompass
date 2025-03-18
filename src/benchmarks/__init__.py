@@ -1,8 +1,12 @@
 from .voicebench.voicebench import VoiceBench
+from .mmau.mmau import MMAU
 
 benchmark_mapping = {
     'voicebench': VoiceBench,
+    'mmau': MMAU,
+    # Add other benchmarks here as needed
 }
+
 
 def load_benchmark(benchmark_name, subset_name, split):
     """
