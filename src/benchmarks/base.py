@@ -2,6 +2,30 @@ class BaseBenchmark:
     def __init__(self):
         pass
 
+    def generate(self, model):
+        """
+        Generate results using the provided model.
+
+        Args:
+            model: The model to be used for generating results.
+
+        Returns:
+            list: A list of generated results.
+        """
+        raise NotImplementedError("This method should be overridden by subclasses.")
+    
+    def evaluate(self, data):
+        """
+        Evaluate the generated results.
+
+        Args:
+            data (list): The generated results to be evaluated.
+
+        Returns:
+            dict: The evaluation results.
+        """
+        raise NotImplementedError("This method should be overridden by subclasses.")
+
     def save_generated_results(self, results, output_dir, model_name):
         """
         Save the generated results to a specified directory.
