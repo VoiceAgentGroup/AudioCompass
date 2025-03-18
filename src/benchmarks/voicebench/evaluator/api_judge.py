@@ -70,7 +70,7 @@ def generate(item):
     return item
 
 
-def main():
+if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--src-file', required=True)
     args = parser.parse_args()
@@ -96,5 +96,3 @@ def main():
 
     print(f"Results saved to {tgt_file}")
 
-if __name__ == '__main__':
-    main()

@@ -4,7 +4,15 @@ from evaluator import evaluator_mapping
 from loguru import logger
 
 
-def main():
+def _evaluate(data):
+    evaluator = evaluator_mapping[args.evaluator]()
+    results = evaluator.evaluate(data)
+    if not results:
+        raise ValueError("No results returned from evaluator.")
+    return results
+
+
+if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('--src-file', type=str, required=True)
     parser.add_argument('--evaluator', type=str, required=True, choices=list(evaluator_mapping.keys()))
@@ -14,9 +22,5 @@ def main():
         for line in f:
             json_obj = json.loads(line.strip())  # Convert JSON string to dictionary
             data.append(json_obj)
-    evaluator = evaluator_mapping[args.evaluator]()
-    logger.info(evaluator.evaluate(data))
-
-
-if __name__ == "__main__":
-    main()
+    results = _evaluate(data)
+    logger.info(results)

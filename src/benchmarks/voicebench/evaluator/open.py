@@ -1,6 +1,9 @@
 import re
-from .base import Evaluator
 import numpy as np
+import multiprocessing
+from tqdm import tqdm
+from .base import Evaluator
+from api_judge import generate
 
 
 def extract_rating(llm_output):
@@ -30,8 +33,10 @@ def extract_rating(llm_output):
 
 class OpenEvaluator(Evaluator):
     def evaluate(self, data):
+        with multiprocessing.Pool(4) as pool:
+            judged_data = list(tqdm(pool.imap(generate, data), total=len(data)))
         scores = []
-        for item in data:
+        for item in judged_data:
             for score in item['score']:
                 try:
                     score = float(score)
