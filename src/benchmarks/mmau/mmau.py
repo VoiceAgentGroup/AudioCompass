@@ -4,7 +4,7 @@ from tqdm import tqdm
 import json
 import os
 from evaluate import _evaluate
-from base import BaseBenchmark
+from ..base import BaseBenchmark
 
 
 class MMAU(BaseBenchmark):
