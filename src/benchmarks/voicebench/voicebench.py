@@ -1,4 +1,4 @@
-from benchmarks import load_benchmark, Audio
+from datasets import load_dataset, Audio
 from loguru import logger
 from tqdm import tqdm
 import json
@@ -16,7 +16,7 @@ class VoiceBench(BaseBenchmark):
 
     
     def load_data(self):
-        dataset = load_benchmark('hlt-lab/voicebench', self.subset_name, split=self.split)
+        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     
@@ -29,7 +29,7 @@ class VoiceBench(BaseBenchmark):
             tmp = {k: v for k, v in item.items() if k != 'audio'}
             logger.info(item['prompt'])
             try:
-                response = model.generate(item['audio'])
+                response = model.generate_audio(item['audio'])
                 logger.info(response)
                 logger.info('====================================')
                 tmp['response'] = response
@@ -65,4 +65,4 @@ class VoiceBench(BaseBenchmark):
         self.save_generated_results(generated_results, output_dir, model.model_name)
         evaluated_results = self.evaluate(generated_results)
         logger.info("Run completed.")
-        return evaluated_results
+        print(evaluated_results)

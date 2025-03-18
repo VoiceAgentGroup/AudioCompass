@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 from src.models import load_model, list_models
 from src.benchmarks import load_benchmark, list_benchmarks
-from loguru import logger
 
 
 def main():
@@ -19,9 +18,10 @@ def main():
     # load model
     model = load_model(args.model)
 
-    results = benchmark.run(model, args.output_dir)
+    # generate results
+    result = benchmark.run(model, args.output_dir)
 
-    logger.info(results)
+    print(result)
 
 
 if __name__ == '__main__':

@@ -35,6 +35,7 @@ def string_match(answer, prediction, choices):
 
 def _evaluate(data):
     corr, total = 0, 0
+    result_string = ""
 
     # Track metrics for different categories:
     task_metrics = {'sound': [0, 0], 'music': [0, 0], 'speech': [0, 0]}
@@ -43,7 +44,7 @@ def _evaluate(data):
     # Here is the new dict for sub-category metrics
     subcat_metrics = {}
 
-    output_key = 'model_output' # The key that contains model output
+    output_key = 'response' # The key that contains model output
     no_pred_count = 0
     matched_outputs = []
 
@@ -74,11 +75,12 @@ def _evaluate(data):
             diff_metrics[difficulty][0] += 1
             if subcat is not None:
                 subcat_metrics[subcat][0] += 1
-            matched_outputs.append([_answer, _prediction])
             corr += 1
-            sample['match'] = 1
+            sample['model_prediction'] = _answer
         else:
-            sample['match'] = 0
+            sample['model_prediction'] = ''
+
+        del sample['response']
 
         total += 1
         task_metrics[task][1] += 1
@@ -86,32 +88,38 @@ def _evaluate(data):
         if subcat is not None:
             subcat_metrics[subcat][1] += 1
 
-    # Print results:
-    print("*"*30)
-    print("Task-wise Accuracy:")
+    # Format results into a string instead of printing:
+    result_string += "*"*30 + "\n"
+    result_string += "Task-wise Accuracy:\n"
     for task in task_metrics:
         n_correct, n_total = task_metrics[task]
         acc = (n_correct / n_total) * 100 if n_total > 0 else 0
-        print(f"{task} : {acc:.2f}% over {n_total} samples")
+        result_string += f"{task} : {acc:.2f}% over {n_total} samples\n"
     
-    print("*"*30)
-    print("Difficulty-wise Accuracy:")
+    result_string += "*"*30 + "\n"
+    result_string += "Difficulty-wise Accuracy:\n"
     for diff in diff_metrics:
         n_correct, n_total = diff_metrics[diff]
         acc = (n_correct / n_total) * 100 if n_total > 0 else 0
-        print(f"{diff} : {acc:.2f}% over {n_total} samples")
+        result_string += f"{diff} : {acc:.2f}% over {n_total} samples\n"
     
-    print("*"*30)
-    print("Sub-category-wise Accuracy:")
+    result_string += "*"*30 + "\n"
+    result_string += "Sub-category-wise Accuracy:\n"
     for subcat in subcat_metrics:
         n_correct, n_total = subcat_metrics[subcat]
         acc = (n_correct / n_total) * 100 if n_total > 0 else 0
-        print(f"{subcat} : {acc:.2f}% over {n_total} samples")
+        result_string += f"{subcat} : {acc:.2f}% over {n_total} samples\n"
 
-    print("*"*30)
-    print(f"Total Accuracy: {(corr/total) * 100:.2f}% over {total} samples")
-    print("*"*30)
-    print(f"No prediction count: {no_pred_count}")
+    result_string += "*"*30 + "\n"
+    result_string += f"Total Accuracy: {(corr/total) * 100:.2f}% over {total} samples\n"
+    result_string += "*"*30 + "\n"
+    result_string += f"No prediction count: {no_pred_count}\n"
+
+    # save results in submission-preferred format
+    with open('mmau_submission.json', 'w') as f:
+        json.dump(data, f, indent=4)
+    
+    return result_string
 
 
 if __name__ == "__main__":
@@ -122,5 +130,5 @@ if __name__ == "__main__":
     with open(args.src_file, 'r') as f:
         data = json.load(f)
 
-    _evaluate(data)
-    
+    results = _evaluate(data)
+    print(results)

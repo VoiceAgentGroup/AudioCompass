@@ -64,3 +64,59 @@ class QwenOmniAssistant(VoiceAssistant):
         full_response = "".join(collected_messages)
         
         return full_response
+
+
+    def generate_mixed(
+        self,
+        audio,
+        text,
+        max_new_tokens=2048,
+    ):
+        # Write the audio data to an in-memory buffer in WAV format
+        buffer = io.BytesIO()
+        sf.write(buffer, audio['array'], audio['sampling_rate'], format='WAV')
+        buffer.seek(0)
+
+        # Read buffer as bytes and encode in base64
+        wav_data = buffer.read()
+        encoded_string = base64.b64encode(wav_data).decode('utf-8')
+
+        completion = self.client.chat.completions.create(
+            model=self.model_name,
+            max_tokens=max_new_tokens,
+            messages=[
+                {
+                    "role": "system",
+                    "content": [{"type": "text", "text": "You are a helpful assistant."}],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "input_audio",
+                            "input_audio": {
+                                "data": f"data:;base64,{encoded_string}",
+                                "format": "wav",
+                            },
+                        },
+                        {
+                            "type": "input_text",
+                            "text": text,
+                        }
+                    ]
+                }
+            ],
+            stream=True,
+            stream_options={"include_usage": True},
+        )
+        
+        collected_messages = []
+        
+        for chunk in completion:
+            if chunk.choices and chunk.choices[0].delta and chunk.choices[0].delta.content:
+                content = chunk.choices[0].delta.content
+                collected_messages.append(content)
+        
+        full_response = "".join(collected_messages)
+        
+        return full_response

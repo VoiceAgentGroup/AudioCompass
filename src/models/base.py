@@ -19,10 +19,10 @@ class VoiceAssistant:
         raise NotImplementedError
 
     @torch.no_grad()
-    def generate_ttft(
+    def generate_mixed(
         self,
         audio,
+        text,
+        max_new_tokens=2048,
     ):
-        tmp = time.perf_counter()
-        self.generate_audio(audio, max_new_tokens=1)
-        return time.perf_counter() - tmp
+        raise NotImplementedError
