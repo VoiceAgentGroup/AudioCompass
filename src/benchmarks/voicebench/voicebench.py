@@ -21,7 +21,7 @@ class VoiceBench(BaseBenchmark):
         return dataset
     
     
-    def generate(self, model, output_dir):
+    def generate(self, model):
         logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
 
         results = []

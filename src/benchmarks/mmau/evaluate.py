@@ -1,9 +1,8 @@
 import argparse
 import json
-import pickle
 from tqdm import tqdm
-from pathlib import Path
 import re
+
 
 def string_match(answer, prediction, choices):
     # Function to normalize and tokenize text
@@ -33,16 +32,8 @@ def string_match(answer, prediction, choices):
     
     return cond1 and cond2
 
-if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="Process benchmark JSON and calculate accuracy.")
-    parser.add_argument('--input', type=str, required=True, help='Path to input JSON file to be evaluated')
-    
-    args = parser.parse_args()  
-    
-    with open(args.input, 'r') as f:
-        input_data = json.load(f)
-
+def _evaluate(data):
     corr, total = 0, 0
 
     # Track metrics for different categories:
@@ -56,11 +47,7 @@ if __name__ == "__main__":
     no_pred_count = 0
     matched_outputs = []
 
-    for idx, sample in enumerate(tqdm(input_data)):
-        
-        # If there's no model output key, skip
-        if output_key not in sample:
-            continue
+    for sample in tqdm(data):
         
         if output_key not in sample:
             _prediction = ''
@@ -99,7 +86,6 @@ if __name__ == "__main__":
         if subcat is not None:
             subcat_metrics[subcat][1] += 1
 
-
     # Print results:
     print("*"*30)
     print("Task-wise Accuracy:")
@@ -126,3 +112,15 @@ if __name__ == "__main__":
     print(f"Total Accuracy: {(corr/total) * 100:.2f}% over {total} samples")
     print("*"*30)
     print(f"No prediction count: {no_pred_count}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Process benchmark JSON and calculate accuracy.")
+    parser.add_argument('--src-file', type=str, required=True, help='Path to input JSON file to be evaluated')
+    args = parser.parse_args()  
+    
+    with open(args.src_file, 'r') as f:
+        data = json.load(f)
+
+    _evaluate(data)
+    
