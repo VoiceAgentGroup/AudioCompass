@@ -61,8 +61,8 @@ class VoiceBench(BaseBenchmark):
 
 
     def run(self, model, output_dir):
-        generated_results = self.generate(model, output_dir)
+        generated_results = self.generate(model)
         self.save_generated_results(generated_results, output_dir, model.model_name)
         evaluated_results = self.evaluate(generated_results)
         logger.info("Run completed.")
-        print(evaluated_results)
+        return evaluated_results
