@@ -14,6 +14,7 @@ import tempfile
 
 class MegrezAssistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = "megrez"
         self.model = AutoModelForCausalLM.from_pretrained(
             'Infinigence/Megrez-3B-Omni',
             trust_remote_code=True,

@@ -8,6 +8,7 @@ import torchaudio
 
 class IchigoeAssistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = "ichigo"
         device = "cuda"
 
         if not os.path.exists("./cache/whisper-vq-stoks-v3-7lang-fixed.model"):

@@ -7,6 +7,8 @@ class MERaLiONAssistant(VoiceAssistant):
     def __init__(self):
         repo_id = "MERaLiON/MERaLiON-AudioLLM-Whisper-SEA-LION"
 
+        self.model_name = "meralion"
+
         self.processor = AutoProcessor.from_pretrained(
             repo_id,
             trust_remote_code=True,

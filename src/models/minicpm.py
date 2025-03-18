@@ -7,6 +7,7 @@ import soundfile as sf
 
 class MiniCPMAssistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = 'minicpm'
         self.model = AutoModel.from_pretrained(
             'openbmb/MiniCPM-o-2_6',
             trust_remote_code=True,

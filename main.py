@@ -1,6 +1,7 @@
 from datasets import load_dataset, Audio
 from argparse import ArgumentParser
-from src.models import model_cls_mapping
+from src.models import load_model, list_models
+from src.datasets import load_dataset, list_datasets
 import json
 from tqdm import tqdm
 from loguru import logger
@@ -9,18 +10,18 @@ import os
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('--model', type=str, default='local', choices=list(model_cls_mapping.keys()))
-    parser.add_argument('--data', type=str, default='alpacaeval')
+    parser.add_argument('--model', type=str, default='local', choices=list_models())
+    parser.add_argument('--dataset', type=str, default='voicebench', choices=list_datasets())
+    parser.add_argument('--subset', type=str, default='alpacaeval')
     parser.add_argument('--split', type=str, default='test')
     parser.add_argument('--modality', type=str, default='audio', choices=['audio', 'text', 'ttft'])
     args = parser.parse_args()
 
     # load data
-    data = load_dataset('hlt-lab/voicebench', args.data, split=args.split)
-    data = data.cast_column("audio", Audio(sampling_rate=16_000))
+    data = load_dataset(dataset_name=args.dataset, subset_name=args.subset, split=args.split)
 
     # load model
-    model = model_cls_mapping[args.model]()
+    model = load_model(args.model)
     # data = data.select([0,1,2,3,4,5])
 
     if args.modality == 'ttft':

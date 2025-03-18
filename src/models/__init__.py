@@ -51,3 +51,24 @@ model_cls_mapping = {
     'qwen_omni_turbo': QwenOmniAssistant,
     'local': LocalAssistant,
 }
+
+def load_model(model_name):
+    """
+    Load a model by its name.
+    
+    Args:
+        model_name (str): The name of the model to load.
+    
+    Returns:
+        model: An instance of the specified model class.
+    """
+    if model_name not in model_cls_mapping:
+        raise ValueError(f"Model '{model_name}' is not available. Available models: {list_models()}")
+    
+    return model_cls_mapping[model_name]()
+
+def list_models():
+    """
+    List all available models.
+    """
+    return list(model_cls_mapping.keys())

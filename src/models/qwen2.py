@@ -4,6 +4,7 @@ from transformers import Qwen2AudioForConditionalGeneration, AutoProcessor
 
 class Qwen2Assistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = 'qwen2'
         self.processor = AutoProcessor.from_pretrained("Qwen/Qwen2-Audio-7B-Instruct", cache_dir='./cache')
         self.model = Qwen2AudioForConditionalGeneration.from_pretrained("Qwen/Qwen2-Audio-7B-Instruct",
                                                                         device_map="cuda",

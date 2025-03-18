@@ -7,6 +7,7 @@ from openai import OpenAI
 
 class Naive2Assistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = 'naive2'
         self.asr = self.load_asr()
         self.client = OpenAI()
 

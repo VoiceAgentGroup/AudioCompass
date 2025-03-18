@@ -6,6 +6,7 @@ import torch
 
 class NaiveAssistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = 'naive'
         self.asr = self.load_asr()
         self.llm = self.load_llm()
 

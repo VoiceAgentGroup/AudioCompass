@@ -11,6 +11,7 @@ import soundfile as sf
 
 class StepAssistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = 'step_audio'
         if not os.path.exists("./cache/Step-Audio-Tokenizer"):
             snapshot_download(
                 repo_id="stepfun-ai/Step-Audio-Tokenizer",

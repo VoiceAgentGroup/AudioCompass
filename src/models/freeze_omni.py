@@ -12,6 +12,7 @@ from src.models.src_freeze_omni.pipeline import inferencePipeline
 
 class audioEncoderProcessor:
     def __init__(self, chunk_size=16):
+        self.model_name = "freeze_omni"
         self.chunk_size = 16
         self.chunk_overlap = 3
         self.feat_dim = 80

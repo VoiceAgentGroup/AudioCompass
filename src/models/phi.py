@@ -9,6 +9,7 @@ class PhiAssistant(VoiceAssistant):
         kwargs = {}
         kwargs['torch_dtype'] = torch.bfloat16
 
+        self.model_name = 'phi'
         self.processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
 
         self.model = AutoModelForCausalLM.from_pretrained(

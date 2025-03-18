@@ -39,11 +39,5 @@ class LocalAssistant(VoiceAssistant):
                 {"role": "user", "content": [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]},
             ]
         )
-
-        token_usage = {
-            "prompt_tokens": completion.usage.prompt_tokens,
-            "completion_tokens": completion.usage.completion_tokens,
-            "total_tokens": completion.usage.total_tokens
-        }
         
-        return completion.choices[0].message.content, token_usage
+        return completion.choices[0].message.content

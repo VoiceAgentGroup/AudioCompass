@@ -7,6 +7,7 @@ import librosa
 
 class MoshiAssistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = 'moshi'
         self.device = 'cuda'
         self.dtype = torch.float16
         self.model = MoshiForConditionalGeneration.from_pretrained("kmhf/hf-moshiko", device_map=self.device, torch_dtype=self.dtype,

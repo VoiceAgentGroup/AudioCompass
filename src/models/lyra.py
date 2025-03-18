@@ -91,6 +91,7 @@ class LyraAssistant(VoiceAssistant):
 
 class LyraMiniAssistant(LyraAssistant):
     def __init__(self):
+        self.model_name = 'Lyra_Mini_3B'
         self.download_model()
         self.load_model('model_zoo/Lyra_Mini_3B')
 
@@ -114,6 +115,7 @@ class LyraMiniAssistant(LyraAssistant):
 
 class LyraBaseAssistant(LyraAssistant):
     def __init__(self):
+        self.model_name = 'Lyra_Base_9B'
         self.download_model()
         self.load_model('model_zoo/Lyra_Base_9B')
 

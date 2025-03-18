@@ -6,6 +6,7 @@ import torch
 class DiVAAssistant(VoiceAssistant):
     def __init__(self):
         self.model = AutoModel.from_pretrained("WillHeld/DiVA-llama-3-v0-8b", cache_dir='./cache', trust_remote_code=True)
+        self.model_name = "diva"
 
     def generate_audio(
         self,

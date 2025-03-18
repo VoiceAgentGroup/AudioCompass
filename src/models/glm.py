@@ -9,6 +9,7 @@ from .src_glm.speech_tokenizer.modeling_whisper import WhisperVQEncoder
 
 class GLMAssistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = 'glm'
         model_path = 'THUDM/glm-4-voice-9b'
         self.glm_model = AutoModel.from_pretrained(
             model_path,

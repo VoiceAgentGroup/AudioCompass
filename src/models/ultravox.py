@@ -4,6 +4,7 @@ import transformers
 
 class UltravoxAssistant(VoiceAssistant):
     def __init__(self):
+        self.model_name = 'ultravox'
         self.pipe = transformers.pipeline(model='fixie-ai/ultravox-v0_4_1-llama-3_1-8b', trust_remote_code=True, cache_dir='./cache', device='cuda')
 
     def generate_audio(
