@@ -21,10 +21,10 @@ AudioCompass provides a unified interface to evaluate the capabilities of variou
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/AudioCompass.git
+git clone https://github.com/wtalioy/AudioCompass.git
 cd AudioCompass
 
-# set up the environment
+# Set up the environment
 conda create -n voicebench python=3.10
 conda activate voicebench
 pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
@@ -126,7 +126,7 @@ from ..base import BaseBenchmark
 class NewBenchmark(BaseBenchmark):
     def __init__(self, subset_name, split):
         self.name = 'newbenchmark'
-        self.subset_name = subset_name
+        self.subset_name = subset_name # if applicable
         self.split = split
         self.dataset = self.load_data()
     
