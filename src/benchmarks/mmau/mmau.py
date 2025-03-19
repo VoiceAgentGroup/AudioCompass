@@ -3,7 +3,7 @@ from loguru import logger
 from tqdm import tqdm
 import json
 import os
-from evaluate import _evaluate
+from .evaluate import _evaluate
 from ..base import BaseBenchmark
 
 

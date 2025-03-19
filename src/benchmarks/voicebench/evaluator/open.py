@@ -3,7 +3,7 @@ import numpy as np
 import multiprocessing
 from tqdm import tqdm
 from .base import Evaluator
-from api_judge import generate
+from .api_judge import generate
 
 
 def extract_rating(llm_output):

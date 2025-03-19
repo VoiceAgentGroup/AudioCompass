@@ -7,11 +7,6 @@ from argparse import ArgumentParser
 import os
 import httpx
 
-client = OpenAI(
-    api_key=os.getenv('OPENAI_API_KEY'),
-    base_url="https://172.203.11.191:3826/v1",
-    http_client=httpx.Client()
-)
 
 meta_prompt_open = """
 I need your help to evaluate the performance of several models in the speech interaction scenario. The models will receive a speech input from the user, which they need to understand and respond to with a speech output.
@@ -48,6 +43,11 @@ Please only output a single "Yes" or "No". Do not output anything else.
 
 
 def generate(item):
+    client = OpenAI(
+        api_key=os.getenv('OPENAI_API_KEY'),
+        base_url="https://172.203.11.191:3826/v1",
+        http_client=httpx.Client()
+    )
     if "reference" in item:
         prompt = meta_prompt_qa.replace('{prompt}', item['prompt']).replace('{reference}', item['reference']).replace('{response}', item['response'])
     else:

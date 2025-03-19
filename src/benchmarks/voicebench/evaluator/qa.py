@@ -3,7 +3,7 @@ import multiprocessing
 from qa_metrics.pedant import PEDANT
 from tqdm import tqdm
 from .base import Evaluator
-from api_judge import generate
+from .api_judge import generate
 
 
 def majority_vote(scores):

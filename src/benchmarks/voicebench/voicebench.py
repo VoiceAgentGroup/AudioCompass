@@ -3,7 +3,7 @@ from loguru import logger
 from tqdm import tqdm
 import json
 import os
-from evaluate import _evaluate
+from .evaluate import _evaluate
 from ..base import BaseBenchmark
 
 
@@ -45,7 +45,16 @@ class VoiceBench(BaseBenchmark):
     
     
     def evaluate(self, data):
-        evaluated_results = _evaluate(data)
+        dataset_evaluator_mapping = {
+            'alpacaeval': 'open',
+            'commoneval': 'open',
+            'sd-qa': 'qa',
+            'ifeval': 'ifeval',
+            'advbench': 'harm',
+            'openbookqa': 'mcq',
+            'mmsu': 'mcq',
+        }
+        evaluated_results = _evaluate(data, dataset_evaluator_mapping[self.subset_name])
         logger.info("Evaluation completed.")
         return evaluated_results
     

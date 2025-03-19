@@ -1,11 +1,11 @@
 from argparse import ArgumentParser
 import json
-from evaluator import evaluator_mapping
+from .evaluator import evaluator_mapping
 from loguru import logger
 
 
-def _evaluate(data):
-    evaluator = evaluator_mapping[args.evaluator]()
+def _evaluate(data, evaluator_name):
+    evaluator = evaluator_mapping[evaluator_name]()
     results = evaluator.evaluate(data)
     if not results:
         raise ValueError("No results returned from evaluator.")
@@ -22,5 +22,5 @@ if __name__ == "__main__":
         for line in f:
             json_obj = json.loads(line.strip())  # Convert JSON string to dictionary
             data.append(json_obj)
-    results = _evaluate(data)
+    results = _evaluate(data, args.evaluator)
     logger.info(results)
