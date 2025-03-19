@@ -8,7 +8,7 @@ from ..base import BaseBenchmark
 
 
 class MMAU(BaseBenchmark):
-    def __init__(self, split):
+    def __init__(self, split, **kargs):
         self.name = 'mmau'
         self.split = split
         self.dataset = self.load_data()
