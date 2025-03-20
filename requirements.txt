@@ -32,3 +32,4 @@ snac==1.2.0
 whisperspeech==0.8
 webdataset
 vector_quantize_pytorch
+psutil

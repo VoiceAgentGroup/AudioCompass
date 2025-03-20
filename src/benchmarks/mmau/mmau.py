@@ -3,26 +3,64 @@ from loguru import logger
 from tqdm import tqdm
 import json
 import os
+import gc
+import psutil
 from .evaluate import _evaluate
 from ..base import BaseBenchmark
 
 
 class MMAU(BaseBenchmark):
-    def __init__(self, split, **kargs):
+    def __init__(self, split, batch_size=10, **kargs):
         self.name = 'mmau'
         self.split = split
-        self.dataset = self.load_data()
-
-    def load_data(self):
-        dataset = load_dataset('lmms-lab/mmau', split=self.split)
+        self.batch_size = batch_size
+        self.dataset = None
+        
+    def load_data(self, streaming=True):
+        dataset = load_dataset('lmms-lab/mmau', split=self.split, streaming=streaming)
         return dataset
+    
+    def _log_memory_usage(self):
+        process = psutil.Process(os.getpid())
+        mem_usage = process.memory_info().rss / 1024 / 1024  # MB
+        logger.info(f"Current memory usage: {mem_usage:.2f} MB")
     
     def generate(self, model):
         logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
-
+        
+        if self.dataset is None:
+            self.dataset = self.load_data(streaming=True)
+        
         results = []
         output_keys = ['question_id', 'question', 'choices', 'answer', 'task', 'sub-category', 'difficulty']
-        for item in tqdm(self.dataset, total=len(self.dataset)):
+        
+        batch = []
+        count = 0
+        total_processed = 0
+        
+        for item in self.dataset:
+            batch.append(item)
+            count += 1
+            
+            if count >= self.batch_size:
+                self._process_batch(batch, model, results, output_keys)
+                total_processed += len(batch)
+                
+                batch = []
+                count = 0
+                gc.collect()
+        
+        if batch:
+            self._process_batch(batch, model, results, output_keys)
+            total_processed += len(batch)
+        
+        if total_processed > len(results):
+            logger.warning(f"Some data failed to process. {total_processed - len(results)} items were skipped.")
+        
+        return results
+    
+    def _process_batch(self, batch, model, results, output_keys):
+        for item in tqdm(batch, total=len(batch)):
             tmp = {k: v for k, v in item.items() if k in output_keys}
             input_text = item['question'] + ' ' + item['choices']
             input_audio = item['audio']
@@ -33,15 +71,12 @@ class MMAU(BaseBenchmark):
                 logger.info('====================================')
                 tmp['response'] = response
                 results.append(tmp)
+                
+                del input_audio
             except Exception as e:
                 logger.error(e)
                 logger.error('====================================')
                 continue
-        if len(self.dataset) > len(results):
-            logger.warning(f"Some data failed to process. {len(self.dataset) - len(results)} items were skipped.")
-
-        return results
-    
 
     def evaluate(self, data):
         evaluated_results = _evaluate(data)
