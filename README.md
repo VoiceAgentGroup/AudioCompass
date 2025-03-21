@@ -25,11 +25,11 @@ git clone https://github.com/wtalioy/AudioCompass.git
 cd AudioCompass
 
 # Set up the environment
-conda create -n voicebench python=3.10
+conda create -n voicebench python=3.10 -y
 conda activate voicebench
-pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
 pip install xformers==0.0.23 --no-deps
 pip install -r requirements.txt
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 -f https://mirrors.aliyun.com/pytorch-wheels/cu121/
 ```
 
 ## Usage and Evaluation
