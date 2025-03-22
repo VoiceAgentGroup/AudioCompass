@@ -100,7 +100,7 @@ class QwenOmniAssistant(VoiceAssistant):
                             },
                         },
                         {
-                            "type": "input_text",
+                            "type": "text",
                             "text": text,
                         }
                     ]
