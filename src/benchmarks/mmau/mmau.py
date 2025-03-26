@@ -4,13 +4,12 @@ from tqdm import tqdm
 import json
 import os
 import gc
-import psutil
 from .evaluate import _evaluate
 from ..base import BaseBenchmark
 
 
 class MMAU(BaseBenchmark):
-    def __init__(self, split, batch_size=10, **kargs):
+    def __init__(self, split, batch_size=100, **kargs):
         self.name = 'mmau'
         self.split = split
         self.batch_size = batch_size

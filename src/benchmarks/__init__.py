@@ -1,9 +1,11 @@
 from .voicebench.voicebench import VoiceBench
 from .mmau.mmau import MMAU
+from .openaudiobench.openaudiobench import OpenAudioBench
 
 benchmark_mapping = {
     'voicebench': VoiceBench,
     'mmau': MMAU,
+    'openaudiobench': OpenAudioBench,
     # Add other benchmarks here as needed
 }
 
