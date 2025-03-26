@@ -8,7 +8,7 @@ from ..base import BaseBenchmark
 
 
 class VoiceBench(BaseBenchmark):
-    def __init__(self, subset_name, split):
+    def __init__(self, subset_name, split, **kwargs):
         self.name = 'voicebench'
         self.subset_name = subset_name
         self.split = split

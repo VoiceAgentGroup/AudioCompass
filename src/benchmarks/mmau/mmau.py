@@ -14,22 +14,14 @@ class MMAU(BaseBenchmark):
         self.name = 'mmau'
         self.split = split
         self.batch_size = batch_size
-        self.dataset = None
+        self.dataset = self.load_data(streaming=True)
         
-    def load_data(self, streaming=True):
+    def load_data(self, streaming):
         dataset = load_dataset('lmms-lab/mmau', split=self.split, streaming=streaming)
         return dataset
     
-    def _log_memory_usage(self):
-        process = psutil.Process(os.getpid())
-        mem_usage = process.memory_info().rss / 1024 / 1024  # MB
-        logger.info(f"Current memory usage: {mem_usage:.2f} MB")
-    
     def generate(self, model):
         logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
-        
-        if self.dataset is None:
-            self.dataset = self.load_data(streaming=True)
         
         results = []
         output_keys = ['question_id', 'question', 'choices', 'answer', 'task', 'sub-category', 'difficulty']
