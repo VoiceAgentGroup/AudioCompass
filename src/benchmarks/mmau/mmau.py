@@ -9,14 +9,14 @@ from ..base import BaseBenchmark
 
 
 class MMAU(BaseBenchmark):
-    def __init__(self, split, batch_size=100, **kargs):
+    def __init__(self, split, batch_size=100, **kwargs):
         self.name = 'mmau'
         self.split = split
         self.batch_size = batch_size
-        self.dataset = self.load_data(streaming=True)
+        self.dataset = self.load_data(streaming=True, **kwargs)
         
-    def load_data(self, streaming):
-        dataset = load_dataset('lmms-lab/mmau', split=self.split, streaming=streaming)
+    def load_data(self, streaming, **kwargs):
+        dataset = load_dataset('lmms-lab/mmau', split=self.split, streaming=streaming, **kwargs)
         return dataset
     
     def generate(self, model):

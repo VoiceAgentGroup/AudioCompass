@@ -12,11 +12,12 @@ class VoiceBench(BaseBenchmark):
         self.name = 'voicebench'
         self.subset_name = subset_name
         self.split = split
-        self.dataset = self.load_data()
+        self.dataset = self.load_data(**kwargs)
 
     
-    def load_data(self):
-        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split)
+    def load_data(self, **kwargs):
+
+        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, **kwargs)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     

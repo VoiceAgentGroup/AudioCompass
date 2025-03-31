@@ -10,10 +10,11 @@ def main():
     parser.add_argument('--subset', type=str, default='alpacaeval')
     parser.add_argument('--split', type=str, default='test')
     parser.add_argument('--output-dir', type=str, default='output')
+    parser.add_argument('--cache-dir', type=str, default=None)
     args = parser.parse_args()
 
     # load benchmark
-    benchmark = load_benchmark(benchmark_name=args.benchmark, subset_name=args.subset, split=args.split)
+    benchmark = load_benchmark(benchmark_name=args.benchmark, subset_name=args.subset, split=args.split, cache_dir=args.cache_dir)
 
     # load model
     model = load_model(args.model)
