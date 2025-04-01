@@ -1,3 +1,4 @@
+import os
 from argparse import ArgumentParser
 from src.models import load_model, list_models
 from src.benchmarks import load_benchmark, list_benchmarks
@@ -14,6 +15,8 @@ def main():
     args = parser.parse_args()
 
     # load benchmark
+    if args.cache_dir is not None:
+        os.environ['HF_DATASETS_OFFLINE'] = "1"
     benchmark = load_benchmark(benchmark_name=args.benchmark, subset_name=args.subset, split=args.split, cache_dir=args.cache_dir)
 
     # load model

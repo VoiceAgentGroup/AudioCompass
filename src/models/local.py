@@ -14,8 +14,9 @@ class LocalAssistant(VoiceAssistant):
             http_client=httpx.Client()
         )
 
-        models = self.client.models.list()
-        self.model_name = models.data[0].id
+        # models = self.client.models.list()
+        # self.model_name = models.data[0].id
+        self.model_name = 'Qwen/Qwen2-Audio-7B-Instruct'
 
     def generate_audio(
         self,
@@ -37,7 +38,8 @@ class LocalAssistant(VoiceAssistant):
             messages=[
                 {"role": "system", "content": "You are a helpful assistant who tries to help answer the user's question."},
                 {"role": "user", "content": [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]},
-            ]
+            ],
+            prompt_logprobs=1
         )
         
         return completion.choices[0].message.content
