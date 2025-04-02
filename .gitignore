@@ -175,6 +175,6 @@ cython_debug/
 
 .DS_Store
 
-data/
+datas/
 log/
 output/
