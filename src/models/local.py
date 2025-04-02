@@ -1,7 +1,6 @@
 from .base import VoiceAssistant
 import io
 import base64
-import httpx
 from openai import OpenAI
 import soundfile as sf
 
@@ -11,12 +10,10 @@ class LocalAssistant(VoiceAssistant):
         self.client = OpenAI(
             api_key="EMPTY",
             base_url="http://localhost:8000/v1",
-            http_client=httpx.Client()
         )
 
-        # models = self.client.models.list()
-        # self.model_name = models.data[0].id
-        self.model_name = 'Qwen/Qwen2-Audio-7B-Instruct'
+        models = self.client.models.list()
+        self.model_name = models.data[0].id
 
     def generate_audio(
         self,
@@ -39,10 +36,12 @@ class LocalAssistant(VoiceAssistant):
                 {"role": "system", "content": "You are a helpful assistant who tries to help answer the user's question."},
                 {"role": "user", "content": [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]},
             ],
-            prompt_logprobs=1
+            extra_body={
+                "prompt_logprobs": 1,
+            }
         )
         
-        return completion.choices[0].message.content
+        return completion.choices[0].message.content, completion.prompt_logprobs
     
 
     def generate_mixed(
