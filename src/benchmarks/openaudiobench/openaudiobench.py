@@ -25,7 +25,6 @@ class OpenAudioBench(BaseBenchmark):
         
         for _, row in df.iterrows():
             data = row.to_dict()
-            # 加载音频文件
             audio_path = os.path.join(self.data_dir, self.subset_name, data['audio_path'])
             if not os.path.exists(audio_path):
                 logger.warning(f"Audio file {audio_path} not found, skipping...")
