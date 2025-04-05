@@ -14,69 +14,55 @@ class CMMLU(BaseBenchmark):
         self.data_dir = data_dir
         self.dataset = self.load_data()
 
-    def concat_audio(self, question_paths, choice_paths, splits, pos) -> list:
+    def concat_audio(self, question_path, choice_path) -> list:
         audio_group = []
 
-        question_audios = []
-        for path in question_paths:
-            audio_path = os.path.join(self.data_dir, path)
-            if not os.path.exists(audio_path):
-                logger.warning(f"Audio file {audio_path} not found, skipping...")
-                continue
-            try:
-                waveform, sample_rate = torchaudio.load(audio_path)
-                if waveform.shape[0] > 1:
-                    waveform = waveform.mean(dim=0, keepdim=True)
-                question_audios.append(waveform.numpy().squeeze())
-            except Exception as e:
-                logger.error(f"Error loading audio file {audio_path}: {str(e)}")
-                continue
+        question_path = os.path.join(self.data_dir, question_path)
+        if not os.path.exists(question_path):
+            raise ValueError(f"Audio file {question_path} not found")
+        waveform, sample_rate = torchaudio.load(question_path)
+        if waveform.shape[0] > 1:
+            waveform = waveform.mean(dim=0, keepdim=True)
+        question_audio = waveform.squeeze()
 
         choice_audios = []
-        for path in choice_paths:
+        for path in choice_path:
             audio_path = os.path.join(self.data_dir, path)
             if not os.path.exists(audio_path):
-                logger.warning(f"Audio file {audio_path} not found, skipping...")
-                continue
-            try:
-                waveform, sample_rate = torchaudio.load(audio_path)
-                if waveform.shape[0] > 1:
-                    waveform = waveform.mean(dim=0, keepdim=True)
-                choice_audios.append(waveform.numpy().squeeze())
-            except Exception as e:
-                logger.error(f"Error loading audio file {audio_path}: {str(e)}")
-                continue
+                raise ValueError(f"Audio file {audio_path} not found")
+            waveform, sample_rate = torchaudio.load(audio_path)
+            if waveform.shape[0] > 1:
+                waveform = waveform.mean(dim=0, keepdim=True)
+            choice_audios.append(waveform.squeeze())
 
-        if splits == 1:
-            if pos == [0]:
-                audio_group = [torch.cat([choice_audio, question_audios[0]]) for choice_audio in choice_audios]
-            elif pos == [1]:
-                audio_group = [torch.cat([question_audios[0], choice_audio]) for choice_audio in choice_audios]
-        elif splits == 2:
-            if pos == [1]:
-                audio_group = [torch.cat([question_audios[0], choice_audio, question_audios[1]]) for choice_audio in choice_audios]
-        else:
-            raise ValueError(f"Unsupported splits {splits} with pos {pos}")
+        for choice_audio in choice_audios:
+            complete_audio = torch.cat([question_audio, choice_audio], dim=-1)
+            audio_group.append({
+                'array': complete_audio.numpy(),
+                'sampling_rate': sample_rate,
+            })
         
         return audio_group
 
     def load_data(self) -> list:
+        logger.info("Preparing data ...")
         dataset = []
         meta_path = os.path.join(self.data_dir, "meta_data.json")
         if not os.path.exists(meta_path):
             raise FileNotFoundError(f"Meta file {meta_path} not found.")
         with open(meta_path, "r") as f:
             meta_data = json.load(f)
-            for subject in meta_data:
+            for subject in tqdm(meta_data):
                 data = {'subject': subject['subject'], 'qa': []}
                 for idx, qa in enumerate(subject['qa']):
-                    audio_group = self.concat_audio(qa['question'], qa['choice'], qa['splits'], qa['pos'])
+                    audio_group = self.concat_audio(qa['question'], qa['choice'])
                     right_answer = qa['right_answer']
                     data['qa'].append({'audio_group': audio_group, 'right_answer': right_answer})
                 dataset.append(data)
         return dataset
 
     def generate(self, model):
+        logger.info("Generating results ...")
         logger.add(f'log/{self.name}.log', rotation='50 MB')
         results = []
         for subject_item in tqdm(self.dataset):

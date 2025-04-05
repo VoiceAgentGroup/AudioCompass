@@ -4,7 +4,7 @@ import json
 base_path = '../datas/cmmlu-minimax'
 os.chdir(base_path)
 
-split_path = 'dev'
+split_path = 'test'
 aggregated_datas = []
 
 dir_list = os.listdir(split_path)
@@ -20,9 +20,7 @@ for dir_path in dir_list:
         aggregated_data['qa'] = []
         for item in data:
             qa = {}
-            qa['splits'] = item['splits']
-            qa['pos'] = item['pos']
-            qa['question'] = [os.path.join(split_path, dir_path, item['idx'], q['file']) for q in item['QA']['question']]
+            qa['question'] = os.path.join(split_path, dir_path, item['idx'], item['QA']['question'][0]['file'])
             choice_strs = ['A', 'B', 'C', 'D']
             qa['choice'] = [os.path.join(split_path, dir_path, item['idx'], item['QA']['choice'][i][0]['file']) for i in choice_strs]
             qa['right_answer'] = item['QA']['right_answer']

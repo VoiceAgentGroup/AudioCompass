@@ -38,7 +38,7 @@ class LocalAssistant(VoiceAssistant):
             ],
             extra_body={
                 "prompt_logprobs": 1,
-            }
+            },
         )
         
         return completion.choices[0].message.content, completion.prompt_logprobs
@@ -70,7 +70,10 @@ class LocalAssistant(VoiceAssistant):
                         {"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}},
                         {"type": "text", "text": text}
                     ]
-                }
-            ]
+                },
+            ],
+            extra_body={
+                "prompt_logprobs": 1,
+            },
         )
-        return completion.choices[0].message.content
+        return completion.choices[0].message.content, completion.prompt_logprobs

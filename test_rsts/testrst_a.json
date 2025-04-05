@@ -1,0 +1,3237 @@
+[
+    null,
+    {
+        "8948": {
+            "logprob": -14.724675178527832,
+            "rank": 81620,
+            "decoded_token": "system"
+        },
+        "84469": {
+            "logprob": -3.224675178527832,
+            "rank": 1,
+            "decoded_token": "strtolower"
+        }
+    },
+    {
+        "198": {
+            "logprob": -18.78877830505371,
+            "rank": 151993,
+            "decoded_token": "\u010a"
+        },
+        "84469": {
+            "logprob": -3.101278066635132,
+            "rank": 1,
+            "decoded_token": "strtolower"
+        }
+    },
+    {
+        "2610": {
+            "logprob": -17.501806259155273,
+            "rank": 139311,
+            "decoded_token": "You"
+        },
+        "84469": {
+            "logprob": -3.3260247707366943,
+            "rank": 1,
+            "decoded_token": "strtolower"
+        }
+    },
+    {
+        "525": {
+            "logprob": -3.1711387634277344,
+            "rank": 6,
+            "decoded_token": "\u0120are"
+        },
+        "646": {
+            "logprob": -1.0461386442184448,
+            "rank": 1,
+            "decoded_token": "\u0120can"
+        }
+    },
+    {
+        "264": {
+            "logprob": -4.15400505065918,
+            "rank": 10,
+            "decoded_token": "\u0120a"
+        },
+        "198": {
+            "logprob": -2.716505289077759,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "10950": {
+            "logprob": -10.803791999816895,
+            "rank": 1952,
+            "decoded_token": "\u0120helpful"
+        },
+        "13": {
+            "logprob": -1.590901494026184,
+            "rank": 1,
+            "decoded_token": "."
+        }
+    },
+    {
+        "17847": {
+            "logprob": -10.163076400756836,
+            "rank": 4597,
+            "decoded_token": "\u0120assistant"
+        },
+        "198": {
+            "logprob": -3.212881088256836,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "13": {
+            "logprob": -14.000003814697266,
+            "rank": 3,
+            "decoded_token": "."
+        },
+        "151645": {
+            "logprob": -3.933898824470816e-06,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151645": {
+            "logprob": -8.344646857949556e-07,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "198": {
+            "logprob": -1.1920928244535389e-07,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151644": {
+            "logprob": -4.458328112377785e-05,
+            "rank": 1,
+            "decoded_token": "<|im_start|>"
+        }
+    },
+    {
+        "872": {
+            "logprob": -20.31182098388672,
+            "rank": 9541,
+            "decoded_token": "user"
+        },
+        "198": {
+            "logprob": -0.030571771785616875,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "198": {
+            "logprob": -13.625829696655273,
+            "rank": 37,
+            "decoded_token": "\u010a"
+        },
+        "151645": {
+            "logprob": -0.0008299481705762446,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "14755": {
+            "logprob": -23.079336166381836,
+            "rank": 49333,
+            "decoded_token": "Audio"
+        },
+        "151645": {
+            "logprob": -0.001211386057548225,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "220": {
+            "logprob": -3.8422114849090576,
+            "rank": 2,
+            "decoded_token": "\u0120"
+        },
+        "151645": {
+            "logprob": -0.029711419716477394,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "16": {
+            "logprob": -0.08414078503847122,
+            "rank": 1,
+            "decoded_token": "1"
+        }
+    },
+    {
+        "25": {
+            "logprob": -7.501126289367676,
+            "rank": 2,
+            "decoded_token": ":"
+        },
+        "151645": {
+            "logprob": -0.0011263700434938073,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "220": {
+            "logprob": -14.281295776367188,
+            "rank": 11,
+            "decoded_token": "\u0120"
+        },
+        "151645": {
+            "logprob": -4.541770613286644e-05,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151647": {
+            "logprob": -27.095277786254883,
+            "rank": 111800,
+            "decoded_token": "<|audio_bos|>"
+        },
+        "151645": {
+            "logprob": -0.00152757263276726,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151647": {
+            "logprob": -34.250003814697266,
+            "rank": 121230,
+            "decoded_token": "<|audio_bos|>"
+        },
+        "198": {
+            "logprob": -5.602820692729438e-06,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -33.6875114440918,
+            "rank": 120100,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -1.168244216387393e-05,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -27.90627670288086,
+            "rank": 111700,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -2.706014311115723e-05,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.817792892456055,
+            "rank": 139498,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.31779295206069946,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.31209373474121,
+            "rank": 114619,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.9370935559272766,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.718202590942383,
+            "rank": 123434,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.5307034254074097,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.848567962646484,
+            "rank": 127361,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -2.2860679626464844,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.761137008666992,
+            "rank": 130190,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "107400": {
+            "logprob": -3.042387008666992,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00bf\u0129\u00e5\u0130\u00bb\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.405044555664062,
+            "rank": 128480,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99487": {
+            "logprob": -2.4050443172454834,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00bf\u013b\u00e4\u00b8\u00aa"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.585247039794922,
+            "rank": 128142,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "58695": {
+            "logprob": -2.0539965629577637,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b8\u0143\u00e5\u013d\u00bd"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.506893157958984,
+            "rank": 131912,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "58695": {
+            "logprob": -3.256894111633301,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b8\u0143\u00e5\u013d\u00bd"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.095617294311523,
+            "rank": 129454,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99599": {
+            "logprob": -0.8768664598464966,
+            "rank": 1,
+            "decoded_token": "\u00e5\u013d\u00bd\u00e5\u00ae\u00b6"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.011924743652344,
+            "rank": 127490,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99599": {
+            "logprob": -1.324425458908081,
+            "rank": 1,
+            "decoded_token": "\u00e5\u013d\u00bd\u00e5\u00ae\u00b6"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.222354888916016,
+            "rank": 128800,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "102135": {
+            "logprob": -1.5348539352416992,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013e\u012d\u00e6\u013f\u00a5"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.09526252746582,
+            "rank": 128538,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.6265130043029785,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.570354461669922,
+            "rank": 130476,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -0.8828535079956055,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.133264541625977,
+            "rank": 125661,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -2.2895145416259766,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.14628791809082,
+            "rank": 123780,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "109210": {
+            "logprob": -1.8962883949279785,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00ae\u00aa\u00e6\u00b3\u0137"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.487337112426758,
+            "rank": 123497,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -1.331086277961731,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.84847068786621,
+            "rank": 121859,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "109238": {
+            "logprob": -1.3797210454940796,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0129\u0142\u00e5\u012f\u0123\u00e5\u00b9\u00b4"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.142349243164062,
+            "rank": 108308,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "58463": {
+            "logprob": -1.2829742431640625,
+            "rank": 1,
+            "decoded_token": "\u00e5\u012f\u0139"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.764118194580078,
+            "rank": 97048,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "58463": {
+            "logprob": -0.7172424793243408,
+            "rank": 1,
+            "decoded_token": "\u00e5\u012f\u0139"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.041404724121094,
+            "rank": 99899,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "30540": {
+            "logprob": -1.8929672241210938,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bb\u00a3"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -16.83074951171875,
+            "rank": 92054,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -0.940125048160553,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.312530517578125,
+            "rank": 122534,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99497": {
+            "logprob": -1.1250295639038086,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0131\u00b2"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.217573165893555,
+            "rank": 125865,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99497": {
+            "logprob": -0.5300736427307129,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0131\u00b2"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.4028377532959,
+            "rank": 120641,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -1.8403385877609253,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.632259368896484,
+            "rank": 117368,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.1947600841522217,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.033065795898438,
+            "rank": 119865,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.0018165111541748,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.91331672668457,
+            "rank": 123561,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.5383158922195435,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.276830673217773,
+            "rank": 123417,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "103997": {
+            "logprob": -2.0580806732177734,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013d\u00be\u00e7\u00bb\u0131"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.03106117248535,
+            "rank": 122984,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "103997": {
+            "logprob": -1.6873116493225098,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013d\u00be\u00e7\u00bb\u0131"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.225597381591797,
+            "rank": 121904,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "104133": {
+            "logprob": -1.9130980968475342,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013e\u012b\u00e4\u00b8\u0122\u00e4\u00b8\u00aa"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.54825782775879,
+            "rank": 117836,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "107273": {
+            "logprob": -2.1420071125030518,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013e\u012b\u00e8\u00ae\u00b8\u00e5\u00a4\u013c"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.52887535095215,
+            "rank": 124755,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "227": {
+            "logprob": -2.2476253509521484,
+            "rank": 1,
+            "decoded_token": "\u0127"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.371530532836914,
+            "rank": 125145,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -1.9652807712554932,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.316146850585938,
+            "rank": 120650,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "5122": {
+            "logprob": -0.7223964333534241,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u013c"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.79192352294922,
+            "rank": 131318,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "15": {
+            "logprob": -2.916923999786377,
+            "rank": 1,
+            "decoded_token": "0"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.678009033203125,
+            "rank": 130689,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "21": {
+            "logprob": -2.7092580795288086,
+            "rank": 1,
+            "decoded_token": "6"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.333038330078125,
+            "rank": 128270,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "16": {
+            "logprob": -0.6455392837524414,
+            "rank": 1,
+            "decoded_token": "1"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.83979034423828,
+            "rank": 103972,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "18830": {
+            "logprob": -2.136664867401123,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013e\u012b"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.876026153564453,
+            "rank": 138861,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "15": {
+            "logprob": -1.6885251998901367,
+            "rank": 1,
+            "decoded_token": "0"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.41964340209961,
+            "rank": 125650,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "114082": {
+            "logprob": -1.8571429252624512,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013e\u012b\u00e4\u00b8\u0122\u00e4\u00bd\u012f"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.964317321777344,
+            "rank": 122522,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99992": {
+            "logprob": -1.5893182754516602,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013e\u012b\u00e4\u00b8\u0122"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.73899269104004,
+            "rank": 126588,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "26939": {
+            "logprob": -0.7077431678771973,
+            "rank": 1,
+            "decoded_token": "\u00e5\u012a\u00b0"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -24.288625717163086,
+            "rank": 132094,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20221": {
+            "logprob": -0.22612543404102325,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0129\u00ba"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.138917922973633,
+            "rank": 127440,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20221": {
+            "logprob": -0.2014186978340149,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0129\u00ba"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.7031192779541,
+            "rank": 124677,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20221": {
+            "logprob": -0.1718701422214508,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0129\u00ba"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.318649291992188,
+            "rank": 124982,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99569": {
+            "logprob": -1.7717747688293457,
+            "rank": 1,
+            "decoded_token": "\u00e6\u0141\u0132"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.939653396606445,
+            "rank": 124679,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20221": {
+            "logprob": -0.25215408205986023,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0129\u00ba"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.8772029876709,
+            "rank": 130818,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "38182": {
+            "logprob": -0.8772024512290955,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00bf\u0129"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -24.731834411621094,
+            "rank": 117077,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "2073": {
+            "logprob": -0.02871006168425083,
+            "rank": 1,
+            "decoded_token": "\u00e2\u0122\u013e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.47852325439453,
+            "rank": 118806,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "2073": {
+            "logprob": -0.08789920061826706,
+            "rank": 1,
+            "decoded_token": "\u00e2\u0122\u013e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.60591697692871,
+            "rank": 115798,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "2073": {
+            "logprob": -0.2152923047542572,
+            "rank": 1,
+            "decoded_token": "\u00e2\u0122\u013e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -24.279939651489258,
+            "rank": 118370,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "2073": {
+            "logprob": -0.014313997700810432,
+            "rank": 1,
+            "decoded_token": "\u00e2\u0122\u013e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.272058486938477,
+            "rank": 117232,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "2073": {
+            "logprob": -1.3345576524734497,
+            "rank": 1,
+            "decoded_token": "\u00e2\u0122\u013e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.570676803588867,
+            "rank": 119809,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "28946": {
+            "logprob": -1.3519275188446045,
+            "rank": 1,
+            "decoded_token": "\u00e8\u0122\u0127"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.969697952270508,
+            "rank": 105349,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "113101": {
+            "logprob": -0.8603237867355347,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b8\u012f\u00e5\u0132\u012e\u00e6\u0126\u0131"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.22930145263672,
+            "rank": 106837,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "90663": {
+            "logprob": -0.4480522871017456,
+            "rank": 1,
+            "decoded_token": "\u00e6\u0122\u013f"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.746896743774414,
+            "rank": 102071,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "100256": {
+            "logprob": -0.7781476378440857,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00ba\u00a1"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.52781867980957,
+            "rank": 96600,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "53930": {
+            "logprob": -0.8559438586235046,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b9\u012d"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.288541793823242,
+            "rank": 103412,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "53930": {
+            "logprob": -1.3197914361953735,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b9\u012d"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.56374740600586,
+            "rank": 97181,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "44793": {
+            "logprob": -1.5793728828430176,
+            "rank": 1,
+            "decoded_token": "\u00e9\u0123\u0135"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.688018798828125,
+            "rank": 113835,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "43288": {
+            "logprob": -1.281769037246704,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00bf\u013b"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.52529525756836,
+            "rank": 103526,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "45995": {
+            "logprob": -1.6971708536148071,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00b7\u00af"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.03865623474121,
+            "rank": 115096,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.163655400276184,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.414705276489258,
+            "rank": 107907,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -1.789705753326416,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.865156173706055,
+            "rank": 119613,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "56568": {
+            "logprob": -1.2714067697525024,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bd\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.714832305908203,
+            "rank": 125182,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "56568": {
+            "logprob": -0.30858153104782104,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bd\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.440998077392578,
+            "rank": 128140,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "56568": {
+            "logprob": -0.7534971237182617,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bd\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.13048553466797,
+            "rank": 131187,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.8179860711097717,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.817691802978516,
+            "rank": 129206,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "40814": {
+            "logprob": -1.6614426374435425,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00ae\u00b0"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.491506576538086,
+            "rank": 135189,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -2.272756338119507,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.966064453125,
+            "rank": 136737,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "62926": {
+            "logprob": -1.4348134994506836,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00b9\u00b6"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.86192512512207,
+            "rank": 137302,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "21317": {
+            "logprob": -2.330674886703491,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bf\u00a1"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.323955535888672,
+            "rank": 140470,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.4802063703536987,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.57815933227539,
+            "rank": 130214,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "100080": {
+            "logprob": -0.5156589150428772,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00bc\u00b9"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.882709503173828,
+            "rank": 136868,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.60145902633667,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.854413986206055,
+            "rank": 132294,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.5106638669967651,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.954856872558594,
+            "rank": 133543,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "44934": {
+            "logprob": -2.1111063957214355,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012b\u012d"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.391910552978516,
+            "rank": 121059,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "44934": {
+            "logprob": -2.4856600761413574,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012b\u012d"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.588218688964844,
+            "rank": 124931,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99336": {
+            "logprob": -2.35384464263916,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00b6\u00b3"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.715974807739258,
+            "rank": 127187,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "64559": {
+            "logprob": -2.059725522994995,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b9\u012b"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.066783905029297,
+            "rank": 130288,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "28951": {
+            "logprob": -2.5199084281921387,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00ae\u00a4"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.40876007080078,
+            "rank": 130560,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "24339": {
+            "logprob": -2.033759355545044,
+            "rank": 1,
+            "decoded_token": "\u00e6\u00b3\u0137"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.124862670898438,
+            "rank": 121397,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -0.9686133861541748,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.9339599609375,
+            "rank": 119963,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -0.6839601993560791,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.561893463134766,
+            "rank": 118857,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -0.5306426286697388,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.810544967651367,
+            "rank": 125163,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -0.779295802116394,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.652957916259766,
+            "rank": 127279,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "6": {
+            "logprob": -0.6529587507247925,
+            "rank": 1,
+            "decoded_token": "'"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.545475006103516,
+            "rank": 123140,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.5142241716384888,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.28826904296875,
+            "rank": 122464,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.303894281387329,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.25544548034668,
+            "rank": 124782,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.005445122718811,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.174619674682617,
+            "rank": 132260,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.8933702707290649,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.355085372924805,
+            "rank": 121773,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.542586088180542,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.567352294921875,
+            "rank": 129002,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.0986025407910347,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.4290714263916,
+            "rank": 128324,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.0540710873901844,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.594003677368164,
+            "rank": 127040,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.09400400519371033,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.143564224243164,
+            "rank": 121687,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "5122": {
+            "logprob": -0.3310648500919342,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u013c"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.571002960205078,
+            "rank": 117007,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "25": {
+            "logprob": -0.13350212574005127,
+            "rank": 1,
+            "decoded_token": ":"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.26141357421875,
+            "rank": 121389,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "2073": {
+            "logprob": -1.745788812637329,
+            "rank": 1,
+            "decoded_token": "\u00e2\u0122\u013e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.093652725219727,
+            "rank": 127892,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.0311522483825684,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.29039192199707,
+            "rank": 129382,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1110": {
+            "logprob": -0.9778920412063599,
+            "rank": 1,
+            "decoded_token": "://"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.242534637451172,
+            "rank": 139138,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -1.5237839221954346,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.376794815063477,
+            "rank": 121941,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "63109": {
+            "logprob": -1.2674200534820557,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00bf\u0125"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.02393913269043,
+            "rank": 123566,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "18830": {
+            "logprob": -1.3989390134811401,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013e\u012b"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.515867233276367,
+            "rank": 125591,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "18830": {
+            "logprob": -0.8752416372299194,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013e\u012b"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.304250717163086,
+            "rank": 113754,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "63109": {
+            "logprob": -1.030812382698059,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00bf\u0125"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.177799224853516,
+            "rank": 101380,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "21317": {
+            "logprob": -1.533267855644226,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bf\u00a1"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -16.29956817626953,
+            "rank": 85773,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "21317": {
+            "logprob": -2.272224187850952,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bf\u00a1"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.929359436035156,
+            "rank": 104546,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.7574838995933533,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.614206314086914,
+            "rank": 118078,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.598580539226532,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.935890197753906,
+            "rank": 124579,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.3421404361724854,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.293046951293945,
+            "rank": 124744,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -0.8242970705032349,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.408802032470703,
+            "rank": 128407,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "28951": {
+            "logprob": -1.6588027477264404,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00ae\u00a4"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.46271514892578,
+            "rank": 131144,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.3689642548561096,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.175390243530273,
+            "rank": 110990,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.37851443886756897,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.5225830078125,
+            "rank": 114193,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.06945724785327911,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.12244987487793,
+            "rank": 121268,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.10682408511638641,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.15766716003418,
+            "rank": 128903,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.032667845487594604,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.583351135253906,
+            "rank": 129012,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.5833511352539062,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.67400360107422,
+            "rank": 120338,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.017754437401890755,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -24.693723678588867,
+            "rank": 124760,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.0062234653159976006,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.709299087524414,
+            "rank": 126015,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.05304872989654541,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.9616756439209,
+            "rank": 134980,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.05542515963315964,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.060089111328125,
+            "rank": 129769,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.091338612139225,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.63094139099121,
+            "rank": 130176,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.06844093650579453,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.51241111755371,
+            "rank": 128130,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.07491034269332886,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -24.41691780090332,
+            "rank": 128913,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.010667916387319565,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.206581115722656,
+            "rank": 128486,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "63109": {
+            "logprob": -1.2378308773040771,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00bf\u0125"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.058490753173828,
+            "rank": 124365,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "63109": {
+            "logprob": -0.16786621510982513,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00bf\u0125"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.554771423339844,
+            "rank": 126553,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "63109": {
+            "logprob": -0.14852170646190643,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00bf\u0125"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.969701766967773,
+            "rank": 113028,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "63109": {
+            "logprob": -0.25095099210739136,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00bf\u0125"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.122671127319336,
+            "rank": 119558,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "63109": {
+            "logprob": -0.15392205119132996,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00bf\u0125"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.404098510742188,
+            "rank": 133110,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.216598629951477,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.201847076416016,
+            "rank": 135768,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.4518471956253052,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.406064987182617,
+            "rank": 129349,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.062315821647644,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.691442489624023,
+            "rank": 130118,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.0351933240890503,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.794952392578125,
+            "rank": 133620,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -1.1387032270431519,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.397838592529297,
+            "rank": 128396,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1": {
+            "logprob": -1.4290893077850342,
+            "rank": 1,
+            "decoded_token": "\""
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.0635929107666,
+            "rank": 135962,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -0.6885924339294434,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.712461471557617,
+            "rank": 136067,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -0.9937120676040649,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.3037052154541,
+            "rank": 135852,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "100147": {
+            "logprob": -2.0849545001983643,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00bf\u013b\u00e4\u00b8\u0122"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.112022399902344,
+            "rank": 137047,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "106509": {
+            "logprob": -1.6432716846466064,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b8\u00bb\u00e5\u00bc\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.74069595336914,
+            "rank": 124649,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "220": {
+            "logprob": -1.0531963109970093,
+            "rank": 1,
+            "decoded_token": "\u0120"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -17.744447708129883,
+            "rank": 123812,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1": {
+            "logprob": -3.2131969928741455,
+            "rank": 1,
+            "decoded_token": "\""
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.059093475341797,
+            "rank": 122789,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.34034252166748047,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.208932876586914,
+            "rank": 121449,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "26940": {
+            "logprob": -1.7089327573776245,
+            "rank": 1,
+            "decoded_token": "\u00e3\u0122\u012c"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.835309982299805,
+            "rank": 121580,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "25": {
+            "logprob": -0.3978092670440674,
+            "rank": 1,
+            "decoded_token": ":"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.92045783996582,
+            "rank": 120421,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "3837": {
+            "logprob": -0.7954576015472412,
+            "rank": 1,
+            "decoded_token": "\u00ef\u00bc\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.564876556396484,
+            "rank": 125110,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.5961273908615112,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.47132110595703,
+            "rank": 119653,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "24": {
+            "logprob": -0.6431963443756104,
+            "rank": 1,
+            "decoded_token": "9"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.978919982910156,
+            "rank": 113171,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99463": {
+            "logprob": -2.1976699829101562,
+            "rank": 1,
+            "decoded_token": "\u00e6\u0140\u0139"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.287200927734375,
+            "rank": 129688,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -1.5684518814086914,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.296737670898438,
+            "rank": 131250,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.7654881477355957,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.100730895996094,
+            "rank": 101701,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -0.2882307171821594,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.078571319580078,
+            "rank": 129294,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.672321081161499,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.12150001525879,
+            "rank": 135131,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "106509": {
+            "logprob": -1.52774977684021,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b8\u00bb\u00e5\u00bc\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.527507781982422,
+            "rank": 133554,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1110": {
+            "logprob": -0.9025086760520935,
+            "rank": 1,
+            "decoded_token": "://"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.778825759887695,
+            "rank": 130952,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.40382567048072815,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.39206314086914,
+            "rank": 132165,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "106509": {
+            "logprob": -2.0795631408691406,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b8\u00bb\u00e5\u00bc\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.18073272705078,
+            "rank": 127043,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20221": {
+            "logprob": -0.680733323097229,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0129\u00ba"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -27.13772964477539,
+            "rank": 127635,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20221": {
+            "logprob": -0.012729462236166,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0129\u00ba"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -26.020095825195312,
+            "rank": 129804,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20221": {
+            "logprob": -0.11384626477956772,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0129\u00ba"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.850540161132812,
+            "rank": 130538,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "100595": {
+            "logprob": -1.5380398035049438,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0122\u00a1"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.1735897064209,
+            "rank": 127150,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.6735894680023193,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.875486373901367,
+            "rank": 129953,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "23031": {
+            "logprob": -1.875485897064209,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bb\u00a5"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.538246154785156,
+            "rank": 129573,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "101367": {
+            "logprob": -1.6632457971572876,
+            "rank": 1,
+            "decoded_token": "\u00e6\u00b0\u0133\u00e4\u00b8\u00bb"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.027416229248047,
+            "rank": 133193,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "103106": {
+            "logprob": -2.4649159908294678,
+            "rank": 1,
+            "decoded_token": "\u00e7\u012a\u00b1\u00e5\u013d\u00bd"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.986534118652344,
+            "rank": 132828,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99348": {
+            "logprob": -2.142784595489502,
+            "rank": 1,
+            "decoded_token": "\u00e6\u0138\u0129\u00e5\u012e\u0138"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.265703201293945,
+            "rank": 128956,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.8907030820846558,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.158504486083984,
+            "rank": 129880,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -2.1897552013397217,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.876388549804688,
+            "rank": 135375,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "35946": {
+            "logprob": -1.8138885498046875,
+            "rank": 1,
+            "decoded_token": "\u00e6\u012a\u0133"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.43977928161621,
+            "rank": 118699,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "41683": {
+            "logprob": -0.2210294008255005,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00bc\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.245574951171875,
+            "rank": 127739,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "32108": {
+            "logprob": -1.1362004280090332,
+            "rank": 1,
+            "decoded_token": "\u00e5\u012e\u0138"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.707239151000977,
+            "rank": 123143,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "97120": {
+            "logprob": -1.4884899854660034,
+            "rank": 1,
+            "decoded_token": "\u00e7\u0137\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.10509490966797,
+            "rank": 137302,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "104939": {
+            "logprob": -0.3550944924354553,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0134\u012e\u00e5\u00b9\u00b3"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.697704315185547,
+            "rank": 127437,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "104939": {
+            "logprob": -0.853954553604126,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0134\u012e\u00e5\u00b9\u00b3"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.437923431396484,
+            "rank": 132222,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "104939": {
+            "logprob": -0.6879225373268127,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0134\u012e\u00e5\u00b9\u00b3"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.315156936645508,
+            "rank": 116644,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "72881": {
+            "logprob": -0.6745319366455078,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00af\u0143"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.34249496459961,
+            "rank": 113003,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "104939": {
+            "logprob": -1.795620083808899,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0134\u012e\u00e5\u00b9\u00b3"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.887544631958008,
+            "rank": 116629,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "104939": {
+            "logprob": -0.7312955260276794,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0134\u012e\u00e5\u00b9\u00b3"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.03839874267578,
+            "rank": 124874,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "26288": {
+            "logprob": -0.5383996367454529,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00a4\u00a7"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.973833084106445,
+            "rank": 123309,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "26288": {
+            "logprob": -1.6613328456878662,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00a4\u00a7"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.286144256591797,
+            "rank": 124975,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "16628": {
+            "logprob": -0.8486445546150208,
+            "rank": 1,
+            "decoded_token": "\u00e6\u0138\u00b0"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.321462631225586,
+            "rank": 129576,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -0.6652122735977173,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.209339141845703,
+            "rank": 114270,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -0.8030899167060852,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.94429588317871,
+            "rank": 122253,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -0.5380450487136841,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.81607437133789,
+            "rank": 123385,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "9370": {
+            "logprob": -0.5035752058029175,
+            "rank": 1,
+            "decoded_token": "\u00e7\u013c\u0126"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.958789825439453,
+            "rank": 123777,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "111269": {
+            "logprob": -1.7400392293930054,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0131\u00a3\u00e5\u0131\u00b7"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.325376510620117,
+            "rank": 126880,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "110414": {
+            "logprob": -1.075376033782959,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00bf\u0133\u00e4\u00bb\u00a3"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.325836181640625,
+            "rank": 115500,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20412": {
+            "logprob": -0.16958537697792053,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013a\u00af"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -24.640411376953125,
+            "rank": 108295,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20412": {
+            "logprob": -0.20291195809841156,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013a\u00af"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -25.15947151184082,
+            "rank": 112397,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20412": {
+            "logprob": -0.06572229415178299,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013a\u00af"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -25.35736656188965,
+            "rank": 114524,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20412": {
+            "logprob": -0.04486680403351784,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013a\u00af"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.341869354248047,
+            "rank": 108048,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "20412": {
+            "logprob": -0.18561924993991852,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013a\u00af"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -26.558456420898438,
+            "rank": 117003,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.027205733582377434,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -27.722068786621094,
+            "rank": 115280,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.003318163100630045,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -25.26951789855957,
+            "rank": 117160,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.14451855421066284,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -28.226242065429688,
+            "rank": 120407,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.007491589989513159,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -27.530933380126953,
+            "rank": 121884,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.03093324974179268,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -27.786710739135742,
+            "rank": 118870,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.005461059045046568,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.476211547851562,
+            "rank": 131026,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.8199621438980103,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.64835548400879,
+            "rank": 115928,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "100339": {
+            "logprob": -1.3046051263809204,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013f\u0130"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -25.66036033630371,
+            "rank": 112424,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.0041105784475803375,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -25.627607345581055,
+            "rank": 114417,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.002606805879622698,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -26.09545135498047,
+            "rank": 117650,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.0017007424030452967,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -27.284061431884766,
+            "rank": 111438,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.0028123611118644476,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -26.924280166625977,
+            "rank": 111168,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.14303100109100342,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.50416374206543,
+            "rank": 115743,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.0041642384603619576,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.103471755981445,
+            "rank": 121867,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.38472193479537964,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.985132217407227,
+            "rank": 118214,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.047632552683353424,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.29720687866211,
+            "rank": 128471,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "100339": {
+            "logprob": -1.3909566402435303,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013f\u0130"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.69175910949707,
+            "rank": 125591,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "100339": {
+            "logprob": -1.2542591094970703,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013f\u0130"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.49878692626953,
+            "rank": 130340,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "15": {
+            "logprob": -0.9362860321998596,
+            "rank": 1,
+            "decoded_token": "0"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.686155319213867,
+            "rank": 108174,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.02990511618554592,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -26.659379959106445,
+            "rank": 119820,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.0031301809940487146,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.920047760009766,
+            "rank": 118915,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.013798560947179794,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -16.466903686523438,
+            "rank": 65282,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "102027": {
+            "logprob": -1.3575283288955688,
+            "rank": 1,
+            "decoded_token": "\u00e6\u00b4\u00aa"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -20.046545028686523,
+            "rank": 61609,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99355": {
+            "logprob": -0.005529229063540697,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0127\u00b4"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -16.5833797454834,
+            "rank": 69695,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99355": {
+            "logprob": -0.8275198936462402,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0127\u00b4"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.043054580688477,
+            "rank": 96430,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99355": {
+            "logprob": -0.13680437207221985,
+            "rank": 1,
+            "decoded_token": "\u00e5\u0127\u00b4"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -16.90610694885254,
+            "rank": 94836,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "114821": {
+            "logprob": -1.6326687335968018,
+            "rank": 1,
+            "decoded_token": "\u00e8\u00a2\u00ab\u00e6\u012b\u00a7\u00e8\u00a1\u012e"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -16.021860122680664,
+            "rank": 90694,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "15946": {
+            "logprob": -2.6781105995178223,
+            "rank": 1,
+            "decoded_token": "\u00e4\u00b8\u0143"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.873947143554688,
+            "rank": 117303,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "102176": {
+            "logprob": -1.4051971435546875,
+            "rank": 1,
+            "decoded_token": "\u00e8\u013b\u00ab"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.039098739624023,
+            "rank": 108292,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "71138": {
+            "logprob": -0.8828490376472473,
+            "rank": 1,
+            "decoded_token": "\u00e7\u00b4\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.058856964111328,
+            "rank": 95781,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1773": {
+            "logprob": -1.2619824409484863,
+            "rank": 1,
+            "decoded_token": "\u00e3\u0122\u0124"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.613595962524414,
+            "rank": 115293,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "99810": {
+            "logprob": -2.004221200942993,
+            "rank": 1,
+            "decoded_token": "\u00e7\u0136\u00b0"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.09541893005371,
+            "rank": 106681,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "71138": {
+            "logprob": -0.376668244600296,
+            "rank": 1,
+            "decoded_token": "\u00e7\u00b4\u0142"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -18.17133903503418,
+            "rank": 107510,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "26288": {
+            "logprob": -2.4369637966156006,
+            "rank": 1,
+            "decoded_token": "\u00e5\u00a4\u00a7"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.361614227294922,
+            "rank": 122448,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1773": {
+            "logprob": -0.04911408945918083,
+            "rank": 1,
+            "decoded_token": "\u00e3\u0122\u0124"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.775196075439453,
+            "rank": 120160,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.6814457178115845,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -22.41234588623047,
+            "rank": 123013,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1773": {
+            "logprob": -0.4435955882072449,
+            "rank": 1,
+            "decoded_token": "\u00e3\u0122\u0124"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.716747283935547,
+            "rank": 120311,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1773": {
+            "logprob": -0.09174676239490509,
+            "rank": 1,
+            "decoded_token": "\u00e3\u0122\u0124"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -21.48980712890625,
+            "rank": 115720,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "1773": {
+            "logprob": -0.08355704694986343,
+            "rank": 1,
+            "decoded_token": "\u00e3\u0122\u0124"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -24.06987190246582,
+            "rank": 121946,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.31987154483795166,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -27.00111961364746,
+            "rank": 119816,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.0011202972382307053,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -27.53163719177246,
+            "rank": 117675,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.00038747431244701147,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -28.562631607055664,
+            "rank": 116827,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.0001308832288486883,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -28.67061424255371,
+            "rank": 116087,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.20186516642570496,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -28.45537567138672,
+            "rank": 114705,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "198": {
+            "logprob": -0.14287537336349487,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.115001678466797,
+            "rank": 117594,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.17750249803066254,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -24.183042526245117,
+            "rank": 118584,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.02679242007434368,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -23.132566452026367,
+            "rank": 117425,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.13256622850894928,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151646": {
+            "logprob": -19.993053436279297,
+            "rank": 117760,
+            "decoded_token": "<|AUDIO|>"
+        },
+        "151645": {
+            "logprob": -0.64930260181427,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151648": {
+            "logprob": -18.655044555664062,
+            "rank": 113287,
+            "decoded_token": "<|audio_eos|>"
+        },
+        "198": {
+            "logprob": -0.9362950325012207,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151648": {
+            "logprob": -32.0,
+            "rank": 114189,
+            "decoded_token": "<|audio_eos|>"
+        },
+        "151645": {
+            "logprob": -1.311301275563892e-06,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "198": {
+            "logprob": -18.968751907348633,
+            "rank": 8,
+            "decoded_token": "\u010a"
+        },
+        "151645": {
+            "logprob": -1.4305104514278355e-06,
+            "rank": 1,
+            "decoded_token": "<|im_end|>"
+        }
+    },
+    {
+        "151645": {
+            "logprob": -13.625001907348633,
+            "rank": 2,
+            "decoded_token": "<|im_end|>"
+        },
+        "151644": {
+            "logprob": -1.9073468138230965e-06,
+            "rank": 1,
+            "decoded_token": "<|im_start|>"
+        }
+    },
+    {
+        "198": {
+            "logprob": -0.8704164624214172,
+            "rank": 1,
+            "decoded_token": "\u010a"
+        }
+    },
+    {
+        "151644": {
+            "logprob": -1.3351351299206726e-05,
+            "rank": 1,
+            "decoded_token": "<|im_start|>"
+        }
+    },
+    {
+        "77091": {
+            "logprob": -19.404281616210938,
+            "rank": 47205,
+            "decoded_token": "assistant"
+        },
+        "2073": {
+            "logprob": -0.3339700400829315,
+            "rank": 1,
+            "decoded_token": "\u00e2\u0122\u013e"
+        }
+    },
+    {
+        "198": {
+            "logprob": -9.882198333740234,
+            "rank": 240,
+            "decoded_token": "\u010a"
+        },
+        "20412": {
+            "logprob": -1.725948452949524,
+            "rank": 1,
+            "decoded_token": "\u00e6\u013a\u00af"
+        }
+    }
+]

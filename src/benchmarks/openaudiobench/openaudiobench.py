@@ -16,6 +16,7 @@ class OpenAudioBench(BaseBenchmark):
         self.dataset = self.load_data()
         
     def load_data(self):
+        logger.info("Loading data ...")
         data_csv_path = os.path.join(self.data_dir, self.subset_name, f"{self.subset_name}.csv")
         if not os.path.exists(data_csv_path):
             raise FileNotFoundError(f"Data file {data_csv_path} not found.")
@@ -47,6 +48,7 @@ class OpenAudioBench(BaseBenchmark):
         return dataset
     
     def generate(self, model):
+        logger.info("Generating results ...")
         logger.add(f'log/{self.name}-{self.subset_name}.log', rotation='50MB')
 
         results = []
