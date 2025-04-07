@@ -56,7 +56,7 @@ class OpenAudioBench(BaseBenchmark):
             tmp = {k: v for k, v in item.items() if k != 'audio'}
             logger.info(item['instruction'])
             try:
-                response = model.generate_audio(item['audio'])
+                response, _ = model.generate_audio(item['audio'])
                 logger.info(response)
                 logger.info('====================================')
                 tmp['infer_response'] = response

@@ -16,13 +16,14 @@ class VoiceBench(BaseBenchmark):
 
     
     def load_data(self, **kwargs):
-
-        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, **kwargs)
+        logger.info("Preparing data ...")
+        dataset = load_dataset('hlt-lab/voicebench', subset=self.subset_name, split=self.split, **kwargs)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     
     
     def generate(self, model):
+        logger.info("Generating results ...")
         logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
 
         results = []

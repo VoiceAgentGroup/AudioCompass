@@ -1,4 +1,4 @@
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
 from loguru import logger
 from tqdm import tqdm
 import json
@@ -9,17 +9,23 @@ from ..base import BaseBenchmark
 
 
 class MMAU(BaseBenchmark):
-    def __init__(self, split, batch_size=100, **kwargs):
+    def __init__(self, split, batch_size=500, **kwargs):
         self.name = 'mmau'
         self.split = split
         self.batch_size = batch_size
-        self.dataset = self.load_data(streaming=True, **kwargs)
+        self.dataset = self.load_data(**kwargs)
         
-    def load_data(self, streaming, **kwargs):
-        dataset = load_dataset('lmms-lab/mmau', split=self.split, streaming=streaming, **kwargs)
+    def load_data(self, **kwargs):
+        logger.info("Preparing data ...")
+        if kwargs.get('offline', None) == True:
+            dataset = load_dataset('parquet', data_dir='datas/mmau', trust_remote_code=True)
+            dataset = dataset[self.split]
+        else:
+            dataset = load_dataset('lmms-lab/mmau', split=self.split, **kwargs)
         return dataset
     
     def generate(self, model):
+        logger.info("Generating results ...")
         logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
         
         results = []

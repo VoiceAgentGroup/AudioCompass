@@ -1,7 +1,7 @@
 from .voicebench.voicebench import VoiceBench
 from .mmau.mmau import MMAU
 from .openaudiobench.openaudiobench import OpenAudioBench
-from .cmmlu.cmmlu import CMMLU
+from .cmmlu import CMMLU
 
 benchmark_mapping = {
     'voicebench': VoiceBench,
@@ -12,7 +12,7 @@ benchmark_mapping = {
 }
 
 
-def load_benchmark(benchmark_name, subset_name, split, cache_dir=None):
+def load_benchmark(benchmark_name, subset_name, split, **kwargs):
     """
     Load a dataset based on the provided benchmark name, subset name, and split.
     
@@ -25,7 +25,7 @@ def load_benchmark(benchmark_name, subset_name, split, cache_dir=None):
         raise ValueError(f"Benchmark {benchmark_name} is not supported.")
     
     dataset_class = benchmark_mapping[benchmark_name]
-    return dataset_class(subset_name=subset_name, split=split, cache_dir=cache_dir)
+    return dataset_class(subset_name=subset_name, split=split, **kwargs)
 
 
 def list_benchmarks():

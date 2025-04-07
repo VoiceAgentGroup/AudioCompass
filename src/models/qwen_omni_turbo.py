@@ -63,7 +63,7 @@ class QwenOmniAssistant(VoiceAssistant):
         
         full_response = "".join(collected_messages)
         
-        return full_response
+        return full_response, None
 
 
     def generate_mixed(

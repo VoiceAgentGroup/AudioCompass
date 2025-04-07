@@ -72,8 +72,5 @@ class LocalAssistant(VoiceAssistant):
                     ]
                 },
             ],
-            extra_body={
-                "prompt_logprobs": 1,
-            },
         )
-        return completion.choices[0].message.content, completion.prompt_logprobs
+        return completion.choices[0].message.content

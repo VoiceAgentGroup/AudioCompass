@@ -20,7 +20,7 @@
 # from .step_audio import StepAssistant
 # from .phi import PhiAssistant
 from .qwen_omni_turbo import QwenOmniAssistant
-from .local import LocalAssistant
+from .localhost import LocalAssistant
 
 model_cls_mapping = {
     # 'qwen2': Qwen2Assistant,
@@ -49,7 +49,7 @@ model_cls_mapping = {
     # 'step': StepAssistant,
     # 'phi': PhiAssistant,
     'qwen_omni_turbo': QwenOmniAssistant,
-    'local': LocalAssistant,
+    'localhost': LocalAssistant,
 }
 
 def load_model(model_name):
