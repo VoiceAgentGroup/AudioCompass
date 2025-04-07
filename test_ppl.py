@@ -50,7 +50,7 @@ def main(args):
             pair = list(pair.values())
             if pair[0]["decoded_token"] == "<|AUDIO|>":
                 logprob = logprob + pair[1]['logprob']
-                length += 2
+                length += 1
                 
         logprob /= length
 

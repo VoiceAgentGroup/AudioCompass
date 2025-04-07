@@ -20,13 +20,19 @@ for dir_path in dir_list:
         aggregated_data['qa'] = []
         for item in data:
             qa = {}
-            qa['question'] = os.path.join(split_path, dir_path, item['idx'], item['QA']['question'][0]['file'])
+            qa['question'] = {
+                'path': os.path.join(split_path, dir_path, item['idx'], item['QA']['question'][0]['file']),
+                'text': item['QA']['question'][0]['text']
+            }
             choice_strs = ['A', 'B', 'C', 'D']
-            qa['choice'] = [os.path.join(split_path, dir_path, item['idx'], item['QA']['choice'][i][0]['file']) for i in choice_strs]
+            qa['choice'] = [{
+                'path': os.path.join(split_path, dir_path, item['idx'], item['QA']['choice'][i][0]['file']),
+                'text': item['QA']['choice'][i][0]['text']
+                } for i in choice_strs]
             qa['right_answer'] = item['QA']['right_answer']
             aggregated_data['qa'].append(qa)
     aggregated_datas.append(aggregated_data)
 
 with open('meta_data.json', 'w') as f:
-    json.dump(aggregated_datas, f, indent=4)
+    json.dump(aggregated_datas, f, indent=4, ensure_ascii=False)
 print('Meta data generated successfully.')
