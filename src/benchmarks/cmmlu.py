@@ -3,7 +3,7 @@ from tqdm import tqdm
 import json
 import os
 import numpy as np
-from ..base import BaseBenchmark
+from .base import BaseBenchmark
 from utils.rule_extractor import extract_answer
 import torchaudio
 import torch
