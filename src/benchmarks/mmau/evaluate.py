@@ -44,9 +44,8 @@ def _evaluate(data):
     # Here is the new dict for sub-category metrics
     subcat_metrics = {}
 
-    output_key = 'response' # The key that contains model output
+    output_key = 'model_prediction' # The key that contains model output
     no_pred_count = 0
-    matched_outputs = []
 
     for sample in tqdm(data):
         
@@ -76,11 +75,6 @@ def _evaluate(data):
             if subcat is not None:
                 subcat_metrics[subcat][0] += 1
             corr += 1
-            sample['model_prediction'] = _answer
-        else:
-            sample['model_prediction'] = ''
-
-        del sample['response']
 
         total += 1
         task_metrics[task][1] += 1
@@ -114,10 +108,6 @@ def _evaluate(data):
     result_string += f"Total Accuracy: {(corr/total) * 100:.2f}% over {total} samples\n"
     result_string += "*"*30 + "\n"
     result_string += f"No prediction count: {no_pred_count}\n"
-
-    # save results in submission-preferred format
-    with open('mmau_submission.json', 'w') as f:
-        json.dump(data, f, indent=4)
     
     return result_string
 

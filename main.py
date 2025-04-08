@@ -7,7 +7,7 @@ from src.benchmarks import load_benchmark, list_benchmarks
 def main():
     parser = ArgumentParser()
     parser.add_argument('--model', type=str, default='localhost', choices=list_models())
-    parser.add_argument('--benchmark', type=str, default='mmau', choices=list_benchmarks())
+    parser.add_argument('--benchmark', type=str, default='cmmlu', choices=list_benchmarks())
     parser.add_argument('--subset', type=str, default='alpacaeval')
     parser.add_argument('--split', type=str, default='test')
     parser.add_argument('--output-dir', type=str, default='output')
@@ -24,7 +24,8 @@ def main():
     # generate results
     result = benchmark.run(model, args.output_dir)
 
-    print(result)
+    if result is not None:
+        print(result)
 
 
 if __name__ == '__main__':

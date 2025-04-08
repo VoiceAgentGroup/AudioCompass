@@ -1,4 +1,4 @@
-from datasets import load_dataset, load_from_disk
+from datasets import load_dataset
 from loguru import logger
 from tqdm import tqdm
 import json
@@ -9,55 +9,31 @@ from ..base import BaseBenchmark
 
 
 class MMAU(BaseBenchmark):
-    def __init__(self, split, batch_size=500, **kwargs):
+    def __init__(self, split, data_dir='datas/mmau', **kwargs):
         self.name = 'mmau'
         self.split = split
-        self.batch_size = batch_size
+        self.data_dir = data_dir
         self.dataset = self.load_data(**kwargs)
+        
         
     def load_data(self, **kwargs):
         logger.info("Preparing data ...")
         if kwargs.get('offline', None) == True:
-            dataset = load_dataset('parquet', data_dir='datas/mmau', trust_remote_code=True)
+            dataset = load_dataset('parquet', data_dir=self.data_dir, trust_remote_code=True)
             dataset = dataset[self.split]
         else:
             dataset = load_dataset('lmms-lab/mmau', split=self.split, **kwargs)
         return dataset
+    
     
     def generate(self, model):
         logger.info("Generating results ...")
         logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
         
         results = []
-        output_keys = ['question_id', 'question', 'choices', 'answer', 'task', 'sub-category', 'difficulty']
+        output_keys = ['question', 'choices', 'answer', 'task', 'sub-category', 'difficulty']
         
-        batch = []
-        count = 0
-        total_processed = 0
-        
-        for item in self.dataset:
-            batch.append(item)
-            count += 1
-            
-            if count >= self.batch_size:
-                self._process_batch(batch, model, results, output_keys)
-                total_processed += len(batch)
-                
-                batch = []
-                count = 0
-                gc.collect()
-        
-        if batch:
-            self._process_batch(batch, model, results, output_keys)
-            total_processed += len(batch)
-        
-        if total_processed > len(results):
-            logger.warning(f"Some data failed to process. {total_processed - len(results)} items were skipped.")
-        
-        return results
-    
-    def _process_batch(self, batch, model, results, output_keys):
-        for item in tqdm(batch, total=len(batch)):
+        for item in tqdm(self.dataset):
             tmp = {k: v for k, v in item.items() if k in output_keys}
             input_text = item['question'] + ' ' + item['choices']
             input_audio = item['audio']
@@ -66,19 +42,30 @@ class MMAU(BaseBenchmark):
                 response = model.generate_mixed(input_audio, input_text)
                 logger.info(response)
                 logger.info('====================================')
-                tmp['response'] = response
+                tmp['model_prediction'] = response
                 results.append(tmp)
                 
                 del input_audio
+                gc.collect()
             except Exception as e:
                 logger.error(e)
                 logger.error('====================================')
                 continue
-
+                
+        return results
+    
+    
     def evaluate(self, data):
         evaluated_results = _evaluate(data)
         logger.info("Evaluation completed.")
         return evaluated_results
+    
+    
+    def get_result_template(self):
+        template_file = os.path.join(self.data_dir, 'mmau-test.json')
+        with open(template_file, 'r') as f:
+            template = json.load(f)
+        return template
     
 
     def save_generated_results(self, results, output_dir, model_name):
@@ -86,13 +73,23 @@ class MMAU(BaseBenchmark):
         model_name = model_name.split('/')[-1]
         output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}.json')
         with open(output_file, 'w') as f:
-            json.dump(results, f, indent=4)
+            if self.split == 'test_mini':
+                json.dump(results, f, indent=4)
+            else:
+                template = self.get_result_template()
+                for template_item, result_item in zip(template, results):
+                    template_item['model_prediction'] = result_item['model_prediction']
+                json.dump(template, f, indent=4)
+                
         logger.info(f"Generated results saved to {output_file}.")
 
 
     def run(self, model, output_dir):
         generated_results = self.generate(model)
-        self.save_generated_results(generated_results, output_dir, model.name)
-        evaluated_results = self.evaluate(generated_results)
+        self.save_generated_results(generated_results, output_dir, model.model_name)
+        if self.split == 'test_mini':
+            evaluated_results = self.evaluate(generated_results)
+        else:
+            evaluated_results = None
         logger.info("Run completed.")
         return evaluated_results

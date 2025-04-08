@@ -37,7 +37,7 @@ class LocalAssistant(VoiceAssistant):
                 {"role": "user", "content": [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]},
             ],
             extra_body={
-                "prompt_logprobs": 1,
+                "prompt_logprobs": 0,
             },
         )
         

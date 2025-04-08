@@ -5,7 +5,7 @@ import json
 from argparse import ArgumentParser
 from src.models import load_model
 
-model = load_model('local')
+model = load_model('localhost')
 
 def main(args):
     subject_dir = f'datas/cmmlu-minimax/test/{args.subject}'
@@ -46,10 +46,10 @@ def main(args):
 
         logprob = 0
         length = 0
-        for pair in logprob_response[1:]:
-            pair = list(pair.values())
-            if pair[0]["decoded_token"] == "<|AUDIO|>":
-                logprob = logprob + pair[1]['logprob']
+        for token in logprob_response[1:]:
+            token = list(token.values())[0]
+            if token['decoded_token'] == '<|AUDIO|>':
+                logprob += token['logprob']
                 length += 1
                 
         logprob /= length
@@ -62,7 +62,7 @@ def main(args):
         'array': question.numpy(),
         'sampling_rate': sample_rate,    
     }
-    response, _ = model.generate_mixed(question, prompt)
+    response = model.generate_mixed(question, prompt)
     print('Normal response:\n' + response)
     
     print('Right Answer: ' + right_answer)

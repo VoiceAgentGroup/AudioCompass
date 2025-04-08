@@ -74,18 +74,18 @@ class CMMLU(BaseBenchmark):
                 dataset.append(data)
         return dataset
     
+    
     def process_logprob(self, logprob):
         audio_logprob = 0
         length = 0
-        for pair in logprob[1:]:
-            pair = list(pair.values())
-            if pair[0]["decoded_token"] == "<|AUDIO|>":
-                audio_logprob = audio_logprob + pair[1]['logprob']
-                length += 1
+        for token in logprob[1:]:
+            token = list(token.values())[0]
+            if token['decoded_token'] == '<|AUDIO|>':
+                audio_logprob += token['logprob']
+                length += 1      
         audio_logprob /= length
         return audio_logprob
-    
-        
+      
     def generate_ppl(self, model):
         logger.info("Generating results ...")
         logger.add(f'log/{self.name}-ppl.log', rotation='50 MB')
@@ -98,7 +98,7 @@ class CMMLU(BaseBenchmark):
                 for idx, qa_item in enumerate(qa):
                     audio_group = qa_item['audio_group']
                     right_answer = qa_item['right_answer']
-                    logprobs = [self.process_logprob(model.generate_audio(audio)[1]) for audio in audio_group]
+                    logprobs = [self.process_logprob(model.generate_audio(audio, max_new_tokens=1)[1]) for audio in audio_group]
                     logger.info(f"Generated logprobs for audio group {idx}: {logprobs}")
                     tmp['response'].append({'idx': idx, 'logprob': logprobs, 'right_answer': right_answer})
                 logger.info('====================================')
@@ -181,10 +181,10 @@ class CMMLU(BaseBenchmark):
         
     
     def generate(self, model):
-        return self.generate_normal(model)
+        return self.generate_ppl(model)
     
     def evaluate(self, results):
-        return self.evaluate_normal(results)
+        return self.evaluate_ppl(results)
     
     def save_generated_results(self, results, output_dir, model_name):
         return self.save_generated_results_normal(results, output_dir, model_name)
