@@ -98,7 +98,7 @@ class CMMLU(BaseBenchmark):
                 for idx, qa_item in enumerate(qa):
                     audio_group = qa_item['audio_group']
                     right_answer = qa_item['right_answer']
-                    logprobs = [self.process_logprob(model.generate_audio(audio, max_new_tokens=1)[1]) for audio in audio_group]
+                    logprobs = [self.process_logprob(model.generate_audio(audio)[1]) for audio in audio_group]
                     logger.info(f"Generated logprobs for audio group {idx}: {logprobs}")
                     tmp['response'].append({'idx': idx, 'logprob': logprobs, 'right_answer': right_answer})
                 logger.info('====================================')
