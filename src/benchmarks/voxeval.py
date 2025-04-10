@@ -10,9 +10,8 @@ from src.transcriptors.whisper_large_v3 import WhisperLargeV3
 
 
 class VoxEval(BaseBenchmark):
-    def __init__(self, subset_name, split, data_dir="datas/VoxEval", **kwargs):
+    def __init__(self, split, data_dir="datas/VoxEval", **kwargs):
         self.name = 'voxeval'
-        self.subset_name = subset_name
         self.split = split
         self.data_dir = data_dir
         
@@ -187,7 +186,7 @@ class VoxEval(BaseBenchmark):
     def generate(self, model):
         """Generate results for VoxEval dataset using the provided model"""
         logger.info("Generating VoxEval results...")
-        logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
+        logger.add(f'log/{self.name}-{self.prompt_mode}-{self.split}.log', rotation='50MB')
         
         results = []
         failed_items = []
@@ -276,7 +275,7 @@ class VoxEval(BaseBenchmark):
         os.makedirs(results_dir, exist_ok=True)
         
         # Save results details as JSON
-        results_file = os.path.join(results_dir, f"{model_name}_{self.subset_name}_{self.split}.json")
+        results_file = os.path.join(results_dir, f"{model_name}_{self.prompt_mode}_{self.split}.json")
         with open(results_file, 'w') as f:
             json.dump(results, f, indent=2)
         
@@ -308,5 +307,5 @@ class VoxEval(BaseBenchmark):
     def run(self, model, output_dir):
         generated_results = self.generate(model)
         self.save_generated_results(generated_results, output_dir, model.__class__.__name__)
-        evaluation_results = self.evaluate(generated_results)
-        return evaluation_results
+        # evaluation_results = self.evaluate(generated_results)
+        return None
