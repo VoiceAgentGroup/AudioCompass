@@ -178,3 +178,5 @@ cython_debug/
 datas/
 log/
 output/
+
+.vscode/
