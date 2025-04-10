@@ -14,6 +14,7 @@ class CMMLU(BaseBenchmark):
         self.name = 'cmmlu'
         self.data_dir = data_dir
         self.dataset = self.load_data()
+        logger.add(f'log/{self.name}-normal.log', rotation='50 MB')
 
     def concat_audio(self, question_path, choice_path) -> list:
         audio_group = []
@@ -137,7 +138,6 @@ class CMMLU(BaseBenchmark):
     
     def generate_normal(self, model):
         logger.info("Generating results ...")
-        logger.add(f'log/{self.name}-normal.log', rotation='50 MB')
         prompt = 'Here is an audio of a question. Please listen carefully and choose the right answer.\n'
         results = []
         for subject_item in tqdm(self.dataset, total=len(self.dataset)):

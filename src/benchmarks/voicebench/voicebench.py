@@ -14,6 +14,7 @@ class VoiceBench(BaseBenchmark):
         self.split = split
         self.data_dir = data_dir
         self.dataset = self.load_data(**kwargs)
+        logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
 
     
     def load_data(self, **kwargs):
@@ -29,7 +30,6 @@ class VoiceBench(BaseBenchmark):
     
     def generate(self, model):
         logger.info("Generating results ...")
-        logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
 
         results = []
         for item in tqdm(self.dataset, total=len(self.dataset)):

@@ -13,6 +13,7 @@ class StoryCloze(BaseBenchmark):
         self.name = 'storycloze'
         self.data_dir = data_dir
         self.dataset = self.load_data()
+        logger.add(f'log/{self.name}.log', rotation='50 MB')
         
     def concat_audio(self, prefix_path, suffix_paths):
         audio_group = []
@@ -80,7 +81,6 @@ class StoryCloze(BaseBenchmark):
     
     def generate(self, model):
         logger.info("Generating results ...")
-        logger.add(f'log/{self.name}.log', rotation='50 MB')
         results = []
         for story_item in tqdm(self.dataset, total=len(self.dataset)):
             idx = story_item['idx']

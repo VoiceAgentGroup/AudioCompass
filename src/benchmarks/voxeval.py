@@ -21,7 +21,6 @@ class VoxEval(BaseBenchmark):
         self.prompt_mode = kwargs.get("prompt_mode", "regular")
         self.cut_audio = kwargs.get("cut_audio", True)
         
-        # Configure paths based on data_dir
         self.test_dir = os.path.join(self.data_dir, "test")
         self.fewshot_dir = os.path.join(self.data_dir, "all_fewshot_examples")
         
@@ -30,21 +29,18 @@ class VoxEval(BaseBenchmark):
             self.shots = kwargs.get("shots", 3)
             self.fewshot_dir = os.path.join(self.data_dir, "math_CoT_fewshot")
         
-        # Initialize whisper transcriptor
         self.transcriptor = WhisperLargeV3()
         
-        # Load dataset
         self.dataset = self.load_data(**kwargs)
+        logger.add(f'log/{self.name}-{self.prompt_mode}-{self.split}.log', rotation='50MB')
     
     def whisper_inference(self, waveform):
-        """Run Whisper inference on audio waveform"""
         if waveform.ndim > 1:
             waveform = waveform[0, :]
         result = self.transcriptor.pipe(waveform)["text"]
         return result
     
     def concat_audio(self, audio_paths, add_silence=True):
-        """Concatenate multiple audio files with optional silence in between"""
         audio_segments = []
         sample_rate = None
         
@@ -68,7 +64,6 @@ class VoxEval(BaseBenchmark):
         return combined
         
     def load_data(self, **kwargs):
-        """Load the VoxEval dataset with prepared audio"""
         logger.info("Preparing VoxEval data...")
         
         # Determine subject list based on prompt mode
@@ -82,7 +77,6 @@ class VoxEval(BaseBenchmark):
         
         logger.info(f"Found {len(subject_list)} subjects: {subject_list}")
         
-        # Prepare the dataset with audio
         prepared_data = []
         few_shot_prompts = {}
         
@@ -123,6 +117,7 @@ class VoxEval(BaseBenchmark):
         
         # Now prepare each subject's questions
         for subject in subject_list:
+            logger.info(f"Preparing questions for {subject}")
             folder = subject.split(".csv")[0]
             if self.prompt_mode == "CoT":
                 fewshot_folder = folder.replace("_4o", "_dev_4o")
@@ -184,9 +179,7 @@ class VoxEval(BaseBenchmark):
         return prepared_data
     
     def generate(self, model):
-        """Generate results for VoxEval dataset using the provided model"""
         logger.info("Generating VoxEval results...")
-        logger.add(f'log/{self.name}-{self.prompt_mode}-{self.split}.log', rotation='50MB')
         
         results = []
         failed_items = []
@@ -307,5 +300,5 @@ class VoxEval(BaseBenchmark):
     def run(self, model, output_dir):
         generated_results = self.generate(model)
         self.save_generated_results(generated_results, output_dir, model.__class__.__name__)
-        # evaluation_results = self.evaluate(generated_results)
-        return None
+        evaluation_results = self.evaluate(generated_results)
+        return evaluation_results

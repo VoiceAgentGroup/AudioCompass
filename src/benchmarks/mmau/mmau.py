@@ -14,6 +14,7 @@ class MMAU(BaseBenchmark):
         self.split = split
         self.data_dir = data_dir
         self.dataset = self.load_data(**kwargs)
+        logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
         
         
     def load_data(self, **kwargs):
@@ -28,7 +29,6 @@ class MMAU(BaseBenchmark):
     
     def generate(self, model):
         logger.info("Generating results ...")
-        logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
         
         results = []
         output_keys = ['question', 'choices', 'answer', 'task', 'sub-category', 'difficulty']

@@ -15,6 +15,7 @@ class OpenAudioBench(BaseBenchmark):
         self.split = split
         self.data_dir = data_dir
         self.dataset = self.load_data()
+        logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
         
     def check_split(self, split):
         available_split = ['alpaca_eval', 'llama_questions', 'reasoning_qa', 'trivia_qa', 'web_questions']
@@ -55,7 +56,6 @@ class OpenAudioBench(BaseBenchmark):
     
     def generate(self, model):
         logger.info("Generating results ...")
-        logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
 
         results = []
         for item in tqdm(self.dataset, total=len(self.dataset)):
