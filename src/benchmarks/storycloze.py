@@ -62,9 +62,9 @@ class StoryCloze(BaseBenchmark):
             meta_data = json.load(f)
         for story_meta in tqdm(meta_data):
             idx = story_meta['idx']
-            prefix_path = os.path.join(self.data_dir, story_meta['idx'], story_meta['prefix'])
-            correct_suffix_path = os.path.join(self.data_dir, story_meta['idx'], story_meta['correct_suffix'])
-            fake_suffix_path = os.path.join(self.data_dir, story_meta['idx'], story_meta[f'{self.split}_suffix'])
+            prefix_path = os.path.join(story_meta['idx'], story_meta['prefix']['wav'])
+            correct_suffix_path = os.path.join(story_meta['idx'], story_meta['correct_suffix']['wav'])
+            fake_suffix_path = os.path.join(story_meta['idx'], story_meta[f'{self.split}_suffix']['wav'])
             audio_group = self.concat_audio(prefix_path, [correct_suffix_path, fake_suffix_path])
             story_data = {'idx': idx, 'audio_group': audio_group}
             dataset.append(story_data)
