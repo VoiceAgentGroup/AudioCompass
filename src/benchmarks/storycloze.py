@@ -4,23 +4,15 @@ import json
 import os
 import numpy as np
 from .base import BaseBenchmark
-from utils.rule_extractor import extract_answer
 import torchaudio
 import torch
 
 
 class StoryCloze(BaseBenchmark):
-    def __init__(self, split, data_dir="datas/zh-storycloze", **kwargs):
+    def __init__(self, data_dir="datas/zh-storycloze", **kwargs):
         self.name = 'storycloze'
-        self.check_split(split)
-        self.split = split
         self.data_dir = data_dir
         self.dataset = self.load_data()
-        
-    def check_split(self, split):
-        available_split = ['sSC', 'tSC']
-        if split not in available_split:
-            raise ValueError("Split should be one of", available_split)
         
     def concat_audio(self, prefix_path, suffix_paths):
         audio_group = []
@@ -62,11 +54,16 @@ class StoryCloze(BaseBenchmark):
             meta_data = json.load(f)
         for story_meta in tqdm(meta_data):
             idx = story_meta['idx']
+            
             prefix_path = os.path.join(story_meta['idx'], story_meta['prefix']['wav'])
             correct_suffix_path = os.path.join(story_meta['idx'], story_meta['correct_suffix']['wav'])
-            fake_suffix_path = os.path.join(story_meta['idx'], story_meta[f'{self.split}_suffix']['wav'])
-            audio_group = self.concat_audio(prefix_path, [correct_suffix_path, fake_suffix_path])
-            story_data = {'idx': idx, 'audio_group': audio_group}
+            sSC_suffix_path = os.path.join(story_meta['idx'], story_meta[f'sSC_suffix']['wav'])
+            tSC_suffix_path = os.path.join(story_meta['idx'], story_meta[f'tSC_suffix']['wav'])
+            
+            s_group = self.concat_audio(prefix_path, [correct_suffix_path, sSC_suffix_path])
+            t_group = self.concat_audio(prefix_path, [correct_suffix_path, tSC_suffix_path])
+            
+            story_data = {'idx': idx, 's_group': s_group, 't_group': t_group}
             dataset.append(story_data)
         return dataset
     
@@ -83,16 +80,18 @@ class StoryCloze(BaseBenchmark):
     
     def generate(self, model):
         logger.info("Generating results ...")
-        logger.add(f'log/{self.name}-{self.split}.log', rotation='50 MB')
+        logger.add(f'log/{self.name}.log', rotation='50 MB')
         results = []
         for story_item in tqdm(self.dataset, total=len(self.dataset)):
             idx = story_item['idx']
             try:
-                audio_group = story_item['audio_group']
-                logprobs = [self.process_logprob(model.generate_audio(audio)[1]) for audio in audio_group]
-                logger.info(f"Generated logprobs for audio group {idx}: {logprobs}")
+                s_group = story_item['s_group']
+                t_group = story_item['t_group']
+                s_logprobs = [self.process_logprob(model.generate_audio(audio)[1]) for audio in s_group]
+                t_logprobs = [self.process_logprob(model.generate_audio(audio)[1]) for audio in t_group]
+                logger.info(f"Generated logprobs for {idx}: sSC{s_logprobs} tSC{t_logprobs}")
                 logger.info('====================================')
-                tmp = {'idx': idx, 'logprobs': logprobs}
+                tmp = {'idx': idx, 's_logprobs': s_logprobs, 't_logprobs': t_logprobs}
                 results.append(tmp)
             except Exception as e:
                 logger.error(e)
@@ -102,18 +101,22 @@ class StoryCloze(BaseBenchmark):
     
     def evaluate(self, results):
         logger.info("Evaluating results ...")
-        correct = 0
+        s_correct = 0
+        t_correct = 0
         for story_item in tqdm(results):
-            answer = np.argmax(story_item['logprobs'])
-            correct += (answer == 0)
-        acc = correct / len(results)
+            s_answer = np.argmax(story_item['s_logprobs'])
+            s_correct += (s_answer == 0)
+            t_answer = np.argmax(story_item['t_logprobs'])
+            t_correct += (t_answer == 0)
+        s_acc = s_correct / len(results)
+        t_acc = t_correct / len(results)
         logger.info("Evaluation completed.")
-        return {'acc': acc}
+        return {'s_acc': s_acc, 't_acc': t_acc}
     
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
-        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}.json')
+        output_file = os.path.join(output_dir, f'{model_name}-{self.name}.json')
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=4)
         logger.info(f"Generated results saved to {output_file}.")
