@@ -52,11 +52,14 @@ You should respond in JSON format. First provide a one-sentence concise analysis
             return {"judgment": ""}
     
     def evaluate(self, datas):
+        messages = []
         for data in datas:
-            data = self.build_eval_messages(data)
+            messages.append(self.build_eval_messages(data))
+        
+        judge = AIJudge()
         with multiprocessing.Pool(4) as pool:
-            res = list(tqdm(pool.imap(AIJudge().judge, datas), total=len(datas), desc="Evaluating"))
-        judged_data = list(map(self.check_eval_response_format, res))
+            judged_data = list(tqdm(pool.imap(judge.generate, messages), total=len(messages)))
+        judged_data = list(map(self.check_eval_response_format, judged_data))
         correct_count = 0
         for item in judged_data:
             if item["judgment"] == "correct":

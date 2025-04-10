@@ -9,15 +9,21 @@ import torchaudio
 
 
 class OpenAudioBench(BaseBenchmark):
-    def __init__(self, subset_name, data_dir="datas/openaudiobench", **kwargs):
+    def __init__(self, split, data_dir="datas/OpenAudioBench/eval_datas", **kwargs):
         self.name = 'openaudiobench'
-        self.subset_name = subset_name
+        self.check_split(split)
+        self.split = split
         self.data_dir = data_dir
         self.dataset = self.load_data()
         
+    def check_split(self, split):
+        available_split = ['alpaca_eval', 'llama_questions', 'reasoning_qa', 'trivia_qa', 'web_questions']
+        if split not in available_split:
+            raise ValueError("Split should be one of", available_split)
+        
     def load_data(self):
-        logger.info("Loading data ...")
-        data_csv_path = os.path.join(self.data_dir, self.subset_name, f"{self.subset_name}.csv")
+        logger.info("Preparing data ...")
+        data_csv_path = os.path.join(self.data_dir, self.split, f"{self.split}.csv")
         if not os.path.exists(data_csv_path):
             raise FileNotFoundError(f"Data file {data_csv_path} not found.")
         
@@ -26,7 +32,7 @@ class OpenAudioBench(BaseBenchmark):
         
         for _, row in df.iterrows():
             data = row.to_dict()
-            audio_path = os.path.join(self.data_dir, self.subset_name, data['audio_path'])
+            audio_path = os.path.join(self.data_dir, self.split, 'audios', data['audio_filename'])
             if not os.path.exists(audio_path):
                 logger.warning(f"Audio file {audio_path} not found, skipping...")
                 continue
@@ -49,7 +55,7 @@ class OpenAudioBench(BaseBenchmark):
     
     def generate(self, model):
         logger.info("Generating results ...")
-        logger.add(f'log/{self.name}-{self.subset_name}.log', rotation='50MB')
+        logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
 
         results = []
         for item in tqdm(self.dataset, total=len(self.dataset)):
@@ -72,7 +78,7 @@ class OpenAudioBench(BaseBenchmark):
         return results
 
     def evaluate(self, data):
-        evaluated_results = _evaluate(data, self.subset_name)
+        evaluated_results = _evaluate(data, self.split)
         logger.info("Evaluation completed.")
         return evaluated_results
     
@@ -80,7 +86,7 @@ class OpenAudioBench(BaseBenchmark):
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
-        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.subset_name}.jsonl')
+        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}.jsonl')
         with open(output_file, 'w') as f:
             for record in results:
                 json_line = json.dumps(record)

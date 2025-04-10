@@ -8,16 +8,21 @@ from ..base import BaseBenchmark
 
 
 class VoiceBench(BaseBenchmark):
-    def __init__(self, subset_name, split, **kwargs):
+    def __init__(self, subset_name, split, data_dir='datas/voicebench', **kwargs):
         self.name = 'voicebench'
         self.subset_name = subset_name
         self.split = split
+        self.data_dir = data_dir
         self.dataset = self.load_data(**kwargs)
 
     
     def load_data(self, **kwargs):
         logger.info("Preparing data ...")
-        dataset = load_dataset('hlt-lab/voicebench', subset=self.subset_name, split=self.split, **kwargs)
+        if kwargs.get('offline', None) == True:
+            dataset = load_dataset('parquet', data_dir=self.data_dir, trust_remote_code=True)
+            dataset = dataset[self.subset_name][self.split]
+        else:
+            dataset = load_dataset('hlt-lab/voicebench', subset=self.subset_name, split=self.split, **kwargs)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     

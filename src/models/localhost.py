@@ -18,7 +18,7 @@ class LocalAssistant(VoiceAssistant):
     def generate_audio(
         self,
         audio,
-        max_new_tokens=2048,
+        max_tokens=2048,
     ):
         # Write the audio data to an in-memory buffer in WAV format
         buffer = io.BytesIO()
@@ -31,7 +31,7 @@ class LocalAssistant(VoiceAssistant):
 
         completion = self.client.chat.completions.create(
             model=self.model_name,
-            max_tokens=max_new_tokens,
+            max_tokens=max_tokens,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant who tries to help answer the user's question."},
                 {"role": "user", "content": [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]},
@@ -48,7 +48,7 @@ class LocalAssistant(VoiceAssistant):
         self,
         audio,
         text,
-        max_new_tokens=2048,
+        max_tokens=2048,
     ):
         buffer = io.BytesIO()
         sf.write(buffer, audio['array'], audio['sampling_rate'], format='WAV')
@@ -58,7 +58,7 @@ class LocalAssistant(VoiceAssistant):
         encoded_string = base64.b64encode(wav_data).decode('utf-8')
         completion = self.client.chat.completions.create(
             model=self.model_name,
-            max_tokens=max_new_tokens,
+            max_tokens=max_tokens,
             messages=[
                 {
                     "role": "system",

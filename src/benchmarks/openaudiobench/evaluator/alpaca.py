@@ -42,10 +42,14 @@ class AlpacaEvaluator:
             assert 0
     
     def evaluate(self, datas):
+        messages = []
         for data in datas:
-            data = self.build_eval_messages(data)
+            messages.append(self.build_eval_messages(data))
+        
+        judge = AIJudge()
         with multiprocessing.Pool(4) as pool:
-            judged_data = list(tqdm(pool.imap(AIJudge.generate, datas), total=len(datas)))
+            judged_data = list(tqdm(pool.imap(judge.generate, messages), total=len(messages)))
+        
         scores = []
         for item in judged_data:
             score = self.get_eval_score(item)
