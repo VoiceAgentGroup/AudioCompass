@@ -275,7 +275,7 @@ class VoxEval(BaseBenchmark):
         os.makedirs(results_dir, exist_ok=True)
         
         # Save results details as JSON
-        results_file = os.path.join(results_dir, f"{model_name}_{self.prompt_mode}_{self.split}.json")
+        results_file = os.path.join(results_dir, f"{model_name}-{self.prompt_mode}-{self.split}.json")
         with open(results_file, 'w') as f:
             json.dump(results, f, indent=2)
         
