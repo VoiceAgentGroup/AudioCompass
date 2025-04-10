@@ -12,7 +12,7 @@ import torch
 class StoryCloze(BaseBenchmark):
     def __init__(self, split, data_dir="datas/zh-storycloze", **kwargs):
         self.name = 'storycloze'
-        self.check_split()
+        self.check_split(split)
         self.split = split
         self.data_dir = data_dir
         self.dataset = self.load_data()

@@ -115,16 +115,18 @@ class CMMLU(BaseBenchmark):
         correct = 0
         total = 0
         for subject_item in tqdm(results):
+            logger.info("Subject: " + subject_item['subject'])
             subject_results = subject_item['response']
             for result in subject_results:
                 answer = choice_strs[np.argmax(result['logprob'])]
                 correct += (answer == result['right_answer'])
+                logger.info(f"idx: {result['idx']} answer: {answer} right_answer: {result['right_answer']}")
                 total += 1
         acc = correct / total
         logger.info("Evaluation completed.")
         return {'acc': acc}
     
-    def save_generated_result_ppl(self, results, output_dir, model_name):
+    def save_generated_results_ppl(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
         output_file = os.path.join(output_dir, f'{model_name}-{self.name}-ppl.json')
@@ -187,7 +189,7 @@ class CMMLU(BaseBenchmark):
         return self.evaluate_ppl(results)
     
     def save_generated_results(self, results, output_dir, model_name):
-        return self.save_generated_results_normal(results, output_dir, model_name)
+        return self.save_generated_results_ppl(results, output_dir, model_name)
     
     def run(self, model, output_dir):
         generated_results = self.generate(model)

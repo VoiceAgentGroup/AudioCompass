@@ -1,4 +1,5 @@
 import os
+from loguru import logger
 from argparse import ArgumentParser
 from src.models import load_model, list_models
 from src.benchmarks import load_benchmark, list_benchmarks
@@ -25,7 +26,7 @@ def main():
     result = benchmark.run(model, args.output_dir)
 
     if result is not None:
-        print(result)
+        logger.info(result)
 
 
 if __name__ == '__main__':
