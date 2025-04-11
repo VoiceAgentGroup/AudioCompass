@@ -14,6 +14,32 @@ class LocalAssistant(VoiceAssistant):
 
         models = self.client.models.list()
         self.model_name = models.data[0].id
+        
+    def generate_text(
+        self,
+        text,
+        max_tokens=2048,
+    ):
+        completion = self.client.chat.completions.create(
+            model=self.model_name,
+            max_tokens=max_tokens,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant who tries to help answer the user's question."
+                },
+                {
+                    "role": "user", 
+                    "content": [
+                        {"type": "text", "text": text}
+                    ]
+                },
+            ],
+            extra_body={
+                "prompt_logprobs": 0,
+            },
+        )
+        return completion.choices[0].message.content, completion.prompt_logprobs
 
     def generate_audio(
         self,
