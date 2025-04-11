@@ -70,8 +70,10 @@ class CMMLU(BaseBenchmark):
                     choice_descs = [choice['text'] for choice in qa['choice']]
                     choice_text = ' '.join([(choice_lb + choice_desc) for choice_lb, choice_desc in zip(choice_lbs, choice_descs)])
                     
+                    text_group = [qa['question']['text'] + choice['text'] for choice in qa['choice']]
+                    
                     right_answer = qa['right_answer']
-                    data['qa'].append({'audio_group': audio_group, 'question_audio': question_audio, 'choice_text': choice_text, 'right_answer': right_answer})
+                    data['qa'].append({'audio_group': audio_group, 'text_group': text_group, 'question_audio': question_audio, 'question_text': qa['question']['text'], 'choice_text': choice_text, 'right_answer': right_answer})
                 dataset.append(data)
         return dataset
     
@@ -87,7 +89,7 @@ class CMMLU(BaseBenchmark):
         audio_logprob /= length
         return audio_logprob
       
-    def generate_ppl(self, model):
+    def generate(self, model):
         logger.info("Generating results ...")
         logger.add(f'log/{self.name}-ppl.log', rotation='50 MB')
         results = []
@@ -110,7 +112,7 @@ class CMMLU(BaseBenchmark):
                 continue
         return results
 
-    def evaluate_ppl(self, results):
+    def evaluate(self, results):
         logger.info("Evaluating results ...")
         choice_strs = ['A', 'B', 'C', 'D']
         correct = 0
@@ -127,69 +129,13 @@ class CMMLU(BaseBenchmark):
         logger.info("Evaluation completed.")
         return {'acc': acc}
     
-    def save_generated_results_ppl(self, results, output_dir, model_name):
+    def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
         output_file = os.path.join(output_dir, f'{model_name}-{self.name}-ppl.json')
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=4)
-        logger.info(f"Generated results saved to {output_file}.")
-        
-    
-    def generate_normal(self, model):
-        logger.info("Generating results ...")
-        prompt = 'Here is an audio of a question. Please listen carefully and choose the right answer.\n'
-        results = []
-        for subject_item in tqdm(self.dataset, total=len(self.dataset)):
-            tmp = {'subject': subject_item['subject'], 'response': []}
-            logger.info(f"Processing subject: {subject_item['subject']}")
-            qa = subject_item['qa']
-            try:
-                for idx, qa_item in enumerate(qa):
-                    question = qa_item['question_audio']
-                    choice_text = qa_item['choice_text']
-                    right_answer = qa_item['right_answer']
-                    answer, _ = model.generate_mixed(question, prompt + choice_text)
-                    logger.info(f"Generated response for audio group {idx}: {answer}")
-                    tmp['response'].append({'idx': idx, 'answer': answer, 'right_answer': right_answer})
-                logger.info('====================================')
-                results.append(tmp)
-            except Exception as e:
-                logger.error(e)
-                logger.error('====================================')
-                continue
-        return results
-    
-    def evaluate_normal(self, results):
-        correct = 0
-        total = 0
-        for subject_item in tqdm(results):
-            subject_results = subject_item['response']
-            for result in subject_results:
-                answer = extract_answer(result['answer'])
-                correct += (answer == result['right_answer'])
-                total += 1
-        acc = correct / total
-        logger.info("Evaluation completed.")
-        return {'acc': acc}
-    
-    def save_generated_results_normal(self, results, output_dir, model_name):
-        os.makedirs(output_dir, exist_ok=True)
-        model_name = model_name.split('/')[-1]
-        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-normal.json')
-        with open(output_file, 'w') as f:
-            json.dump(results, f, indent=4)
-        logger.info(f"Generated results saved to {output_file}.")
-        
-    
-    def generate(self, model):
-        return self.generate_ppl(model)
-    
-    def evaluate(self, results):
-        return self.evaluate_ppl(results)
-    
-    def save_generated_results(self, results, output_dir, model_name):
-        return self.save_generated_results_ppl(results, output_dir, model_name)
+        logger.info(f"Generated results saved to {output_file}.")    
     
     def run(self, model, output_dir):
         generated_results = self.generate(model)
