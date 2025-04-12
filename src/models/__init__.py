@@ -20,6 +20,7 @@
 # from .step_audio import StepAssistant
 # from .phi import PhiAssistant
 from .qwen_omni_turbo import QwenOmniAssistant
+from .speechgpt2 import SpeechGPT2
 from .localhost import LocalAssistant
 
 model_cls_mapping = {
@@ -49,6 +50,7 @@ model_cls_mapping = {
     # 'step': StepAssistant,
     # 'phi': PhiAssistant,
     'qwen_omni_turbo': QwenOmniAssistant,
+    'speechgpt2': SpeechGPT2,
     'localhost': LocalAssistant,
 }
 
