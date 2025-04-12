@@ -12,7 +12,7 @@ def main():
     parser.add_argument('--subset', type=str, default='alpacaeval')
     parser.add_argument('--split', type=str, default='test')
     parser.add_argument('--output-dir', type=str, default='output')
-    parser.add_argument('--cache-dir', type=str, default='./.cache')
+    parser.add_argument('--cache-dir', type=str, default='cache')
     parser.add_argument('--offline', action="store_true")
     args = parser.parse_args()
 
