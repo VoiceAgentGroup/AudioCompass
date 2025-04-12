@@ -180,3 +180,4 @@ log/
 output/
 
 .vscode/
+cache/
