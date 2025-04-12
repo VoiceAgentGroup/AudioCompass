@@ -42,7 +42,7 @@ class Naive3Assistant(VoiceAssistant):
         )
         return pipeline
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,
@@ -62,7 +62,7 @@ class Naive3Assistant(VoiceAssistant):
         response = outputs[0]["generated_text"][-1]['content']
         return response
 
-    def generate_text(
+    def generate_t2t(
         self,
         text,
     ):

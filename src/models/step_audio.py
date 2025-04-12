@@ -29,7 +29,7 @@ class StepAssistant(VoiceAssistant):
             trust_remote_code=True,
         )
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,

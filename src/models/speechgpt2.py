@@ -32,5 +32,5 @@ class SpeechGPT2(VoiceAssistant):
             codec_config_path="./src/models/src_speechgpt2/Codec/config/sg2_codec_config.yaml"
         )
 
-    def generate_audio(self, audio, max_new_tokens=2048):
+    def generate_s2t(self, audio, max_new_tokens=2048):
         pass

@@ -213,7 +213,7 @@ class MiniOmniAssistant(VoiceAssistant):
 
         return fabric, model, text_tokenizer, snacmodel, whispermodel
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,
@@ -230,7 +230,7 @@ class MiniOmniAssistant(VoiceAssistant):
         )
         return response
 
-    def generate_text(
+    def generate_t2t(
         self,
         text,
     ):

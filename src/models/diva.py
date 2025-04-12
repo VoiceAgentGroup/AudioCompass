@@ -8,7 +8,7 @@ class DiVAAssistant(VoiceAssistant):
         self.model = AutoModel.from_pretrained("WillHeld/DiVA-llama-3-v0-8b", cache_dir='./cache', trust_remote_code=True)
         self.model_name = "diva"
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,
@@ -17,15 +17,15 @@ class DiVAAssistant(VoiceAssistant):
         audio = audio['array']
         return self.model.generate([audio], max_new_tokens=max_new_tokens)[0]
 
-    def generate_text(
+    def generate_t2t(
         self,
         text,
     ):
-        return generate_text(self.model, [text], max_new_tokens=2048)[0]
+        return generate_t2t(self.model, [text], max_new_tokens=2048)[0]
 
 
 @torch.no_grad()
-def generate_text(
+def generate_t2t(
     llm,
     text_prompt,
     do_sample=False,

@@ -87,8 +87,8 @@ class StoryCloze(BaseBenchmark):
             try:
                 s_group = story_item['s_group']
                 t_group = story_item['t_group']
-                s_logprobs = [self.process_logprob(model.generate_audio(audio)[1]) for audio in s_group]
-                t_logprobs = [self.process_logprob(model.generate_audio(audio)[1]) for audio in t_group]
+                s_logprobs = [self.process_logprob(model.generate_s2t(audio)[1]) for audio in s_group]
+                t_logprobs = [self.process_logprob(model.generate_s2t(audio)[1]) for audio in t_group]
                 logger.info(f"Generated logprobs for {idx}: sSC{s_logprobs} tSC{t_logprobs}")
                 logger.info('====================================')
                 tmp = {'idx': idx, 's_logprobs': s_logprobs, 't_logprobs': t_logprobs}

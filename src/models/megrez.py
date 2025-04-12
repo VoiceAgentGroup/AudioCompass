@@ -24,7 +24,7 @@ class MegrezAssistant(VoiceAssistant):
         ).eval().cuda()
         self.model._get_or_init_processor()
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,

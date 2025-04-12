@@ -15,7 +15,7 @@ class LocalAssistant(VoiceAssistant):
         models = self.client.models.list()
         self.model_name = models.data[0].id
         
-    def generate_text(
+    def generate_t2t(
         self,
         text,
         max_tokens=2048,
@@ -41,7 +41,7 @@ class LocalAssistant(VoiceAssistant):
         )
         return completion.choices[0].message.content, completion.prompt_logprobs
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_tokens=2048,
@@ -70,7 +70,7 @@ class LocalAssistant(VoiceAssistant):
         return completion.choices[0].message.content, completion.prompt_logprobs
     
 
-    def generate_mixed(
+    def generate_st2t(
         self,
         audio,
         text,

@@ -22,7 +22,7 @@ class MiniCPMAssistant(VoiceAssistant):
 
         self.sys_prompt = model.get_sys_prompt(mode='audio_assistant', language='en')
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,
@@ -36,7 +36,7 @@ class MiniCPMAssistant(VoiceAssistant):
             sampling=True,
             max_new_tokens=2048,
             use_tts_template=True,
-            generate_audio=False,
+            generate_s2t=False,
             temperature=0.3,
         )
 

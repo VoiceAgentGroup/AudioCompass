@@ -36,7 +36,7 @@ class BaichuanAssistant(VoiceAssistant):
         text += self.role_prefix["assistant"]
         return text
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,

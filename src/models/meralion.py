@@ -23,7 +23,7 @@ class MERaLiONAssistant(VoiceAssistant):
             torch_dtype=torch.bfloat16,
         )
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,

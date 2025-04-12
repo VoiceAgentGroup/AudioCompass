@@ -23,7 +23,7 @@ class GLMAssistant(VoiceAssistant):
         self.feature_extractor = WhisperFeatureExtractor.from_pretrained("THUDM/glm-4-voice-tokenizer", cache_dir='./cache')
         self.whisper_model = WhisperVQEncoder.from_pretrained("THUDM/glm-4-voice-tokenizer", cache_dir='./cache').eval().to("cuda")
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=4096,
@@ -51,7 +51,7 @@ class GLMAssistant(VoiceAssistant):
         # logger.info(text_tokens)
         return self.glm_tokenizer.decode(text_tokens, ignore_special_tokens=False)
 
-    def generate_text(
+    def generate_t2t(
         self,
         text,
     ):

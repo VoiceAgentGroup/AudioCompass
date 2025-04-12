@@ -39,7 +39,7 @@ class MMAU(BaseBenchmark):
             input_audio = item['audio']
             logger.info(input_text)
             try:
-                response = model.generate_mixed(input_audio, input_text)
+                response = model.generate_st2t(input_audio, input_text)
                 logger.info(response)
                 logger.info('====================================')
                 tmp['model_prediction'] = response

@@ -189,7 +189,7 @@ class VoxEval(BaseBenchmark):
             
             try:
                 input_audio = item['audio']
-                response_audio = model.generate_audio(input_audio)
+                response_audio = model.generate_s2t(input_audio)
                 transcription = self.whisper_inference(response_audio)
                 
                 result_item = {k: v for k, v in item.items() if k != 'audio'}

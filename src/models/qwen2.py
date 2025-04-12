@@ -10,7 +10,7 @@ class Qwen2Assistant(VoiceAssistant):
                                                                         device_map="cuda",
                                                                         cache_dir='./cache', torch_dtype='auto')
 
-    def generate_audio(
+    def generate_s2t(
         self,
         audio,
         max_new_tokens=2048,
@@ -32,7 +32,7 @@ class Qwen2Assistant(VoiceAssistant):
         response = self.processor.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
         return response
 
-    def generate_text(
+    def generate_t2t(
             self,
             text,
     ):
