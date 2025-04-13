@@ -39,7 +39,10 @@ class LocalAssistant(VoiceAssistant):
                 "prompt_logprobs": 0,
             },
         )
-        return completion.choices[0].message.content, completion.prompt_logprobs
+        
+        ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
+        
+        return completion.choices[0].message.content, ppl
 
     def generate_s2t(
         self,
@@ -67,7 +70,9 @@ class LocalAssistant(VoiceAssistant):
             },
         )
         
-        return completion.choices[0].message.content, completion.prompt_logprobs
+        ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
+        
+        return completion.choices[0].message.content, ppl
     
 
     def generate_st2t(

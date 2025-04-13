@@ -76,18 +76,6 @@ class CMMLU(BaseBenchmark):
                     data['qa'].append({'audio_group': audio_group, 'text_group': text_group, 'question_audio': question_audio, 'question_text': qa['question']['text'], 'choice_text': choice_text, 'right_answer': right_answer})
                 dataset.append(data)
         return dataset
-    
-    
-    def process_logprob(self, logprob):
-        audio_logprob = 0
-        length = 0
-        for token in logprob[1:]:
-            token = list(token.values())[0]
-            if token['decoded_token'] == '<|AUDIO|>':
-                audio_logprob += token['logprob']
-                length += 1      
-        audio_logprob /= length
-        return audio_logprob
       
     def generate(self, model):
         logger.info("Generating results ...")
@@ -101,9 +89,9 @@ class CMMLU(BaseBenchmark):
                 for idx, qa_item in enumerate(qa):
                     audio_group = qa_item['audio_group']
                     right_answer = qa_item['right_answer']
-                    logprobs = [self.process_logprob(model.generate_s2t(audio)[1]) for audio in audio_group]
-                    logger.info(f"Generated logprobs for audio group {idx}: {logprobs}")
-                    tmp['response'].append({'idx': idx, 'logprob': logprobs, 'right_answer': right_answer})
+                    ppl = [model.generate_s2t(audio)[1] for audio in audio_group]
+                    logger.info(f"Generated ppl for audio group {idx}: {ppl}")
+                    tmp['response'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
                 logger.info('====================================')
                 results.append(tmp)
             except Exception as e:
@@ -121,7 +109,7 @@ class CMMLU(BaseBenchmark):
             logger.info("Subject: " + subject_item['subject'])
             subject_results = subject_item['response']
             for result in subject_results:
-                answer = choice_strs[np.argmax(result['logprob'])]
+                answer = choice_strs[np.argmax(result['ppl'])]
                 correct += (answer == result['right_answer'])
                 logger.info(f"idx: {result['idx']} answer: {answer} right_answer: {result['right_answer']}")
                 total += 1
@@ -132,7 +120,7 @@ class CMMLU(BaseBenchmark):
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
-        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-ppl.json')
+        output_file = os.path.join(output_dir, f'{model_name}-{self.name}.json')
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=4)
         logger.info(f"Generated results saved to {output_file}.")    

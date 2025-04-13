@@ -68,17 +68,6 @@ class StoryCloze(BaseBenchmark):
             dataset.append(story_data)
         return dataset
     
-    def process_logprob(self, logprob):
-        audio_logprob = 0
-        length = 0
-        for token in logprob[1:]:
-            token = list(token.values())[0]
-            if token['decoded_token'] == '<|AUDIO|>':
-                audio_logprob += token['logprob']
-                length += 1      
-        audio_logprob /= length
-        return audio_logprob
-    
     def generate(self, model):
         logger.info("Generating results ...")
         results = []
@@ -87,11 +76,11 @@ class StoryCloze(BaseBenchmark):
             try:
                 s_group = story_item['s_group']
                 t_group = story_item['t_group']
-                s_logprobs = [self.process_logprob(model.generate_s2t(audio)[1]) for audio in s_group]
-                t_logprobs = [self.process_logprob(model.generate_s2t(audio)[1]) for audio in t_group]
-                logger.info(f"Generated logprobs for {idx}: sSC{s_logprobs} tSC{t_logprobs}")
+                s_ppl = [model.generate_s2t(audio)[1] for audio in s_group]
+                t_ppl = [model.generate_s2t(audio)[1] for audio in t_group]
+                logger.info(f"Generated ppl for {idx}: sSC{s_ppl} tSC{t_ppl}")
                 logger.info('====================================')
-                tmp = {'idx': idx, 's_logprobs': s_logprobs, 't_logprobs': t_logprobs}
+                tmp = {'idx': idx, 's_ppl': s_ppl, 't_ppl': t_ppl}
                 results.append(tmp)
             except Exception as e:
                 logger.error(e)
@@ -104,9 +93,9 @@ class StoryCloze(BaseBenchmark):
         s_correct = 0
         t_correct = 0
         for story_item in tqdm(results):
-            s_answer = np.argmax(story_item['s_logprobs'])
+            s_answer = np.argmin(story_item['s_ppl'])
             s_correct += (s_answer == 0)
-            t_answer = np.argmax(story_item['t_logprobs'])
+            t_answer = np.argmin(story_item['t_ppl'])
             t_correct += (t_answer == 0)
         s_acc = s_correct / len(results)
         t_acc = t_correct / len(results)
