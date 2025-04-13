@@ -225,7 +225,7 @@ class MiniOmni2Assistant(VoiceAssistant):
         mel = whisper.log_mel_spectrogram(audio)
         return mel, int(duration_ms / 20) + 1
 
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_new_tokens=2048,

@@ -53,7 +53,7 @@ class SpeechGPT2(VoiceAssistant):
         except Exception as e:
             return f"Error: {str(e)}", None, None
 
-    def generate_s2t(self, audio):
+    def generate_a2t(self, audio):
         response, _ = self.process_input(audio, None, 's2t')
         self.model.clear_history()
         return response, None

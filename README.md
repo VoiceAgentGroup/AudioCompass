@@ -80,7 +80,7 @@ class NewModelAssistant(VoiceAssistant):
         # Initialize your model here
         pass
         
-    def generate_s2t(self, audio, max_new_tokens=2048):
+    def generate_a2t(self, audio, max_new_tokens=2048):
         # Implement audio-only input processing
         # audio: dict with 'array' and 'sampling_rate' keys
         # Return text response
@@ -91,7 +91,7 @@ class NewModelAssistant(VoiceAssistant):
         # Return text response
         pass
         
-    def generate_st2t(self, audio, text, max_new_tokens=2048):
+    def generate_at2t(self, audio, text, max_new_tokens=2048):
         # Implement mixed input processing
         # audio: dict with 'array' and 'sampling_rate' keys
         # text: string input

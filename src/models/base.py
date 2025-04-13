@@ -4,7 +4,7 @@ import time
 
 class VoiceAssistant:
     @torch.no_grad()
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_new_tokens=2048,
@@ -19,7 +19,7 @@ class VoiceAssistant:
         raise NotImplementedError
 
     @torch.no_grad()
-    def generate_st2t(
+    def generate_at2t(
         self,
         audio,
         text,

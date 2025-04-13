@@ -89,7 +89,7 @@ class CMMLU(BaseBenchmark):
                 for idx, qa_item in enumerate(qa):
                     audio_group = qa_item['audio_group']
                     right_answer = qa_item['right_answer']
-                    ppl = [model.generate_s2t(audio)[1] for audio in audio_group]
+                    ppl = [model.get_ppl(audio, input_type='audio') for audio in audio_group]
                     logger.info(f"Generated ppl for audio group {idx}: {ppl}")
                     tmp['response'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
                 logger.info('====================================')

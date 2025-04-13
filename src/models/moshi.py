@@ -15,7 +15,7 @@ class MoshiAssistant(VoiceAssistant):
         self.tokenizer = AutoTokenizer.from_pretrained('kmhf/hf-moshiko')
         self.feature_extractor = AutoFeatureExtractor.from_pretrained('kmhf/hf-moshiko')
 
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_new_tokens=2048,

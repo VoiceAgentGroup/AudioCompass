@@ -36,7 +36,7 @@ class VoiceBench(BaseBenchmark):
             tmp = {k: v for k, v in item.items() if k != 'audio'}
             logger.info(item['prompt'])
             try:
-                response, _ = model.generate_s2t(item['audio'])
+                response = model.generate_a2t(item['audio'])
                 logger.info(response)
                 logger.info('====================================')
                 tmp['response'] = response

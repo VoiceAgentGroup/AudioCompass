@@ -10,7 +10,7 @@ class Qwen2Assistant(VoiceAssistant):
                                                                         device_map="cuda",
                                                                         cache_dir='./cache', torch_dtype='auto')
 
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_new_tokens=2048,

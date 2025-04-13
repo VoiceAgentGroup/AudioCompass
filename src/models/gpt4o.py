@@ -13,7 +13,7 @@ class GPT4oAssistant(VoiceAssistant):
         self.client = OpenAI()
         self.model_name = "gpt-4o-audio-preview"
 
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_new_tokens=2048,

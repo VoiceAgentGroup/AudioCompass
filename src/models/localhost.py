@@ -15,93 +15,77 @@ class LocalAssistant(VoiceAssistant):
         models = self.client.models.list()
         self.model_name = models.data[0].id
         
+    def get_response(self, content, max_tokens=2048):
+        return self.client.chat.completions.create(
+            model=self.model_name,
+            max_tokens=max_tokens,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant who tries to help answer the user's question."
+                },
+                {
+                    "role": "user", 
+                    "content": content
+                },
+            ],
+            extra_body={
+                "prompt_logprobs": 0,
+            },
+        )
+        
+    def encode_audio(self, audio):
+        buffer = io.BytesIO()
+        sf.write(buffer, audio['array'], audio['sampling_rate'], format='WAV')
+        buffer.seek(0)
+        wav_data = buffer.read()
+        encoded_string = base64.b64encode(wav_data).decode('utf-8')
+        return encoded_string
+        
     def generate_t2t(
         self,
         text,
         max_tokens=2048,
     ):
-        completion = self.client.chat.completions.create(
-            model=self.model_name,
-            max_tokens=max_tokens,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful assistant who tries to help answer the user's question."
-                },
-                {
-                    "role": "user", 
-                    "content": [
-                        {"type": "text", "text": text}
-                    ]
-                },
-            ],
-            extra_body={
-                "prompt_logprobs": 0,
-            },
-        )
-        
-        ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
-        
+        content = [{"type": "text", "text": text}]
+        completion = self.get_response(content, max_tokens)
         return completion.choices[0].message.content, ppl
 
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_tokens=2048,
     ):
-        # Write the audio data to an in-memory buffer in WAV format
-        buffer = io.BytesIO()
-        sf.write(buffer, audio['array'], audio['sampling_rate'], format='WAV')
-        buffer.seek(0)  # Reset buffer position to the beginning
-
-        # Read buffer as bytes and encode in base64
-        wav_data = buffer.read()
-        encoded_string = base64.b64encode(wav_data).decode('utf-8')
-
-        completion = self.client.chat.completions.create(
-            model=self.model_name,
-            max_tokens=max_tokens,
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant who tries to help answer the user's question."},
-                {"role": "user", "content": [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]},
-            ],
-            extra_body={
-                "prompt_logprobs": 0,
-            },
-        )
-        
-        ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
-        
-        return completion.choices[0].message.content, ppl
+        encoded_string = self.encode_audio(audio)
+        content = [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]
+        completion = self.get_response(content, max_tokens)
+        return completion.choices[0].message.content
     
 
-    def generate_st2t(
+    def generate_at2t(
         self,
         audio,
         text,
         max_tokens=2048,
     ):
-        buffer = io.BytesIO()
-        sf.write(buffer, audio['array'], audio['sampling_rate'], format='WAV')
-        buffer.seek(0)
-
-        wav_data = buffer.read()
-        encoded_string = base64.b64encode(wav_data).decode('utf-8')
-        completion = self.client.chat.completions.create(
-            model=self.model_name,
-            max_tokens=max_tokens,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful assistant who tries to help answer the user's question."
-                },
-                {
-                    "role": "user", 
-                    "content": [
-                        {"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}},
-                        {"type": "text", "text": text}
-                    ]
-                },
-            ],
-        )
+        encoded_string = self.encode_audio(audio)
+        content = [
+            {"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}},
+            {"type": "text", "text": text}
+        ]
+        completion = self.get_response(content, max_tokens)
         return completion.choices[0].message.content
+    
+    def get_ppl(self, input, input_type: str):
+        if input_type == 'text':
+            content = [{"type": "text", "text": input}]
+            completion = self.get_response(content)
+            ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
+        elif input_type == 'audio':
+            encoded_string = self.encode_audio(input)
+            content = [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]
+            completion = self.get_response(content)
+            ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
+        else:
+            raise ValueError("Invalid input_type", input_type)
+        return ppl

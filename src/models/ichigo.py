@@ -39,7 +39,7 @@ class IchigoeAssistant(VoiceAssistant):
         result = ''.join(f'<|sound_{num:04d}|>' for num in codes)
         return f'<|sound_start|>{result}<|sound_end|>'
 
-    def generate_s2t(
+    def generate_a2t(
             self,
             audio,
             max_new_tokens=2048,

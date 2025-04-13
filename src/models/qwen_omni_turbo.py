@@ -15,7 +15,7 @@ class QwenOmniAssistant(VoiceAssistant):
         )
         self.model_name = "qwen-omni-turbo"
     
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_new_tokens=2048,
@@ -66,7 +66,7 @@ class QwenOmniAssistant(VoiceAssistant):
         return full_response, None
 
 
-    def generate_st2t(
+    def generate_at2t(
         self,
         audio,
         text,

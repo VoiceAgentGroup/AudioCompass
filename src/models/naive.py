@@ -42,7 +42,7 @@ class NaiveAssistant(VoiceAssistant):
         )
         return pipeline
 
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_new_tokens=2048,

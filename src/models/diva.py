@@ -8,7 +8,7 @@ class DiVAAssistant(VoiceAssistant):
         self.model = AutoModel.from_pretrained("WillHeld/DiVA-llama-3-v0-8b", cache_dir='./cache', trust_remote_code=True)
         self.model_name = "diva"
 
-    def generate_s2t(
+    def generate_a2t(
         self,
         audio,
         max_new_tokens=2048,

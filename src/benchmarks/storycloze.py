@@ -76,8 +76,8 @@ class StoryCloze(BaseBenchmark):
             try:
                 s_group = story_item['s_group']
                 t_group = story_item['t_group']
-                s_ppl = [model.generate_s2t(audio)[1] for audio in s_group]
-                t_ppl = [model.generate_s2t(audio)[1] for audio in t_group]
+                s_ppl = [model.get_ppl(audio, input_type='audio') for audio in s_group]
+                t_ppl = [model.get_ppl(audio, input_type='audio') for audio in t_group]
                 logger.info(f"Generated ppl for {idx}: sSC{s_ppl} tSC{t_ppl}")
                 logger.info('====================================')
                 tmp = {'idx': idx, 's_ppl': s_ppl, 't_ppl': t_ppl}
