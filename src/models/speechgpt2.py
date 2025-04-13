@@ -54,21 +54,21 @@ class SpeechGPT2(VoiceAssistant):
             return f"Error: {str(e)}", None, None
 
     def generate_a2t(self, audio):
+        self.model.process_greeting()
         response, _ = self.process_input(audio, None, 's2t')
-        self.model.clear_history()
-        return response, None
+        return response
     
     def generate_t2t(self, text):
+        self.model.process_greeting()
         response, _ = self.process_input(None, text, 't2t')
-        self.model.clear_history()
-        return response, None
+        return response
     
     def generate_t2s(self, text):
-        response, wav = self.process_input(None, text, 't2s')
-        self.model.clear_history()
-        return response, wav  # wav: tuple (sample_rate, array)
+        self.model.process_greeting()
+        _, wav = self.process_input(None, text, 't2s')
+        return wav  # wav: tuple (sample_rate, array)
     
     def generate_s2s(self, audio):
-        response, wav = self.process_input(audio, None, 's2s')
-        self.model.clear_history()
-        return response, wav  # wav: tuple (sample_rate, array)
+        self.model.process_greeting()
+        _, wav = self.process_input(audio, None, 's2s')
+        return wav  # wav: tuple (sample_rate, array)
