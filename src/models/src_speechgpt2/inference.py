@@ -430,3 +430,32 @@ class Inference:
                 return detokenized_text, (24000, wav.reshape(-1).detach().cpu().numpy())
 
             return detokenized_text, None
+        
+    def get_ppl(self, input, mode):
+
+        bsz = len(input)
+        params = self.model.params
+        assert bsz <= params.max_batch_size, (bsz, params.max_batch_size)
+        # tokenize
+        prompt_tokens = self.preprocess(
+            input=input,
+            mode=mode,
+        )
+        max_prompt_size = max([len(t) for t in prompt_tokens])
+        total_len = min(params.max_seq_len, max_prompt_size)
+        tokens = torch.zeros((bsz, total_len)).cuda().long()
+        for k, t in enumerate(prompt_tokens):
+            num_token = min(total_len, len(t))
+            tokens[k, :num_token] = torch.tensor(t[-num_token:]).long()
+        # forward
+        outputs = self.model.forward(tokens, 0)
+        # compute ppl
+        shift_logits = outputs[..., :-1, :].contiguous().float()
+        shift_labels = tokens[..., 1:].contiguous()
+        shift_logits = shift_logits.view(-1, shift_logits.size(-1))
+        shift_labels = shift_labels.view(-1)
+        loss_fct = torch.nn.CrossEntropyLoss(reduction='none', ignore_index=0)
+        loss = loss_fct(shift_logits, shift_labels).view(bsz, -1)
+        lens = (tokens != 0).sum(-1).cpu().numpy()
+        ce_loss = loss.sum(-1).cpu().detach().numpy() / lens
+        return ce_loss

@@ -60,7 +60,6 @@ class LocalAssistant(VoiceAssistant):
         content = [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]
         completion = self.get_response(content, max_tokens)
         return completion.choices[0].message.content
-    
 
     def generate_at2t(
         self,
@@ -79,13 +78,11 @@ class LocalAssistant(VoiceAssistant):
     def get_ppl(self, input, input_type: str):
         if input_type == 'text':
             content = [{"type": "text", "text": input}]
-            completion = self.get_response(content)
-            ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
         elif input_type == 'audio':
             encoded_string = self.encode_audio(input)
             content = [{"type": "input_audio", "input_audio": {"data": encoded_string, "format": 'wav'}}]
-            completion = self.get_response(content)
-            ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
         else:
             raise ValueError("Invalid input_type", input_type)
+        completion = self.get_response(content)
+        ppl = -sum([list(token.values())[0]['logprob'] for token in completion.prompt_logprobs[1:]]) / len(completion.prompt_logprobs[1:])
         return ppl

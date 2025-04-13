@@ -26,3 +26,11 @@ class VoiceAssistant:
         max_new_tokens=2048,
     ):
         raise NotImplementedError
+    
+    @torch.no_grad()
+    def get_ppl(
+        self,
+        input,
+        input_type: str,
+    ):
+        raise NotImplementedError
