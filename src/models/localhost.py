@@ -49,7 +49,7 @@ class LocalAssistant(VoiceAssistant):
     ):
         content = [{"type": "text", "text": text}]
         completion = self.get_response(content, max_tokens)
-        return completion.choices[0].message.content, ppl
+        return completion.choices[0].message.content
 
     def generate_a2t(
         self,
