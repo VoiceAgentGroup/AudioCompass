@@ -258,8 +258,8 @@ class Inference:
     def clear_history(self):
         self.history.clear()
 
-    def read_wav(self, audio_path: str, sampling_rate: int):
-        wav, raw_sample_rate = torchaudio.load(audio_path)  # (1, T)   tensor
+    def read_wav(self, audio, sampling_rate: int):
+        wav, raw_sample_rate = audio['array'], audio['sampling_rate']  # (1, T)   tensor
         if raw_sample_rate != sampling_rate:
             wav = torchaudio.functional.resample(
                 wav, raw_sample_rate, sampling_rate
@@ -434,15 +434,16 @@ class Inference:
     def get_ppl(self, input, mode):
 
         bsz = len(input)
-        params = self.model.params
-        assert bsz <= params.max_batch_size, (bsz, params.max_batch_size)
+        # params = self.model.params
+        # assert bsz <= params.max_batch_size, (bsz, params.max_batch_size)
         # tokenize
         prompt_tokens = self.preprocess(
             input=input,
             mode=mode,
         )
         max_prompt_size = max([len(t) for t in prompt_tokens])
-        total_len = min(params.max_seq_len, max_prompt_size)
+        # total_len = min(params.max_seq_len, max_prompt_size)
+        total_len = max_prompt_size
         tokens = torch.zeros((bsz, total_len)).cuda().long()
         for k, t in enumerate(prompt_tokens):
             num_token = min(total_len, len(t))
