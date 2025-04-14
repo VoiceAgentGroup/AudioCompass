@@ -36,22 +36,17 @@ class SpeechGPT2(VoiceAssistant):
         )
 
     def process_input(self, audio_input, text_input, mode):
-        try:
-            # Handle audio input
-            if audio_input is not None:
-                buffer = io.BytesIO()
-                sf.write(buffer, audio_input['array'], audio_input['sample_rate'], format='WAV')
-                buffer.seek(0)
-                input_data = buffer
-            else:
-                input_data = text_input
+        if audio_input is not None:
+            buffer = io.BytesIO()
+            sf.write(buffer, audio_input['array'], audio_input['sampling_rate'], format='WAV')
+            buffer.seek(0)
+            input_data = buffer
+        else:
+            input_data = text_input
 
-            return self.model.forward(
-                task='thought', input=input_data, text=text_input, mode=mode
-            )
-
-        except Exception as e:
-            return f"Error: {str(e)}", None, None
+        return self.model.forward(
+            task='thought', input=input_data, text=text_input, mode=mode
+        )
 
     def generate_a2t(self, audio):
         self.model.process_greeting()
@@ -74,10 +69,15 @@ class SpeechGPT2(VoiceAssistant):
         return wav  # wav: tuple (sample_rate, array)
     
     def get_ppl(self, input, input_type: str):
+        # self.model.process_greeting()
         if input_type == 'text':
             mode = 't2t'
         elif input_type == 'audio':
             mode = 's2t'
+            buffer = io.BytesIO()
+            sf.write(buffer, input['array'], input['sampling_rate'], format='WAV')
+            buffer.seek(0)
+            input = buffer
         else:
             raise ValueError("Invalid input_type", input_type)
-        return self.model.get_ppl(input, mode)
+        return self.model.get_ppl([input], mode)

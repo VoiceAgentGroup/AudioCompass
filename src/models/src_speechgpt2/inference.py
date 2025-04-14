@@ -196,7 +196,7 @@ class Inference:
         self.model = torch.compile(self.model, mode="reduce-overhead")
 
         self.generate_kwargs = {
-            "max_new_tokens": 5000,
+            # "max_new_tokens": 5000,
             "temperature": 0.8,
             "do_sample": True,
             "top_p": 0.9,
@@ -207,6 +207,7 @@ class Inference:
                 else self.tokenizer.eos_token_id
             ),
         }
+        
 
         self.generator = SpeechGPT2Tokenizer.load_from_checkpoint(
             config_path=codec_config_path, checkpoint_path=codec_ckpt_path
@@ -243,7 +244,7 @@ class Inference:
             greeting_audio_detokenized.reshape(-1).detach().cpu().numpy(),
         )
                 
-    def process_greeting(self, greeting_source="extra/greetings.jsonl", greeting_line_idx=0):
+    def process_greeting(self, greeting_source="src/models/src_speechgpt2/extra/greetings.jsonl", greeting_line_idx=2):
         greeting_line_idx = int(greeting_line_idx)
         with open(greeting_source, "r") as f:
             for idx, line in enumerate(f):
@@ -258,8 +259,8 @@ class Inference:
     def clear_history(self):
         self.history.clear()
 
-    def read_wav(self, audio, sampling_rate: int):
-        wav, raw_sample_rate = audio['array'], audio['sampling_rate']  # (1, T)   tensor
+    def read_wav(self, audio_path: str, sampling_rate: int):
+        wav, raw_sample_rate = torchaudio.load(audio_path)  # (1, T)   tensor
         if raw_sample_rate != sampling_rate:
             wav = torchaudio.functional.resample(
                 wav, raw_sample_rate, sampling_rate
@@ -346,6 +347,7 @@ class Inference:
         mode: Union[None, str] = "s2s",
         text: Union[None, str] = None,
         audio_channels=3,
+        max_new_tokens=5000,
     ):
         group_size = self.group_size
         with torch.no_grad():
@@ -359,7 +361,7 @@ class Inference:
                 transcript=text,
             )
 
-            generation_config = GenerationConfig(**self.generate_kwargs)
+            generation_config = GenerationConfig(**self.generate_kwargs, max_new_tokens=max_new_tokens)
 
             input_ids = input_ids.T.reshape(1, -1)
             input_ids = torch.cat(self.history + [input_ids], dim=-1)
@@ -431,25 +433,43 @@ class Inference:
 
             return detokenized_text, None
         
-    def get_ppl(self, input, mode):
+    def get_ppl(self, inputs, mode):
 
-        bsz = len(input)
+        bsz = len(inputs)
         # params = self.model.params
         # assert bsz <= params.max_batch_size, (bsz, params.max_batch_size)
         # tokenize
-        prompt_tokens = self.preprocess(
-            input=input,
+        input_tokens = [self.preprocess(
+            input=x,
+            group_size=self.group_size,
             mode=mode,
-        )
-        max_prompt_size = max([len(t) for t in prompt_tokens])
+        ) for x in inputs]
+        max_prompt_size = max([t.shape[-1] for t in input_tokens])
         # total_len = min(params.max_seq_len, max_prompt_size)
         total_len = max_prompt_size
-        tokens = torch.zeros((bsz, total_len)).cuda().long()
-        for k, t in enumerate(prompt_tokens):
-            num_token = min(total_len, len(t))
-            tokens[k, :num_token] = torch.tensor(t[-num_token:]).long()
+        tokens = torch.zeros((bsz, 4, total_len)).cuda().long()
+        for k, t in enumerate(input_tokens):
+            num_token = min(total_len, t.shape[-1])
+            tokens[k, :, :num_token] = torch.tensor(t[:, -num_token:]).long()
         # forward
-        outputs = self.model.forward(tokens, 0)
+        tokens = tokens.T.reshape(1, -1)
+        tokens = torch.cat(self.history + [tokens], dim=-1)
+        # generation_config = GenerationConfig(
+        #     **self.generate_kwargs,
+        #     max_new_tokens=1,
+        #     return_dict_in_generate=True,
+        #     output_scores=True,
+        # )
+        # # prompt_length = tokens.shape[1] // (3 + 1)
+        # stopping_criteria = [
+        #     MIMOStopper(
+        #         self.tokenizer.eos_token_id,
+        #         group_size=self.group_size,
+        #         audio_channels=3, 
+        #         max_tokens=1,
+        #     )
+        # ]
+        outputs = self.model.forward(tokens)
         # compute ppl
         shift_logits = outputs[..., :-1, :].contiguous().float()
         shift_labels = tokens[..., 1:].contiguous()

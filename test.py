@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 from src.models import load_model
 
 model = load_model('speechgpt2')
+model.model.process_greeting()
 
 def main(args):
     subject_dir = f'datas/cmmlu-minimax/test/{args.subject}'
@@ -39,8 +40,10 @@ def main(args):
         }
 
         ppl = model.get_ppl(complete_audio, input_type='audio')
+        # response = model.generate_a2t(complete_audio)
 
         print(f"{choice}-ppl:", ppl)
+        # print(response)
     
     print('Right Answer: ' + right_answer)
         
