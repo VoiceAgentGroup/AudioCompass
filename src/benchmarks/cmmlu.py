@@ -4,7 +4,6 @@ import json
 import os
 import numpy as np
 from .base import BaseBenchmark
-from utils.rule_extractor import extract_answer
 import torchaudio
 import torch
 
@@ -43,13 +42,8 @@ class CMMLU(BaseBenchmark):
                 'array': complete_audio.numpy(),
                 'sampling_rate': sample_rate,
             })
-            
-        question_audio = {
-            'array': question_audio,
-            'sampling_rate': sample_rate,
-        }
         
-        return audio_group, question_audio
+        return audio_group
 
     def load_data(self) -> list:
         logger.info("Preparing data ...")
@@ -64,16 +58,9 @@ class CMMLU(BaseBenchmark):
                 for idx, qa in enumerate(subject['qa']):
                     question_path = qa['question']['path']
                     choice_path = [choice['path'] for choice in qa['choice']]
-                    audio_group, question_audio = self.concat_audio(question_path, choice_path)
-                    
-                    choice_lbs = ['A. ', 'B. ', 'C. ', 'D. ']
-                    choice_descs = [choice['text'] for choice in qa['choice']]
-                    choice_text = ' '.join([(choice_lb + choice_desc) for choice_lb, choice_desc in zip(choice_lbs, choice_descs)])
-                    
-                    text_group = [qa['question']['text'] + choice['text'] for choice in qa['choice']]
-                    
+                    audio_group = self.concat_audio(question_path, choice_path)
                     right_answer = qa['right_answer']
-                    data['qa'].append({'audio_group': audio_group, 'text_group': text_group, 'question_audio': question_audio, 'question_text': qa['question']['text'], 'choice_text': choice_text, 'right_answer': right_answer})
+                    data['qa'].append({'audio_group': audio_group, 'right_answer': right_answer})
                 dataset.append(data)
         return dataset
       
