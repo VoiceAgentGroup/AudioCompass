@@ -347,7 +347,7 @@ class Inference:
         mode: Union[None, str] = "s2s",
         text: Union[None, str] = None,
         audio_channels=3,
-        max_new_tokens=5000,
+        max_new_tokens=2048,
     ):
         group_size = self.group_size
         with torch.no_grad():

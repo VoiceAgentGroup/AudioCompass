@@ -58,15 +58,15 @@ class SpeechGPT2(VoiceAssistant):
         response, _ = self.process_input(None, text, 't2t')
         return response
     
-    def generate_t2s(self, text):
+    def generate_t2a(self, text):
         self.model.process_greeting()
-        _, wav = self.process_input(None, text, 't2s')
-        return wav  # wav: tuple (sample_rate, array)
+        _, (_, wav) = self.process_input(None, text, 't2s')  # wav: tuple (sample_rate, array)
+        return wav
     
-    def generate_s2s(self, audio):
+    def generate_a2a(self, audio):
         self.model.process_greeting()
-        _, wav = self.process_input(audio, None, 's2s')
-        return wav  # wav: tuple (sample_rate, array)
+        _, (_, wav) = self.process_input(audio, None, 's2s')  # wav: tuple (sample_rate, array)
+        return wav
     
     def get_ppl(self, input, input_type: str):
         # self.model.process_greeting()

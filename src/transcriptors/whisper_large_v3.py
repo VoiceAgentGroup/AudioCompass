@@ -18,4 +18,11 @@ class WhisperLargeV3:
             feature_extractor=self.processor.feature_extractor,
             torch_dtype=torch_dtype,
             device=device,
+            return_timestamps=True,
         )
+        
+    def inference(self, waveform):
+        if waveform.ndim > 1:
+            waveform = waveform[0, :]
+        result = self.pipe(waveform)["text"]
+        return result

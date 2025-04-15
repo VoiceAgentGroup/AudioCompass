@@ -2,7 +2,7 @@ from .voicebench.voicebench import VoiceBench
 from .mmau.mmau import MMAU
 from .openaudiobench.openaudiobench import OpenAudioBench
 from .cmmlu import CMMLU
-from .storycloze import StoryCloze
+from .zh_storycloze import zhStoryCloze
 from .voxeval import VoxEval
 
 benchmark_mapping = {
@@ -10,7 +10,7 @@ benchmark_mapping = {
     'mmau': MMAU,
     'openaudiobench': OpenAudioBench,
     'cmmlu': CMMLU,
-    'storycloze': StoryCloze,
+    'zh-storycloze': zhStoryCloze,
     'voxeval': VoxEval
     # Add other benchmarks here as needed
 }
