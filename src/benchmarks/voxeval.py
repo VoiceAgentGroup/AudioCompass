@@ -34,12 +34,6 @@ class VoxEval(BaseBenchmark):
         self.dataset = self.load_data(**kwargs)
         logger.add(f'log/{self.name}-{self.prompt_mode}-{self.split}.log', rotation='50MB')
     
-    def whisper_inference(self, waveform):
-        if waveform.ndim > 1:
-            waveform = waveform[0, :]
-        result = self.transcriptor.pipe(waveform)["text"]
-        return result
-    
     def concat_audio(self, audio_paths, add_silence=True):
         audio_segments = []
         sample_rate = None
@@ -149,7 +143,7 @@ class VoxEval(BaseBenchmark):
                     continue
                 
                 try:
-                    question_audio, _ = torchaudio.load(question_path)
+                    question_audio, sampling_rate = torchaudio.load(question_path)
                     
                     # Create silence (1 second)
                     silence = torch.zeros((question_audio.shape[0], 16000))  # Standard 16kHz sample rate
@@ -160,6 +154,11 @@ class VoxEval(BaseBenchmark):
                     # Cut audio if needed
                     if self.cut_audio:
                         input_audio = input_audio[:, -80 * 16000:]  # Last 80 seconds at 16kHz
+                    
+                    input_audio = {
+                        'array': input_audio.squeeze(0).numpy(),
+                        'sampling_rate': sampling_rate,
+                    }
                     
                     # Add to prepared data
                     prepared_data.append({
@@ -189,8 +188,8 @@ class VoxEval(BaseBenchmark):
             
             try:
                 input_audio = item['audio']
-                response_audio = model.generate_a2t(input_audio)
-                transcription = self.whisper_inference(response_audio)
+                response_audio = model.generate_a2a(input_audio)
+                transcription = self.transcriptor.inference(response_audio)
                 
                 result_item = {k: v for k, v in item.items() if k != 'audio'}
                 result_item['response'] = transcription
@@ -299,6 +298,6 @@ class VoxEval(BaseBenchmark):
     
     def run(self, model, output_dir):
         generated_results = self.generate(model)
-        self.save_generated_results(generated_results, output_dir, model.__class__.__name__)
+        self.save_generated_results(generated_results, output_dir, model.model_name)
         evaluation_results = self.evaluate(generated_results)
         return evaluation_results
