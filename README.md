@@ -21,15 +21,13 @@ AudioCompass provides a unified interface to evaluate the capabilities of variou
 
 ```bash
 # Clone the repository
-git clone https://github.com/wtalioy/AudioCompass.git
+git clone https://github.com/VoiceAgentGroup/AudioCompass.git
 cd AudioCompass
 
 # Set up the environment
-conda create -n voicebench python=3.10 -y
-conda activate voicebench
-pip install xformers==0.0.23 --no-deps
+conda create -n audiocompass python=3.10 -y
+conda activate audiocompass
 pip install -r requirements.txt
-pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 -f https://mirrors.aliyun.com/pytorch-wheels/cu121/
 ```
 
 ## Usage and Evaluation
@@ -37,14 +35,13 @@ pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 -f https://mirror
 To run a benchmark on a specific model:
 
 ```bash
-python main.py --model <model_name> --benchmark <dataset_name> --subset <subset_name> --split <split_name> --output-dir <output_directory>
+python main.py --model <model_name> --benchmark <dataset_name> --subset <subset_name> --split <split_name> --output-dir <output_directory> --cache-dir <cache-directory>
 ```
 
 For example:
 
 ```bash
-# local is for models running on localhost
-python main.py --model local --benchmark voicebench --subset alpacaeval --split test --output-dir output
+python main.py --model speechgpt2 --benchmark voicebench --subset alpacaeval --split test --output-dir output --cache cache
 ```
 
 The evaluation process:
