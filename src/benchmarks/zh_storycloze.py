@@ -10,7 +10,7 @@ import torch
 
 class zhStoryCloze(BaseBenchmark):
     def __init__(self, data_dir="datas/zh-storycloze", **kwargs):
-        self.name = 'storycloze'
+        self.name = 'zh-storycloze'
         self.data_dir = data_dir
         self.dataset = self.load_data()
         logger.add(f'log/{self.name}.log', rotation='50 MB')
