@@ -20,7 +20,7 @@ class OpenAudioBench(BaseBenchmark):
     def check_split(self, split):
         available_split = ['alpaca_eval', 'llama_questions', 'reasoning_qa', 'trivia_qa', 'web_questions']
         if split not in available_split:
-            raise ValueError("Split should be one of", available_split)
+            raise ValueError("Split should be one of " + available_split)
         
     def load_data(self):
         logger.info("Preparing data ...")

@@ -23,7 +23,7 @@ class VoiceBench(BaseBenchmark):
             dataset = load_dataset('parquet', data_dir=self.data_dir, trust_remote_code=True)
             dataset = dataset[self.subset_name][self.split]
         else:
-            dataset = load_dataset('hlt-lab/voicebench', subset=self.subset_name, split=self.split, **kwargs)
+            dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     
