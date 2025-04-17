@@ -451,7 +451,7 @@ class Inference:
             tokens = torch.zeros((bsz, 4, total_len)).cuda().long()
             for k, t in enumerate(input_tokens):
                 num_token = min(total_len, t.shape[-1])
-                tokens[k, :, :num_token] = torch.tensor(t[:, -num_token:]).long()
+                tokens[k, :, :num_token] = t[:, -num_token:].clone().long()
             # forward
             tokens = tokens.T.reshape(bsz, -1)
             outputs = self.model.forward(input_ids=tokens, labels=tokens)

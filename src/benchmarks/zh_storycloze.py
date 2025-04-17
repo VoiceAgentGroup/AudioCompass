@@ -64,7 +64,7 @@ class zhStoryCloze(BaseBenchmark):
             s_group = self.concat_audio(prefix_path, [correct_suffix_path, sSC_suffix_path])
             t_group = self.concat_audio(prefix_path, [correct_suffix_path, tSC_suffix_path])
             
-            story_data = {'idx': idx, 's_group': s_group, 't_group': t_group}
+            story_data = {'idx': idx, 'correct': s_group[0], 'sSC': s_group[1], 'tSC': t_group[1]}
             dataset.append(story_data)
         return dataset
     
@@ -74,12 +74,16 @@ class zhStoryCloze(BaseBenchmark):
         for story_item in tqdm(self.dataset, total=len(self.dataset)):
             idx = story_item['idx']
             try:
-                s_group = story_item['s_group']
-                t_group = story_item['t_group']
-                s_ppl = [model.get_ppl(audio, input_type='audio') for audio in s_group]
-                t_ppl = [model.get_ppl(audio, input_type='audio') for audio in t_group]
-                logger.info(f"Generated ppl for {idx}: sSC{s_ppl} tSC{t_ppl}")
+                correct = story_item['correct']
+                sSC = story_item['sSC']
+                tSC = story_item['tSC']
+                correct_ppl = model.get_ppl(correct, input_type='audio')
+                sSC_ppl = model.get_ppl(sSC, input_type='audio')
+                tSC_ppl = model.get_ppl(tSC, input_type='audio')
+                logger.info(f"Generated ppl for idx{idx}: correct{correct_ppl} sSC{sSC_ppl} tSC{tSC_ppl}")
                 logger.info('====================================')
+                s_ppl = [correct_ppl, sSC_ppl]
+                t_ppl = [correct_ppl, tSC_ppl]
                 tmp = {'idx': idx, 's_ppl': s_ppl, 't_ppl': t_ppl}
                 results.append(tmp)
             except Exception as e:
