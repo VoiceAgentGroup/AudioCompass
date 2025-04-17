@@ -2,7 +2,7 @@ from .base import VoiceAssistant
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 import transformers
 import torch
-from src.api.gpt import generate_text_chat
+from src.api.ai_judge import generate_text_chat
 from openai import OpenAI
 
 class Naive2Assistant(VoiceAssistant):

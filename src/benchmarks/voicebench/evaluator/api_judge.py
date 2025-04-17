@@ -45,7 +45,7 @@ Please only output a single "Yes" or "No". Do not output anything else.
 def generate(item):
     client = OpenAI(
         api_key=os.getenv('OPENAI_API_KEY'),
-        base_url="https://172.203.11.191:3826/v1",
+        base_url=os.getenv('OPENAI_URL'),
         http_client=httpx.Client()
     )
     if "reference" in item:

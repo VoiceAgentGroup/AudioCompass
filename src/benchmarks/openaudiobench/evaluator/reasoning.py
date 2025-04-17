@@ -2,7 +2,8 @@ import re
 import multiprocessing
 import numpy as np
 from tqdm import tqdm
-from .ai_judge import AIJudge
+from src.api.ai_judge import OPENAI_Judge
+from .config import judge_model
 
 class ReasoningQAEvaluator:
 
@@ -59,9 +60,9 @@ class ReasoningQAEvaluator:
         for data in datas:
             messages.append(self.build_eval_messages(data))
         
-        judge = AIJudge()
+        judge = OPENAI_Judge()
         with multiprocessing.Pool(4) as pool:
-            judged_data = list(tqdm(pool.imap(judge.generate, messages), total=len(messages)))
+            judged_data = list(tqdm(pool.imap(judge.generate, judge_model, messages), total=len(messages)))
         scores = []
         for item in judged_data:
             res = re.findall(r'\[([0-5])\]', item)
