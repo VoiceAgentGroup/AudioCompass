@@ -1,3 +1,6 @@
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 from typing import List, Optional, Tuple, Union, Callable
 import torch
 import torch.nn.functional as F
@@ -73,6 +76,56 @@ class MIMOCausalLMOutputWithCrossAttentions(ModelOutput):
     hidden_states: Optional[Tuple[torch.FloatTensor]] = None
     local_hidden_states: Optional[Tuple[torch.FloatTensor]] = None # Downcasted hidden states for local transformer generation
     attentions: Optional[Tuple[torch.FloatTensor]] = None
+
+
+def prepare_4d_attention_mask(
+    attention_mask_with_indices: torch.Tensor, dtype: torch.dtype, device: torch.device
+) -> torch.Tensor:
+    r"""
+    Expands the attention mask with indices from (batch_size, seq_len) to (batch_size, 1, seq_len, seq_len),
+    while handles packed sequences and transforms the mask to lower triangular form to prevent future peeking.
+
+    e.g.
+    ```
+    [[1, 1, 2, 2, 2, 0]]
+    ```
+    ->
+    ```
+    [
+        [
+            [
+                [o, x, x, x, x, x],
+                [o, o, x, x, x, x],
+                [x, x, o, x, x, x],
+                [x, x, o, o, x, x],
+                [x, x, o, o, o, x],
+                [x, x, x, x, x, x],
+            ]
+        ]
+    ]
+    ```
+    where `o` equals to `0.0`, `x` equals to `min_dtype`.
+    """
+    bsz, seq_len = attention_mask_with_indices.size()
+    min_dtype = torch.finfo(dtype).min
+    expanded_mask = attention_mask_with_indices[:, None, None, :].expand(
+        bsz, 1, seq_len, seq_len
+    )
+    # Create a binary mask from the original mask where zeros remain zeros and all other values are set to one
+    padding_mask = torch.where(expanded_mask != 0, 1, 0)
+    # Create a block-diagonal mask.
+    attention_mask_4d = (
+        torch.eq(expanded_mask, expanded_mask.transpose(-1, -2)).int() * padding_mask
+    )
+    # Use the lower triangular mask to zero out the upper triangular part
+    attention_mask_4d *= torch.tril(
+        torch.ones((seq_len, seq_len), dtype=torch.long, device=device)
+    )
+    # Invert the attention mask.
+    attention_mask_4d = torch.where(
+        attention_mask_4d != 0, torch.tensor(0, dtype=dtype, device=device), min_dtype
+    )
+    return attention_mask_4d
 
 
 class MIMOLlamaForCausalLM(LlamaPreTrainedModel):
@@ -207,8 +260,11 @@ class MIMOLlamaForCausalLM(LlamaPreTrainedModel):
         input_ids = input_ids.int()
         group_size = self.config.group_size
         
+        # print(f"forward input:\n{input_ids[:, :, -12:]}")
+        
         text_input_ids = input_ids[:, 0, ::group_size]
         speech_input_ids = input_ids[:, 1:, :].view(B, self.n_vq, -1, group_size).transpose(1, 2) # [B, T//group_size, n_vq, group_size]
+        # TODO: Verify whether this code is correct
         
         speech_embeddings = 0
         for i in range(self.n_vq):
@@ -235,17 +291,67 @@ class MIMOLlamaForCausalLM(LlamaPreTrainedModel):
 
         hidden_states = outputs[0] # [B, T, hidden_size]
 
-        text_logits = self.lm_head(hidden_states[:, -num_logits_to_keep:, :])
-        shift_hidden_states = self.hidden_states_downcast(hidden_states[:, -1, :].unsqueeze(1)) # [B, 1, hidden_size]
-        # We directly pass the hidden_states of the model as the output. Autoregressive generation of the local transformer will be handled in the forward_local method.
+        # Local transformer uses different inference modes depending on whether labels are present or not
+        if labels is not None:
+            # Training mode, compute loss in one forward pass
+            # Construct input_ids and labels for local transformer
+            # For each token in the seq_len dimension of the hidden_states, we add them to a batch
+            # input_ids and labels are identical
+            # both begin with the hidden_state of the global LM, with sequences to be generated following them
+            shift_hidden_states = self.hidden_states_downcast(hidden_states[:, :-1, :].unsqueeze(2)) # Last hidden state has no label, [B, T - 1, 1, hidden_size]
+            shift_speech_embeddings = speech_embeddings[:, 1:, :-1, :] # First speech input are not to be sent in for generation, [B, T - 1, group_size - 1, hidden_size]
+            del speech_embeddings
+            local_input_embs = torch.cat([shift_hidden_states, shift_speech_embeddings], dim=2) # [B, T - 1, group_size, hidden_size]
+            local_input_embs = local_input_embs.reshape(-1, local_input_embs.size(2), local_input_embs.size(3)) # [B * (T-1), group_size, hidden_size]
+            del shift_hidden_states, shift_speech_embeddings
 
-        return MIMOCausalLMOutputWithCrossAttentions(
-            text_logits=text_logits,
-            past_key_values=outputs.past_key_values,
-            hidden_states=outputs.hidden_states,
-            local_hidden_states=shift_hidden_states,
-            attentions=outputs.attentions,
-        )
+            with torch.nn.attention.sdpa_kernel(torch.nn.attention.SDPBackend.FLASH_ATTENTION):
+                local_hidden_states = self.local_transformer(
+                    inputs_embeds=local_input_embs,
+                )[0] # [B * (T-1), group_size, hidden_size]
+
+            del local_input_embs
+            local_hidden_states = local_hidden_states.view(B, -1, group_size, self.local_transformer_config.hidden_size) # [B, T-1, group_size, hidden_size]
+
+            local_logits = torch.empty(local_hidden_states.size(0), local_hidden_states.size(1), self.n_vq, group_size, self.local_transformer_config.vocab_size, device=hidden_states.device, dtype=torch.float32)
+            for i in range(self.n_vq):
+                local_logits[:, :, i, :, :] = self.local_transformer_lm_heads[i](local_hidden_states) # [B, T-1, vq, group_size, vocab_size]
+
+            loss_all = torch.empty(self.n_vq + 1, device=input_ids.device)
+            labels = labels.reshape(B, -1, self.n_vq + 1).transpose(1, 2).contiguous().type(torch.LongTensor)
+
+            text_logits = self.lm_head(hidden_states)
+            text_labels = labels[:, 0, ::group_size]
+            text_weights = self.loss_weights.to(text_logits.device) if self.loss_weights is not None else None
+            shift_logits = text_logits.float()[..., :-1, :].contiguous().view(-1, text_logits.shape[-1])
+            shift_labels = text_labels[..., 1:].contiguous().view(-1).to(shift_logits.device)
+            loss_all[0] = nn.functional.cross_entropy(shift_logits, shift_labels, weight=text_weights, reduction="sum") * group_size # Mutiply by group_size to match the loss scale of speech tokens
+            del shift_logits, shift_labels, text_weights, text_labels
+
+            local_weights = self.audio_loss_weights.to(local_logits.device) if self.audio_loss_weights is not None else None
+            for i in range(self.n_vq):
+                # Local transformer logits have already been shifted
+                local_logits_vq = local_logits[:, :, i, :, :].contiguous().view(-1, local_logits.size(-1))
+                local_labels = labels[:, i + 1, group_size:].contiguous().view(-1).to(local_logits.device)
+                loss_all[i + 1] = nn.functional.cross_entropy(local_logits_vq, local_labels, weight=local_weights, reduction="sum")
+                
+            return MIMOCausalLMOutputWithCrossAttentions(
+                loss=loss_all,
+                past_key_values=outputs.past_key_values,
+            )
+
+        else:
+            text_logits = self.lm_head(hidden_states[:, -num_logits_to_keep:, :])
+            shift_hidden_states = self.hidden_states_downcast(hidden_states[:, -1, :].unsqueeze(1)) # [B, 1, hidden_size]
+            # We directly pass the hidden_states of the model as the output. Autoregressive generation of the local transformer will be handled in the forward_local method.
+
+            return MIMOCausalLMOutputWithCrossAttentions(
+                text_logits=text_logits,
+                past_key_values=outputs.past_key_values,
+                hidden_states=outputs.hidden_states,
+                local_hidden_states=shift_hidden_states,
+                attentions=outputs.attentions,
+            )
     
     def forward_local(self,
                       local_last_hidden_states: torch.FloatTensor, # [B, 1, hidden_size]

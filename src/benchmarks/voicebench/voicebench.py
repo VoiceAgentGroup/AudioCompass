@@ -19,11 +19,12 @@ class VoiceBench(BaseBenchmark):
     
     def load_data(self, **kwargs):
         logger.info("Preparing data ...")
-        if kwargs.get('offline', None) == True:
-            dataset = load_dataset('parquet', data_dir=self.data_dir, trust_remote_code=True)
-            dataset = dataset[self.subset_name][self.split]
-        else:
-            dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split)
+        # if kwargs.get('offline', None) == True:
+        #     dataset = load_dataset('parquet', data_dir=self.data_dir, trust_remote_code=True)
+        #     dataset = dataset[self.subset_name][self.split]
+        # else:
+        #     dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=kwargs.get('cache_dir', None))
+        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=kwargs.get('cache_dir', None))
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     

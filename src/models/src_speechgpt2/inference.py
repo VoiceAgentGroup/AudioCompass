@@ -438,45 +438,24 @@ class Inference:
         bsz = len(inputs)
         # params = self.model.params
         # assert bsz <= params.max_batch_size, (bsz, params.max_batch_size)
-        # tokenize
-        input_tokens = [self.preprocess(
-            input=x,
-            group_size=self.group_size,
-            mode=mode,
-        ) for x in inputs]
-        max_prompt_size = max([t.shape[-1] for t in input_tokens])
-        # total_len = min(params.max_seq_len, max_prompt_size)
-        total_len = max_prompt_size
-        tokens = torch.zeros((bsz, 4, total_len)).cuda().long()
-        for k, t in enumerate(input_tokens):
-            num_token = min(total_len, t.shape[-1])
-            tokens[k, :, :num_token] = torch.tensor(t[:, -num_token:]).long()
-        # forward
-        tokens = tokens.T.reshape(1, -1)
-        tokens = torch.cat(self.history + [tokens], dim=-1)
-        # generation_config = GenerationConfig(
-        #     **self.generate_kwargs,
-        #     max_new_tokens=1,
-        #     return_dict_in_generate=True,
-        #     output_scores=True,
-        # )
-        # # prompt_length = tokens.shape[1] // (3 + 1)
-        # stopping_criteria = [
-        #     MIMOStopper(
-        #         self.tokenizer.eos_token_id,
-        #         group_size=self.group_size,
-        #         audio_channels=3, 
-        #         max_tokens=1,
-        #     )
-        # ]
-        outputs = self.model.forward(tokens)
-        # compute ppl
-        shift_logits = outputs[..., :-1, :].contiguous().float()
-        shift_labels = tokens[..., 1:].contiguous()
-        shift_logits = shift_logits.view(-1, shift_logits.size(-1))
-        shift_labels = shift_labels.view(-1)
-        loss_fct = torch.nn.CrossEntropyLoss(reduction='none', ignore_index=0)
-        loss = loss_fct(shift_logits, shift_labels).view(bsz, -1)
-        lens = (tokens != 0).sum(-1).cpu().numpy()
-        ce_loss = loss.sum(-1).cpu().detach().numpy() / lens
-        return ce_loss
+        with torch.no_grad():
+            # tokenize
+            input_tokens = [self.preprocess(
+                input=x,
+                group_size=self.group_size,
+                mode=mode,
+            ) for x in inputs]
+            max_prompt_size = max([t.shape[-1] for t in input_tokens])
+            # total_len = min(params.max_seq_len, max_prompt_size)
+            total_len = max_prompt_size
+            tokens = torch.zeros((bsz, 4, total_len)).cuda().long()
+            for k, t in enumerate(input_tokens):
+                num_token = min(total_len, t.shape[-1])
+                tokens[k, :, :num_token] = torch.tensor(t[:, -num_token:]).long()
+            # forward
+            tokens = tokens.T.reshape(bsz, -1)
+            outputs = self.model.forward(input_ids=tokens, labels=tokens)
+            # compute ppl
+            loss = outputs.loss
+            loss = 10 * loss[0] + 4 * loss[1] + loss[2] + loss[3]
+            return loss.item()

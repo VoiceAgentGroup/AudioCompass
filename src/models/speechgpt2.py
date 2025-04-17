@@ -69,7 +69,7 @@ class SpeechGPT2(VoiceAssistant):
         return wav
     
     def get_ppl(self, input, input_type: str):
-        # self.model.process_greeting()
+        self.model.process_greeting()
         if input_type == 'text':
             mode = 't2t'
         elif input_type == 'audio':
