@@ -2,7 +2,7 @@ import re
 import multiprocessing
 import numpy as np
 from tqdm import tqdm
-from src.api.ai_judge import OPENAI_Judge
+from src.utils.ai_judge import OPENAI_Judge
 from .config import judge_model
 
 class ReasoningQAEvaluator:
