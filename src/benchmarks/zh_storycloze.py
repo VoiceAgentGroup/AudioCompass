@@ -36,8 +36,8 @@ class zhStoryCloze(BaseBenchmark):
                 waveform = waveform.mean(dim=0, keepdim=True)
             suffix_audios.append(waveform.squeeze())
 
-        for choice_audio in suffix_audios:
-            complete_audio = torch.cat([question_audio, choice_audio], dim=-1)
+        for suffix_audio in suffix_audios:
+            complete_audio = torch.cat([question_audio, suffix_audio], dim=-1)
             audio_group.append({
                 'array': complete_audio.numpy(),
                 'sampling_rate': sample_rate,
