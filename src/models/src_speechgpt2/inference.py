@@ -279,7 +279,7 @@ class Inference:
         mode="s2s",
         transcript=None,
     ):
-        if type(input) != str:
+        if type(input) != str:  # speech input
             wav = (
                 self.read_wav(input, self.generator.sampling_rate)
                 .reshape(1, 1, -1)
@@ -314,11 +314,26 @@ class Inference:
 
         assert self.greeting, "Must load greeting first"
 
+        if mode[0] == 's':  # s2t, s2s, st2t, st2s
+            user_prompt = InputSegment("", audio=audio_tokenized)
+            if mode[1] == 't':  # st2t, st2s
+                user_prompt += InputSegment(transcript)
+                system_prompt = InputSegment(
+                    f"You are an helpful assistant. You should listen to the audio and answer the user's text questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
+                )
+            else:  # st2, s2s
+                InputSegment(
+                    f"You are an helpful assistant. You should answer the user's speech questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
+                )
+        else:  # t2t, t2s
+            user_prompt = InputSegment(transcript)
+            system_prompt = InputSegment(
+                f"You are an helpful assistant. You should answer the user's {'text' if mode[0] == 't' else 'speech'} questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
+            )
+            
         prompt = (
             [
-                InputSegment(
-                    f"You are an helpful assistant. You should answer the user's {'text' if mode[0] == 't' else 'speech'} questions in {'text' if mode[2] == 't' else 'speech'}.\n\n\n",
-                ),
+                system_prompt,
                 *self.greeting,
             ]
             if not self.history
@@ -326,13 +341,9 @@ class Inference:
         )
         prompt += [
             InputSegment(f"[|Human|]: "),
-            (
-                InputSegment("", audio=audio_tokenized)
-                if mode[0] == "s"
-                else InputSegment(transcript)
-            ),
-            InputSegment(f" ###\n[|SpeechGPT|]: "),
+            user_prompt,
         ]
+        prompt += InputSegment(f" ###\n[|SpeechGPT|]: ")
 
         input_ids = [seg.to_input_id(self.tokenizer, group_size) for seg in prompt]
         input_ids = torch.cat(input_ids, dim=1)

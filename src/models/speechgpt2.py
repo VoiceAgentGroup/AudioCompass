@@ -35,7 +35,7 @@ class SpeechGPT2(VoiceAssistant):
             codec_config_path="./src/models/src_speechgpt2/Codec/config/sg2_codec_config.yaml"
         )
 
-    def process_input(self, audio_input, text_input, mode):
+    def process_input(self, audio_input, text_input, task, mode=None):
         if audio_input is not None:
             buffer = io.BytesIO()
             sf.write(buffer, audio_input['array'], audio_input['sampling_rate'], format='WAV')
@@ -45,27 +45,42 @@ class SpeechGPT2(VoiceAssistant):
             input_data = text_input
 
         return self.model.forward(
-            task='thought', input=input_data, text=text_input, mode=mode
+            task=task, input=input_data, text=text_input, mode=mode
         )
 
     def generate_a2t(self, audio):
         self.model.process_greeting()
-        response, _ = self.process_input(audio, None, 's2t')
+        response, _ = self.process_input(audio, None, task='thought', mode='s2t')
         return response
     
     def generate_t2t(self, text):
         self.model.process_greeting()
-        response, _ = self.process_input(None, text, 't2t')
+        response, _ = self.process_input(None, text, task='thought', mode='t2t')
         return response
     
     def generate_t2a(self, text):
         self.model.process_greeting()
-        _, (_, wav) = self.process_input(None, text, 't2s')  # wav: tuple (sample_rate, array)
+        _, (_, wav) = self.process_input(None, text, task='thought', mode='t2s')
         return wav
     
     def generate_a2a(self, audio):
         self.model.process_greeting()
-        _, (_, wav) = self.process_input(audio, None, 's2s')  # wav: tuple (sample_rate, array)
+        _, (_, wav) = self.process_input(audio, None, task='thought', mode='s2s')
+        return wav
+    
+    def generate_at2t(self, audio, text):
+        self.model.process_greeting()
+        response, _ = self.process_input(audio, text, task='thought', mode='st2t')
+        return response
+    
+    def generate_at2a(self, audio, text):
+        self.model.process_greeting()
+        _, (_, wav) = self.process_input(audio, text, task='thought', mode='st2s')
+        return wav
+    
+    def tts(self, text):
+        self.model.process_greeting()
+        _, (_, wav) = self.process_input(None, text, task='tts')
         return wav
     
     def get_ppl(self, input, input_type: str):
