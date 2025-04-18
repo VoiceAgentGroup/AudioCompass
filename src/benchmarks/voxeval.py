@@ -29,7 +29,7 @@ class VoxEval(BaseBenchmark):
             self.shots = kwargs.get("shots", 3)
             self.fewshot_dir = os.path.join(self.data_dir, "math_CoT_fewshot")
         
-        self.transcriptor = WhisperLargeV3()
+        self.transcriptor = WhisperLargeV3(**kwargs)
         
         self.dataset = self.load_data(**kwargs)
         logger.add(f'log/{self.name}-{self.prompt_mode}-{self.split}.log', rotation='50MB')

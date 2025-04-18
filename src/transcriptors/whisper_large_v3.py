@@ -1,12 +1,17 @@
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
+import os
 
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
+device = "cuda" if torch.cuda.is_available() else "cpu"
 torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
 class WhisperLargeV3:
-    def __init__(self):
-        self.model_id = "openai/whisper-large-v3"
+    def __init__(self, **kwargs):
+        if kwargs.get('offline', False):
+            cache_dir = kwargs.get('cache_dir', 'cache')
+            self.model_id = os.path.join(cache_dir, 'whisper-large-v3')
+        else:
+            self.model_id = "openai/whisper-large-v3"
         self.model = AutoModelForSpeechSeq2Seq.from_pretrained(
             self.model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
         ).to(device)
@@ -21,8 +26,8 @@ class WhisperLargeV3:
             return_timestamps=True,
         )
         
-    def inference(self, waveform):
-        if waveform.ndim > 1:
-            waveform = waveform[0, :]
-        result = self.pipe(waveform)["text"]
+    def inference(self, audio):
+        if audio.ndim > 1:
+            audio = audio[0, :]
+        result = self.pipe(audio)["text"]
         return result
