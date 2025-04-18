@@ -6,7 +6,7 @@ from tqdm import tqdm
 from loguru import logger
 import json
 from .base import BaseBenchmark
-from src.transcriptors.whisper_large_v3 import WhisperLargeV3
+from src.transcriptors import WhisperLargeV3
 
 
 class VoxEval(BaseBenchmark):
