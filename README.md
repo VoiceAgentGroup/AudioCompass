@@ -25,7 +25,7 @@ git clone https://github.com/VoiceAgentGroup/AudioCompass.git
 cd AudioCompass
 
 # Set up the environment
-conda create -n audiocompass python=3.10 -y
+conda create -n audiocompass python=3.12 -y
 conda activate audiocompass
 pip install -r requirements.txt
 ```
