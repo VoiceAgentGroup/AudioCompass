@@ -77,6 +77,8 @@ class MMAU(BaseBenchmark):
                 json.dump(results, f, indent=4)
             else:
                 template = self.get_result_template()
+                if len(template) != len(results):
+                    raise RuntimeError("Fail to apply submission template due to some missed results.")
                 for template_item, result_item in zip(template, results):
                     template_item['model_prediction'] = result_item['model_prediction']
                 json.dump(template, f, indent=4)
