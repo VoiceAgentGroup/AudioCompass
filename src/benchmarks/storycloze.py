@@ -5,6 +5,7 @@ import os
 import numpy as np
 from .base import BaseBenchmark
 import torchaudio
+from utils import gen_storycloze_meta
 
 
 class StoryCloze(BaseBenchmark):
@@ -30,9 +31,10 @@ class StoryCloze(BaseBenchmark):
         dataset = []
         meta_path = os.path.join(self.data_dir, "meta_data.json")
         if not os.path.exists(meta_path):
-            raise FileNotFoundError(f"Meta file {meta_path} not found.")
-        with open(meta_path, "r") as f:
-            meta_data = json.load(f)
+            meta_data = gen_storycloze_meta(base_path=self.data_dir)
+        else:
+            with open(meta_path, "r") as f:
+                meta_data = json.load(f)
         for story_meta in tqdm(meta_data):
             idx = story_meta['idx']
             correct_audio = self.preprocess_audio(story_meta['correct']['wav'])

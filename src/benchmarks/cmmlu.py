@@ -6,6 +6,7 @@ import numpy as np
 from .base import BaseBenchmark
 import torchaudio
 import torch
+from utils import gen_cmmlu_meta
 
 
 class CMMLU(BaseBenchmark):
@@ -50,18 +51,19 @@ class CMMLU(BaseBenchmark):
         dataset = []
         meta_path = os.path.join(self.data_dir, "meta_data.json")
         if not os.path.exists(meta_path):
-            raise FileNotFoundError(f"Meta file {meta_path} not found.")
-        with open(meta_path, "r") as f:
-            meta_data = json.load(f)
-            for subject in tqdm(meta_data):
-                data = {'subject': subject['subject'], 'qa': []}
-                for idx, qa in enumerate(subject['qa']):
-                    question_path = qa['question']['path']
-                    choice_path = [choice['path'] for choice in qa['choice']]
-                    audio_group = self.concat_audio(question_path, choice_path)
-                    right_answer = qa['right_answer']
-                    data['qa'].append({'audio_group': audio_group, 'right_answer': right_answer})
-                dataset.append(data)
+            meta_data = gen_cmmlu_meta(base_path=self.data_dir)
+        else:
+            with open(meta_path, "r") as f:
+                meta_data = json.load(f)
+        for subject in tqdm(meta_data):
+            data = {'subject': subject['subject'], 'qa': []}
+            for idx, qa in enumerate(subject['qa']):
+                question_path = qa['question']['path']
+                choice_path = [choice['path'] for choice in qa['choice']]
+                audio_group = self.concat_audio(question_path, choice_path)
+                right_answer = qa['right_answer']
+                data['qa'].append({'audio_group': audio_group, 'right_answer': right_answer})
+            dataset.append(data)
         return dataset
       
     def generate(self, model):
