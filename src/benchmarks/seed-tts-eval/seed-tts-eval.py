@@ -51,7 +51,10 @@ class SeedTTSEval(BaseBenchmark):
                     utt = utt[:-4]
             if not os.path.exists(os.path.join(wav_dir, utt + '.wav')):
                 continue
-            dataset.append(infer_text)
+            dataset.append({
+                'infer_text': infer_text,
+                'ref_wav_path': os.path.join(wav_dir, utt + '.wav'),
+            })
             
         return dataset
     
@@ -59,13 +62,17 @@ class SeedTTSEval(BaseBenchmark):
         logger.info("Generating results ...")
         results = []
         
-        for idx, infer_text in enumerate(tqdm(self.dataset)):
+        for idx, data in enumerate(tqdm(self.dataset)):
             try:
-                response_audio = model.tts(infer_text)
+                response_audio, sample_rate = model.tts(data['infer_text'])
                 transcription = self.transcriptor.inference(response_audio)
                 results.append({
                     'idx': idx,
+                    'infer_text': data['infer_text'],
+                    'tts_wav': response_audio,
+                    'sample_rate': sample_rate,
                     'transcription': transcription,
+                    'ref_wav_path': data['ref_wav_path'],
                 })
                 logger.info(f"Transcription: {transcription}")
                 logger.info('====================================')
@@ -76,7 +83,7 @@ class SeedTTSEval(BaseBenchmark):
             
         return results
     
-    def process_one(self, hypo, truth):
+    def process_one_wer(self, hypo, truth):
         raw_truth = truth
         raw_hypo = hypo
 
@@ -107,17 +114,28 @@ class SeedTTSEval(BaseBenchmark):
         return (raw_truth, raw_hypo, wer, subs, dele, inse)
     
     def evaluate(self, results):
-        if len(self.dataset) != len(results):
-            raise RuntimeError("Some of the results are missed.")
+        logger.info("Evaluating results ...")
+        # wer
         total_wer = 0
-        for result, truth in tqdm(zip(results, self.dataset)):
-            raw_truth, raw_hypo, wer, subs, dele, inse = self.process_one(result['transcription'], truth)
+        for result in tqdm(results):
+            raw_truth, raw_hypo, wer, subs, dele, inse = self.process_one_wer(result['transcription'], result['infer_text'])
             total_wer += wer
         avg_wer = total_wer / len(results)
         return {'wer': avg_wer}
     
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
+        output_dir = os.path.join(output_dir, self.name)
+        wav_dir = os.path.join(output_dir, 'tts-wavs')
+        os.makedirs(output_dir, exist_ok=True)
+        os.makedirs(wav_dir, exist_ok=True)
+        for result in results:
+            wav_path = os.path.join(wav_dir, f"{model_name}-{result['idx']}.wav")
+            wav = result['tts_wav'] if result['tts_wav'].ndim == 2 else result['tts_wav'].unsqueeze(0)
+            torchaudio.save(wav_path, wav, result['sample_rate'])
+            result['tts_wav_path'] = wav_path
+            result.pop('tts_wav')
+            result.pop('sample_rate')
         model_name = model_name.split('/')[-1]
         output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}.json')
         with open(output_file, 'w') as f:
