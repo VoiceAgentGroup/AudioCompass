@@ -1,5 +1,5 @@
 class BaseBenchmark:
-    def __init__(self):
+    def __init__(self, **kwargs):
         pass
 
     def generate(self, model):

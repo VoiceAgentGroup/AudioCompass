@@ -10,10 +10,10 @@ from src.transcriptors import WhisperLargeV3
 
 
 class VoxEval(BaseBenchmark):
-    def __init__(self, split, data_dir="datas/VoxEval", **kwargs):
+    def __init__(self, split, data_dir="datas/VoxEval", cache_dir='cache', **kwargs):
         self.name = 'voxeval'
         self.split = split
-        self.data_dir = data_dir
+        self.data_dir = os.path.join(cache_dir, data_dir)
         
         # Parameters
         self.timbre = kwargs.get("timbre", "alloy")

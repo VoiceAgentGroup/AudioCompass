@@ -9,9 +9,9 @@ from utils import gen_storycloze_meta
 
 
 class StoryCloze(BaseBenchmark):
-    def __init__(self, data_dir="datas/storycloze", **kwargs):
+    def __init__(self, data_dir="datas/storycloze", cache_dir='cache', **kwargs):
         self.name = 'storycloze'
-        self.data_dir = data_dir
+        self.data_dir = os.path.join(cache_dir, data_dir)
         self.dataset = self.load_data()
         logger.add(f'log/{self.name}.log', rotation='50 MB')
         

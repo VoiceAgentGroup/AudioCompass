@@ -11,10 +11,10 @@ class SeedTTSEval(BaseBenchmark):
     def __init__(self, split, data_dir="datas/seedtts_testset", cache_dir='cache', **kwargs):
         self.name = 'seed-tts-eval'
         self.split = split
-        self.data_dir = data_dir
-        self.cache_dir = cache_dir
+        self.data_dir = os.path.join(cache_dir, data_dir)
         self.dataset = self.load_data()
         self.transcriptor = Paraformer(**kwargs)
+        self.wavlm_path = os.path.join(cache_dir, 'models', 'wavlm_large_finetune.pth')
         logger.add(f'log/{self.name}', rotation='50 MB')
         
     def check_split(self, split):
@@ -87,7 +87,7 @@ class SeedTTSEval(BaseBenchmark):
         for result in tqdm(results):
             raw_truth, raw_hypo, wer, subs, dele, inse = process_one_wer(result['transcription'], result['infer_text'])
             total_wer += wer
-            sim, model = verification(model_name='wavlm_large', wav1=result['tts_wav_path'], wav2=results['ref_wav_path'], checkpoint=os.path.join(self.cache_dir, 'wavlm_large_finetune.pth'))
+            sim, model = verification(model_name='wavlm_large', wav1=result['tts_wav_path'], wav2=results['ref_wav_path'], checkpoint=self.wavlm_path)
             total_sim += sim.cpu().item()
         avg_wer = total_wer / len(results)
         avg_sim = total_sim / len(results)

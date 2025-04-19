@@ -9,10 +9,10 @@ from ..base import BaseBenchmark
 
 
 class MMAU(BaseBenchmark):
-    def __init__(self, split, data_dir='datas/mmau', **kwargs):
+    def __init__(self, split, data_dir='datas/mmau', cache_dir='cache', **kwargs):
         self.name = 'mmau'
         self.split = split
-        self.data_dir = data_dir
+        self.data_dir = os.path.join(cache_dir, data_dir)
         self.dataset = self.load_data(**kwargs)
         logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
         

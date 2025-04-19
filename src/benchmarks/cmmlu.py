@@ -10,9 +10,9 @@ from utils import gen_cmmlu_meta
 
 
 class CMMLU(BaseBenchmark):
-    def __init__(self, data_dir="datas/cmmlu-minimax", **kwargs):
+    def __init__(self, data_dir="datas/cmmlu-minimax", cache_dir='cache', **kwargs):
         self.name = 'cmmlu'
-        self.data_dir = data_dir
+        self.data_dir = os.path.join(cache_dir, data_dir)
         self.dataset = self.load_data()
         logger.add(f'log/{self.name}', rotation='50 MB')
 

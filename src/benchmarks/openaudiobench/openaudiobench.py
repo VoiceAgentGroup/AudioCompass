@@ -9,11 +9,11 @@ import torchaudio
 
 
 class OpenAudioBench(BaseBenchmark):
-    def __init__(self, split, data_dir="datas/OpenAudioBench/eval_datas", **kwargs):
+    def __init__(self, split, data_dir="datas/OpenAudioBench/eval_datas", cache_dir='cache', **kwargs):
         self.name = 'openaudiobench'
         self.check_split(split)
         self.split = split
-        self.data_dir = data_dir
+        self.data_dir = os.path.join(cache_dir, data_dir)
         self.dataset = self.load_data()
         logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
         

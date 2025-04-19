@@ -8,23 +8,23 @@ from ..base import BaseBenchmark
 
 
 class VoiceBench(BaseBenchmark):
-    def __init__(self, subset_name, split, data_dir='datas/voicebench', **kwargs):
+    def __init__(self, subset_name, split, data_dir='datas/voicebench', cache_dir='cache', **kwargs):
         self.name = 'voicebench'
         self.subset_name = subset_name
         self.split = split
-        self.data_dir = data_dir
-        self.dataset = self.load_data(**kwargs)
+        self.data_dir = os.path.join(cache_dir, data_dir)
+        self.dataset = self.load_data()
         logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
 
     
-    def load_data(self, **kwargs):
+    def load_data(self):
         logger.info("Preparing data ...")
         # if kwargs.get('offline', None) == True:
         #     dataset = load_dataset('parquet', data_dir=self.data_dir, trust_remote_code=True)
         #     dataset = dataset[self.subset_name][self.split]
         # else:
-        #     dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=kwargs.get('cache_dir', None))
-        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=kwargs.get('cache_dir', None))
+        #     dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=self.data_dir)
+        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=self.data_dir)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     
