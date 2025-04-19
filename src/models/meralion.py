@@ -2,23 +2,25 @@ from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor
 from .base import VoiceAssistant
 from loguru import logger
 import torch
+import os
 
 class MERaLiONAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         repo_id = "MERaLiON/MERaLiON-AudioLLM-Whisper-SEA-LION"
 
         self.model_name = "meralion"
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
 
         self.processor = AutoProcessor.from_pretrained(
             repo_id,
             trust_remote_code=True,
-            cache_dir='./cache',
+            cache_dir=cache_dir,
         )
         self.model = AutoModelForSpeechSeq2Seq.from_pretrained(
             repo_id,
             use_safetensors=True,
             trust_remote_code=True,
-            cache_dir='./cache',
+            cache_dir=cache_dir,
             device_map='cuda',
             torch_dtype=torch.bfloat16,
         )

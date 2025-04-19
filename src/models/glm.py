@@ -3,12 +3,13 @@ from transformers import AutoModel, AutoTokenizer
 from transformers import WhisperFeatureExtractor, AutoTokenizer
 from loguru import logger
 import torch
+import os
 from .src_glm.speech_tokenizer.utils import extract_speech_token
 from .src_glm.speech_tokenizer.modeling_whisper import WhisperVQEncoder
 
 
 class GLMAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = 'glm'
         model_path = 'THUDM/glm-4-voice-9b'
         self.glm_model = AutoModel.from_pretrained(
@@ -19,9 +20,10 @@ class GLMAssistant(VoiceAssistant):
             cache_dir='./cache',
             torch_dtype=torch.bfloat16,
         ).eval()
-        self.glm_tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True, cache_dir='./cache')
-        self.feature_extractor = WhisperFeatureExtractor.from_pretrained("THUDM/glm-4-voice-tokenizer", cache_dir='./cache')
-        self.whisper_model = WhisperVQEncoder.from_pretrained("THUDM/glm-4-voice-tokenizer", cache_dir='./cache').eval().to("cuda")
+        cache_dir = os.path.join(kwargs.get('cache_dir', './cache'), 'models')
+        self.glm_tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True, cache_dir=cache_dir)
+        self.feature_extractor = WhisperFeatureExtractor.from_pretrained("THUDM/glm-4-voice-tokenizer", cache_dir=cache_dir)
+        self.whisper_model = WhisperVQEncoder.from_pretrained("THUDM/glm-4-voice-tokenizer", cache_dir=cache_dir).eval().to("cuda")
 
     def generate_a2t(
         self,

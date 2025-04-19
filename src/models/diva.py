@@ -1,11 +1,13 @@
 from .base import VoiceAssistant
 from transformers import AutoModel
 import torch
+import os
 
 
 class DiVAAssistant(VoiceAssistant):
-    def __init__(self):
-        self.model = AutoModel.from_pretrained("WillHeld/DiVA-llama-3-v0-8b", cache_dir='./cache', trust_remote_code=True)
+    def __init__(self, **kwargs):
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
+        self.model = AutoModel.from_pretrained("WillHeld/DiVA-llama-3-v0-8b", cache_dir=cache_dir, trust_remote_code=True)
         self.model_name = "diva"
 
     def generate_a2t(

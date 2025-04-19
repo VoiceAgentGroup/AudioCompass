@@ -10,7 +10,7 @@ from huggingface_hub import snapshot_download
 
 
 class BaichuanAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.sampling_rate = 24000
         self.role_prefix = {
             'system': '<B_SYS>',

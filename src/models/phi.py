@@ -1,16 +1,17 @@
 from .base import VoiceAssistant
 import torch
+import os
 from transformers import AutoModelForCausalLM, AutoProcessor, GenerationConfig
 
 
 class PhiAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         model_path = 'microsoft/Phi-4-multimodal-instruct'
-        kwargs = {}
         kwargs['torch_dtype'] = torch.bfloat16
 
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
         self.model_name = 'phi'
-        self.processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
+        self.processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True, cache_dir=cache_dir)
 
         self.model = AutoModelForCausalLM.from_pretrained(
             model_path,
@@ -18,6 +19,7 @@ class PhiAssistant(VoiceAssistant):
             torch_dtype='auto',
             _attn_implementation='flash_attention_2',
             device_map='cuda',
+            cache_dir=cache_dir
         )
 
         self.generation_config = GenerationConfig.from_pretrained(model_path, 'generation_config.json')

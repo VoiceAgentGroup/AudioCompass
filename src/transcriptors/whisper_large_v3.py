@@ -7,15 +7,15 @@ torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
 class WhisperLargeV3:
     def __init__(self, **kwargs):
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
         if kwargs.get('offline', False):
-            cache_dir = kwargs.get('cache_dir', 'cache')
             self.model_id = os.path.join(cache_dir, 'whisper-large-v3')
         else:
             self.model_id = "openai/whisper-large-v3"
         self.model = AutoModelForSpeechSeq2Seq.from_pretrained(
-            self.model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
+            self.model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True, cache_dir=cache_dir
         ).to(device)
-        self.processor = AutoProcessor.from_pretrained(self.model_id)
+        self.processor = AutoProcessor.from_pretrained(self.model_id, cache_dir=cache_dir)
         self.pipe = pipeline(
             "automatic-speech-recognition",
             model=self.model,

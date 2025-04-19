@@ -2,20 +2,22 @@ from .base import VoiceAssistant
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 import transformers
 import torch
+import os
 from src.utils.ai_judge import generate_text_chat
 from openai import OpenAI
 
 class Naive2Assistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = 'naive2'
-        self.asr = self.load_asr()
+        self.asr = self.load_asr(**kwargs)
         self.client = OpenAI()
 
-    def load_asr(self):
+    def load_asr(self, **kwargs):
         model_id = "openai/whisper-large-v3"
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
 
         model = AutoModelForSpeechSeq2Seq.from_pretrained(
-            model_id, torch_dtype=torch.float16, low_cpu_mem_usage=True, use_safetensors=True, cache_dir='./cache'
+            model_id, torch_dtype=torch.float16, low_cpu_mem_usage=True, use_safetensors=True, cache_dir=cache_dir
         )
         model.to("cuda:0")
 
@@ -28,6 +30,7 @@ class Naive2Assistant(VoiceAssistant):
             feature_extractor=processor.feature_extractor,
             torch_dtype=torch.float16,
             device="cuda:0",
+            cache_dir=cache_dir
         )
         return pipe
 

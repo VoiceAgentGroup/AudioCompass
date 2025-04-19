@@ -13,14 +13,15 @@ import tempfile
 
 
 class MegrezAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = "megrez"
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
         self.model = AutoModelForCausalLM.from_pretrained(
             'Infinigence/Megrez-3B-Omni',
             trust_remote_code=True,
             torch_dtype=torch.bfloat16,
             # attn_implementation="flash_attention_2",
-            cache_dir='./cache',
+            cache_dir=cache_dir,
         ).eval().cuda()
         self.model._get_or_init_processor()
 

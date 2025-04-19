@@ -10,18 +10,19 @@ from .src_speechgpt2.mimo_qwen2_grouped import MIMOModelArguments
 
 
 class SpeechGPT2(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = 'speechgpt2'
-        self.model_path = "./cache/SpeechGPT-2.0-preview-7B"
-        if not os.path.exists("./cache/SpeechGPT-2.0-preview-Codec"):
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
+        self.model_path = os.path.join(cache_dir, "SpeechGPT-2.0-preview-7B")
+        if not os.path.exists(os.path.join(cache_dir, "SpeechGPT-2.0-preview-Codec")):
             snapshot_download(
                 repo_id="fnlp/SpeechGPT-2.0-preview-Codec",
-                local_dir="./cache/SpeechGPT-2.0-preview-Codec",
+                local_dir=os.path.join(cache_dir, "SpeechGPT-2.0-preview-Codec"),
             )
-        if not os.path.exists("./cache/SpeechGPT-2.0-preview-7B"):
+        if not os.path.exists(self.model_path):
             snapshot_download(
                 repo_id='fnlp/SpeechGPT-2.0-preview-7B',
-                local_dir="./cache/SpeechGPT-2.0-preview-7B",
+                local_dir=self.model_path,
             )
         parser = HfArgumentParser((MIMOModelArguments,))
         self.model_args, _ = parser.parse_args_into_dataclasses(
@@ -31,7 +32,7 @@ class SpeechGPT2(VoiceAssistant):
         self.model = Inference(
             model_path=self.model_path,
             model_args=self.model_args,
-            codec_ckpt_path="./cache/SpeechGPT-2.0-preview-Codec/sg2_codec_ckpt.pkl",
+            codec_ckpt_path=os.path.join(cache_dir, "SpeechGPT-2.0-preview-Codec/sg2_codec_ckpt.pkl"),
             codec_config_path="./src/models/src_speechgpt2/Codec/config/sg2_codec_config.yaml"
         )
 

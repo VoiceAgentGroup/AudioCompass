@@ -2,19 +2,21 @@ from .base import VoiceAssistant
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 import transformers
 import torch
+import os
 
 
 class Naive4Assistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = 'naive4'
-        self.asr = self.load_asr()
-        self.llm = self.load_llm()
+        self.asr = self.load_asr(**kwargs)
+        self.llm = self.load_llm(**kwargs)
 
-    def load_asr(self):
+    def load_asr(self, **kwargs):
         model_id = "openai/whisper-large-v3-turbo"
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
 
         model = AutoModelForSpeechSeq2Seq.from_pretrained(
-            model_id, torch_dtype=torch.float16, low_cpu_mem_usage=True, use_safetensors=True, cache_dir='./cache'
+            model_id, torch_dtype=torch.float16, low_cpu_mem_usage=True, use_safetensors=True, cache_dir=cache_dir
         )
         model.to("cuda:0")
 
@@ -27,18 +29,20 @@ class Naive4Assistant(VoiceAssistant):
             feature_extractor=processor.feature_extractor,
             torch_dtype=torch.float16,
             device="cuda:0",
+            cache_dir=cache_dir,
         )
         return pipe
 
-    def load_llm(self):
+    def load_llm(self, **kwargs):
         model_id = "meta-llama/Llama-3.2-3B-Instruct"
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
 
         pipeline = transformers.pipeline(
             "text-generation",
             model=model_id,
             model_kwargs={"torch_dtype": torch.bfloat16},
             device_map="cuda",
-            # cache_dir='./cache',
+            cache_dir=cache_dir
         )
         return pipeline
 

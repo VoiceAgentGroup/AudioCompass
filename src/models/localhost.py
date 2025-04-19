@@ -6,7 +6,7 @@ import soundfile as sf
 
 
 class LocalAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.client = OpenAI(
             api_key="EMPTY",
             base_url="http://localhost:8000/v1",

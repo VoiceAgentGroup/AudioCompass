@@ -7,23 +7,24 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 import torchaudio
 
 class IchigoeAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = "ichigo"
         device = "cuda"
 
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
         if not os.path.exists("./cache/whisper-vq-stoks-v3-7lang-fixed.model"):
             hf_hub_download(
                 repo_id="jan-hq/WhisperVQ",
                 filename="whisper-vq-stoks-v3-7lang-fixed.model",
-                local_dir="./cache/",
+                local_dir=cache_dir,
             )
         self.vq_model = RQBottleneckTransformer.load_model(
-            "./cache/whisper-vq-stoks-v3-7lang-fixed.model"
+            os.path.join(cache_dir, "whisper-vq-stoks-v3-7lang-fixed.model")
         ).to(device)
         self.vq_model.ensure_whisper(device)
 
-        tokenizer = AutoTokenizer.from_pretrained('homebrewltd/Ichigo-llama3.1-s-instruct-v0.4', cache_dir='./cache')
-        model = AutoModelForCausalLM.from_pretrained('homebrewltd/Ichigo-llama3.1-s-instruct-v0.4', device_map='cuda', torch_dtype=torch.bfloat16, cache_dir='./cache')
+        tokenizer = AutoTokenizer.from_pretrained('homebrewltd/Ichigo-llama3.1-s-instruct-v0.4', cache_dir=cache_dir)
+        model = AutoModelForCausalLM.from_pretrained('homebrewltd/Ichigo-llama3.1-s-instruct-v0.4', device_map='cuda', torch_dtype=torch.bfloat16, cache_dir=cache_dir)
 
         self.pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
 

@@ -3,17 +3,19 @@ from .base import VoiceAssistant
 import torch, math
 from transformers import MoshiForConditionalGeneration, AutoFeatureExtractor, AutoTokenizer
 import librosa
+import os
 
 
 class MoshiAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = 'moshi'
         self.device = 'cuda'
         self.dtype = torch.float16
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
         self.model = MoshiForConditionalGeneration.from_pretrained("kmhf/hf-moshiko", device_map=self.device, torch_dtype=self.dtype,
-                                                              cache_dir='./cache')
-        self.tokenizer = AutoTokenizer.from_pretrained('kmhf/hf-moshiko')
-        self.feature_extractor = AutoFeatureExtractor.from_pretrained('kmhf/hf-moshiko')
+                                                              cache_dir=cache_dir)
+        self.tokenizer = AutoTokenizer.from_pretrained('kmhf/hf-moshiko', cache_dir=cache_dir)
+        self.feature_extractor = AutoFeatureExtractor.from_pretrained('kmhf/hf-moshiko', cache_dir=cache_dir)
 
     def generate_a2t(
         self,

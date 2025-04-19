@@ -11,7 +11,7 @@ from huggingface_hub import snapshot_download
 
 
 class LyraAssistant(VoiceAssistant):
-    def load_model(self, model_path):
+    def load_model(self, model_path, **kwargs):
         disable_torch_init()
         model_name = get_model_name_from_path(model_path)
         tokenizer, model, image_processor, _, speech_processor = load_pretrained_model(model_path, None,

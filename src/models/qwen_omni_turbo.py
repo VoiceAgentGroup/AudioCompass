@@ -4,14 +4,12 @@ import base64
 import os
 from openai import OpenAI
 import soundfile as sf
-import httpx
 
 class QwenOmniAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.client = OpenAI(
-            api_key=os.getenv("DASHSCOPE_API_KEY"),
-            base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
-            http_client=httpx.Client(),
+            api_key=os.getenv("OPENAI_API_KEY"),
+            base_url=os.getenv("OPENAI_URL"),
         )
         self.model_name = "qwen-omni-turbo"
     

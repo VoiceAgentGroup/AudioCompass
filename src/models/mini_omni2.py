@@ -188,10 +188,11 @@ def T1_T2(fabric, input_ids, model, text_tokenizer):
 
 
 class MiniOmni2Assistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = "mini_omni2"
         self.device = "cuda:0"
-        self.ckpt_dir = f"./cache/mini-omni2"
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
+        self.ckpt_dir = os.path.join(cache_dir, 'mini-omni2')
         self.fabric, self.model, self.text_tokenizer, self.snacmodel, self.whispermodel = self.load_model(self.ckpt_dir, self.device)
 
     def load_model(self, ckpt_dir, device):

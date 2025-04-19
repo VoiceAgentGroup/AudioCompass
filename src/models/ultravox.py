@@ -1,11 +1,13 @@
 from .base import VoiceAssistant
 import transformers
+import os
 
 
 class UltravoxAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = 'ultravox'
-        self.pipe = transformers.pipeline(model='fixie-ai/ultravox-v0_4_1-llama-3_1-8b', trust_remote_code=True, cache_dir='./cache', device='cuda')
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
+        self.pipe = transformers.pipeline(model='fixie-ai/ultravox-v0_4_1-llama-3_1-8b', trust_remote_code=True, cache_dir=cache_dir, device='cuda')
 
     def generate_a2t(
         self,

@@ -11,7 +11,7 @@ from src.models.src_freeze_omni.pipeline import inferencePipeline
 
 
 class audioEncoderProcessor:
-    def __init__(self, chunk_size=16):
+    def __init__(self, chunk_size=16, **kwargs):
         self.model_name = "freeze_omni"
         self.chunk_size = 16
         self.chunk_overlap = 3
@@ -52,21 +52,22 @@ class audioEncoderProcessor:
 
 
 class FreezeOmniAssistant(VoiceAssistant):
-    def __init__(self):
-        if not os.path.exists("./cache/Freeze-Omni"):
+    def __init__(self, **kwargs):
+        cache_dir = kwargs.get('cache_dir', './cache')
+        if not os.path.exists(os.path.join(cache_dir, "Freeze-Omni")):
             snapshot_download(
                 repo_id="VITA-MLLM/Freeze-Omni",
-                local_dir="./cache/Freeze-Omni",
+                local_dir=os.path.join(cache_dir, "Freeze-Omni"),
             )
-        if not os.path.exists("./cache/Qwen2-7B-Instruct"):
+        if not os.path.exists(os.path.join(cache_dir, "Qwen2-7B-Instruct")):
             snapshot_download(
                 repo_id='Qwen/Qwen2-7B-Instruct',
-                local_dir="./cache/Qwen2-7B-Instruct",
+                local_dir=os.path.join(cache_dir, "Qwen2-7B-Instruct"),
             )
 
         configs = argparse.Namespace(
-            model_path="./cache/Freeze-Omni/checkpoints",
-            llm_path="./cache/Qwen2-7B-Instruct",
+            model_path=os.path.join(cache_dir, "Freeze-Omni/checkpoints"),
+            llm_path=os.path.join(cache_dir, "Qwen2-7B-Instruct"),
             top_k=20,
             top_p=0.8,
             temperature=0.8,

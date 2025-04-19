@@ -9,7 +9,7 @@ import soundfile as sf
 
 
 class GPT4oAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.client = OpenAI()
         self.model_name = "gpt-4o-audio-preview"
 

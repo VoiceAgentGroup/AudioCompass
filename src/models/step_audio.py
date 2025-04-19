@@ -10,23 +10,25 @@ import soundfile as sf
 
 
 class StepAssistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = 'step_audio'
-        if not os.path.exists("./cache/Step-Audio-Tokenizer"):
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
+        if not os.path.exists(os.path.join(cache_dir, "Step-Audio-Tokenizer")):
             snapshot_download(
                 repo_id="stepfun-ai/Step-Audio-Tokenizer",
-                local_dir="./cache/Step-Audio-Tokenizer",
+                local_dir=os.path.join(cache_dir, "Step-Audio-Tokenizer"),
             )
         self.llm_tokenizer = AutoTokenizer.from_pretrained(
             'stepfun-ai/Step-Audio-Chat', trust_remote_code=True
         )
-        self.encoder = StepAudioTokenizer("./cache/Step-Audio-Tokenizer")
+        self.encoder = StepAudioTokenizer(os.path.join(cache_dir, "Step-Audio-Tokenizer"))
 
         self.llm = AutoModelForCausalLM.from_pretrained(
             'stepfun-ai/Step-Audio-Chat',
             torch_dtype=torch.bfloat16,
             device_map="auto",
             trust_remote_code=True,
+            cache_dir=cache_dir,
         )
 
     def generate_a2t(

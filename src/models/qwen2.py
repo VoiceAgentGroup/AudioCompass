@@ -1,14 +1,16 @@
 from .base import VoiceAssistant
 from transformers import Qwen2AudioForConditionalGeneration, AutoProcessor
+import os
 
 
 class Qwen2Assistant(VoiceAssistant):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.model_name = 'qwen2'
-        self.processor = AutoProcessor.from_pretrained("Qwen/Qwen2-Audio-7B-Instruct", cache_dir='./cache')
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
+        self.processor = AutoProcessor.from_pretrained("Qwen/Qwen2-Audio-7B-Instruct", cache_dir=cache_dir)
         self.model = Qwen2AudioForConditionalGeneration.from_pretrained("Qwen/Qwen2-Audio-7B-Instruct",
                                                                         device_map="cuda",
-                                                                        cache_dir='./cache', torch_dtype='auto')
+                                                                        cache_dir=cache_dir, torch_dtype='auto')
 
     def generate_a2t(
         self,

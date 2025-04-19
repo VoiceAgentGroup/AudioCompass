@@ -28,6 +28,30 @@ class VoiceAssistant:
         raise NotImplementedError
     
     @torch.no_grad()
+    def generate_t2a(
+        self,
+        text,
+        max_new_tokens=2048,
+    ):
+        raise NotImplementedError
+    
+    @torch.no_grad()
+    def generate_a2a(
+        self,
+        audio,
+        max_new_tokens=2048,
+    ):
+        raise NotImplementedError
+    
+    @torch.no_grad()
+    def tts(
+        self,
+        text,
+        max_new_tokens=2048,
+    ):
+        raise NotImplementedError
+    
+    @torch.no_grad()
     def get_ppl(
         self,
         input,
