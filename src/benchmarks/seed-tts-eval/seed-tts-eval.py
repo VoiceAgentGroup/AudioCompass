@@ -1,5 +1,6 @@
 import os
 import torchaudio
+import torch
 from tqdm import tqdm
 from loguru import logger
 import json
@@ -65,7 +66,7 @@ class SeedTTSEval(BaseBenchmark):
                 results.append({
                     'idx': idx,
                     'infer_text': data['infer_text'],
-                    'tts_wav': response_audio,
+                    'tts_wav': torch.tensor(response_audio),
                     'sample_rate': sample_rate,
                     'transcription': transcription,
                     'ref_wav_path': data['ref_wav_path'],
