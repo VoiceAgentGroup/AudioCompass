@@ -5,6 +5,8 @@ AudioCompass is a comprehensive evaluation framework for audio and multimodal la
 ## Table of Contents
 - [Overview](#overview)
 - [Installation](#installation)
+- [Data Preparation](#data-preparation)
+- [Model Preparation](#model-preparation)
 - [Usage and Evaluation](#usage-and-evaluation)
 - [Adding New Models](#adding-new-models)
 - [Adding New Benchmarks](#adding-new-benchmarks)
