@@ -322,7 +322,7 @@ class Inference:
                     f"You are an helpful assistant. You should listen to the audio and answer the user's text questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
                 )
             else:  # st2, s2s
-                InputSegment(
+                system_prompt = InputSegment(
                     f"You are an helpful assistant. You should answer the user's speech questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
                 )
         else:  # t2t, t2s
@@ -342,8 +342,8 @@ class Inference:
         prompt += [
             InputSegment(f"[|Human|]: "),
             user_prompt,
+            InputSegment(f" ###\n[|SpeechGPT|]: "),
         ]
-        prompt += InputSegment(f" ###\n[|SpeechGPT|]: ")
 
         input_ids = [seg.to_input_id(self.tokenizer, group_size) for seg in prompt]
         input_ids = torch.cat(input_ids, dim=1)
