@@ -1,22 +1,18 @@
 import os
-import torch
 import torchaudio
-import string
 from tqdm import tqdm
 from loguru import logger
-from zhon.hanzi import punctuation
-from jiwer import compute_measures
 import json
 from ..base import BaseBenchmark
 from src.transcriptors import Paraformer
-
-punctuation_all = punctuation + string.punctuation
+from .evaluate import verification, process_one_wer
 
 class SeedTTSEval(BaseBenchmark):
-    def __init__(self, split, data_dir="datas/seedtts_testset", **kwargs):
+    def __init__(self, split, data_dir="datas/seedtts_testset", cache_dir='cache', **kwargs):
         self.name = 'seed-tts-eval'
         self.split = split
         self.data_dir = data_dir
+        self.cache_dir = cache_dir
         self.dataset = self.load_data()
         self.transcriptor = Paraformer(**kwargs)
         logger.add(f'log/{self.name}', rotation='50 MB')
@@ -83,45 +79,20 @@ class SeedTTSEval(BaseBenchmark):
             
         return results
     
-    def process_one_wer(self, hypo, truth):
-        raw_truth = truth
-        raw_hypo = hypo
-
-        for x in punctuation_all:
-            if x == '\'':
-                continue
-            truth = truth.replace(x, '')
-            hypo = hypo.replace(x, '')
-
-        truth = truth.replace('  ', ' ')
-        hypo = hypo.replace('  ', ' ')
-
-        if self.split == "zh":
-            truth = " ".join([x for x in truth])
-            hypo = " ".join([x for x in hypo])
-        elif self.split == "en":
-            truth = truth.lower()
-            hypo = hypo.lower()
-        else:
-            raise NotImplementedError
-
-        measures = compute_measures(truth, hypo)
-        ref_list = truth.split(" ")
-        wer = measures["wer"]
-        subs = measures["substitutions"] / len(ref_list)
-        dele = measures["deletions"] / len(ref_list)
-        inse = measures["insertions"] / len(ref_list)
-        return (raw_truth, raw_hypo, wer, subs, dele, inse)
-    
     def evaluate(self, results):
         logger.info("Evaluating results ...")
-        # wer
+        
         total_wer = 0
+        total_sim = 0
         for result in tqdm(results):
-            raw_truth, raw_hypo, wer, subs, dele, inse = self.process_one_wer(result['transcription'], result['infer_text'])
+            raw_truth, raw_hypo, wer, subs, dele, inse = process_one_wer(result['transcription'], result['infer_text'])
             total_wer += wer
+            sim, model = verification(model_name='wavlm_large', wav1=result['tts_wav_path'], wav2=results['ref_wav_path'], checkpoint=os.path.join(self.cache_dir, 'wavlm_large_finetune.pth'))
+            total_sim += sim.cpu().item()
         avg_wer = total_wer / len(results)
-        return {'wer': avg_wer}
+        avg_sim = total_sim / len(results)
+        
+        return {'wer': avg_wer, 'sim': avg_sim}
     
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
