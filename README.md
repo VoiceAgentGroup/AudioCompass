@@ -38,18 +38,13 @@ To run a benchmark on a specific model:
 python main.py --model <model_name> --benchmark <dataset_name> --subset <subset_name> --split <split_name> --output-dir <output_directory> --cache-dir <cache-directory>
 ```
 
+Add the `--offline` flag to run in environments without internet access, assuming models and datasets are already cached:
+
 For example:
 
 ```bash
-python main.py --model speechgpt2 --benchmark voicebench --subset alpacaeval --split test --output-dir output --cache cache
+python main.py --model speechgpt2 --benchmark voicebench --subset alpacaeval --split test --output-dir output --cache-dir cache --offline
 ```
-
-The evaluation process:
-1. Loads the specified model and benchmark
-2. Generates responses for the benchmark dataset using the model
-3. Saves the generation results to the specified output directory (typically as JSONL files)
-4. Evaluates the responses using appropriate metrics
-5. Returns and prints the evaluation results to the console
 
 To list available models and benchmarks:
 
@@ -59,6 +54,47 @@ print(list_models())
 
 from src.benchmarks import list_benchmarks
 print(list_benchmarks())
+```
+
+## Data Preparation
+
+1. Benchmark datasets are expected to be located within a `datas` subdirectory inside the specified cache directory (`--cache-dir`, defaults to `./cache`).
+2. Ensure the cache directory exists (e.g., create `./cache/datas`).
+3. For datasets requiring manual download, place the datasets into `<cache_dir>/datas/`:
+    - [OpenAudioBench](https://huggingface.co/datasets/baichuan-inc/OpenAudioBench)
+    - [VoxEval](https://huggingface.co/datasets/qqjz/VoxEval).
+    - [seed-tts-eval](https://drive.google.com/file/d/1GlSjVfSHkW3-leKKBlfrjuuTGqQ_xaLP/edit)
+    - **storycloze**:
+        - [sStoryCloze](https://drive.google.com/file/d/19ZnkM4vjApCZipd7xQ1ESlOi5oBVrlFL/view?usp=sharing)
+        - [tStoryCloze](https://drive.google.com/file/d/17prYkldYb3w3Pyg3Pm77-VnE6nkD5jzG/view?usp=sharing)
+
+Example cache directory structure for data:
+```
+<cache_dir>/
+└── datas/
+    ├── OpenAudioBench/
+    ├── VoxEval/
+    ├── seedtts_testset/
+    ├── storycloze/
+    │   ├── sSC/
+    │   └── tSC/
+    └── ... (other datasets)
+```
+
+## Model Preparation
+
+- Models are typically downloaded and cached automatically into a `models` subdirectory within the specified cache directory (`--cache-dir`, defaults to `./cache`).
+- Ensure the cache directory exists (e.g., create `./cache/models`).
+- For models requiring manual download, place the model files within `<cache_dir>/models/`:
+    - [WavLM-large fine-tuned](https://drive.google.com/file/d/1-aE1NfzpRCLxA4GUxX9ITI3F9LlbtEGP/view)
+
+Example cache directory structure for models:
+```
+<cache_dir>/
+└── models/
+    ├── WavLM-large-finetuned/
+    │   └── ... (model files)
+    └── ... (other models downloaded automatically or manually)
 ```
 
 ## Adding New Models
@@ -78,22 +114,15 @@ class NewModelAssistant(VoiceAssistant):
         pass
         
     def generate_a2t(self, audio, max_new_tokens=2048):
-        # Implement audio-only input processing
-        # audio: dict with 'array' and 'sampling_rate' keys
-        # Return text response
         pass
         
     def generate_t2t(self, text):
-        # Implement text-only input processing
-        # Return text response
         pass
         
     def generate_at2t(self, audio, text, max_new_tokens=2048):
-        # Implement mixed input processing
-        # audio: dict with 'array' and 'sampling_rate' keys
-        # text: string input
-        # Return text response
         pass
+
+    # And other necessary methods for your model
 ```
 
 3. Update the `src/models/__init__.py` file to import and register your new model:
