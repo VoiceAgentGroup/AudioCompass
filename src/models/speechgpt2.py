@@ -60,13 +60,13 @@ class SpeechGPT2(VoiceAssistant):
     
     def generate_t2a(self, text):
         self.model.process_greeting()
-        _, (_, wav) = self.process_input(None, text, task='thought', mode='t2s')
-        return wav
+        _, (sample_rate, wav) = self.process_input(None, text, task='thought', mode='t2s')
+        return wav, sample_rate
     
     def generate_a2a(self, audio):
         self.model.process_greeting()
-        _, (_, wav) = self.process_input(audio, None, task='thought', mode='s2s')
-        return wav
+        _, (sample_rate, wav) = self.process_input(audio, None, task='thought', mode='s2s')
+        return wav, sample_rate
     
     def generate_at2t(self, audio, text):
         self.model.process_greeting()
@@ -75,13 +75,13 @@ class SpeechGPT2(VoiceAssistant):
     
     def generate_at2a(self, audio, text):
         self.model.process_greeting()
-        _, (_, wav) = self.process_input(audio, text, task='thought', mode='st2s')
-        return wav
+        _, (sample_rate, wav) = self.process_input(audio, text, task='thought', mode='st2s')
+        return wav, sample_rate
     
     def tts(self, text):
         self.model.process_greeting()
-        _, (_, wav) = self.process_input(None, text, task='tts')
-        return wav
+        _, (sample_rate, wav) = self.process_input(None, text, task='tts')
+        return wav, sample_rate
     
     def get_ppl(self, input, input_type: str):
         self.model.process_greeting()

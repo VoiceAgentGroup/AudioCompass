@@ -188,7 +188,7 @@ class VoxEval(BaseBenchmark):
             
             try:
                 input_audio = item['audio']
-                response_audio = model.generate_a2a(input_audio)
+                response_audio, sample_rate = model.generate_a2a(input_audio)
                 transcription = self.transcriptor.inference(response_audio)
                 
                 result_item = {k: v for k, v in item.items() if k != 'audio'}
