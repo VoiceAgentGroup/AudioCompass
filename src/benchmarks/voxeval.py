@@ -7,6 +7,7 @@ from loguru import logger
 import json
 from .base import BaseBenchmark
 from src.transcriptors import WhisperLargeV3
+from src.utils.rule_extractor import extract_answer
 
 
 class VoxEval(BaseBenchmark):
@@ -236,9 +237,10 @@ class VoxEval(BaseBenchmark):
                 # Extract the answer from the response
                 response = item['response'].lower()
                 answer = item['answer'].lower()
+                answer = extract_answer(answer)
                 
                 # Simple exact match for now (can be improved later)
-                if answer in response:
+                if answer == response:
                     correct += 1
             
             accuracy = correct / len(items) if items else 0
@@ -269,30 +271,7 @@ class VoxEval(BaseBenchmark):
         # Save results details as JSON
         results_file = os.path.join(results_dir, f"{model_name}-{self.prompt_mode}-{self.split}.json")
         with open(results_file, 'w') as f:
-            json.dump(results, f, indent=2)
-        
-        # Save results by subject in CSV format
-        subject_results = {}
-        for item in results:
-            subject = item['subject']
-            if subject not in subject_results:
-                subject_results[subject] = []
-            subject_results[subject].append(item)
-        
-        for subject, items in subject_results.items():
-            # Create a folder for each subject
-            subject_dir = os.path.join(results_dir, f"{self.prompt_mode}_{self.timbre}")
-            os.makedirs(subject_dir, exist_ok=True)
-            
-            # Create DataFrame for subject
-            df = pd.DataFrame(columns=[0, 1, 2, 3, 4, 5, 6])
-            for item in items:
-                df.loc[item['question_id']] = [None, item['question'], item['options'], 
-                                             item['answer'], None, None, item['response']]
-            
-            # Save as CSV
-            subject_file = os.path.join(subject_dir, subject)
-            df.to_csv(subject_file, header=None, index=None)
+            json.dump(results, f, indent=4)
         
         logger.info(f"Results saved to {results_dir}")
     
