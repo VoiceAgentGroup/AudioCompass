@@ -184,7 +184,7 @@ class VoxEval(BaseBenchmark):
         results = []
         failed_items = []
         
-        for item in tqdm(self.dataset):
+        for idx, item in enumerate(tqdm(self.dataset)):
             logger.info(f"Processing timbre {self.timbre} subject {item['subject']}, question {item['question_id']}")
             
             try:
@@ -193,6 +193,9 @@ class VoxEval(BaseBenchmark):
                 transcription = self.transcriptor.inference(response_audio)
                 
                 result_item = {k: v for k, v in item.items() if k != 'audio'}
+                result_item['idx'] = idx
+                result_item['response_audio'] = response_audio
+                result_item['sample_rate'] = sample_rate
                 result_item['response'] = transcription
                 results.append(result_item)
                 
@@ -265,15 +268,26 @@ class VoxEval(BaseBenchmark):
     
     def save_generated_results(self, results, output_dir, model_name):
         logger.info(f"Saving VoxEval results...")
-        results_dir = os.path.join(output_dir, self.name)
-        os.makedirs(results_dir, exist_ok=True)
+        os.makedirs(output_dir, exist_ok=True)
+        output_dir = os.path.join(output_dir, self.name)
+        wav_dir = os.path.join(output_dir, 'wavs')
+        os.makedirs(output_dir, exist_ok=True)
+        os.makedirs(wav_dir, exist_ok=True)
         
-        # Save results details as JSON
-        results_file = os.path.join(results_dir, f"{model_name}-{self.prompt_mode}-{self.split}.json")
+        for result in results:
+            wav_path = os.path.join(wav_dir, f"{model_name}-{result['idx']}.wav")
+            wav = result['response_audio'] if result['response_audio'].ndim == 2 else result['response_audio'].unsqueeze(0)
+            torchaudio.save(wav_path, wav, result['sample_rate'])
+            result['response_audio_path'] = wav_path
+            result.pop('response_audio')
+            result.pop('sample_rate')
+            
+        model_name = model_name.split('/')[-1]
+        results_file = os.path.join(output_dir, f"{model_name}-{self.prompt_mode}-{self.split}.json")
         with open(results_file, 'w') as f:
             json.dump(results, f, indent=4)
         
-        logger.info(f"Results saved to {results_dir}")
+        logger.info(f"Results saved to {output_dir}")
     
     def run(self, model, output_dir):
         generated_results = self.generate(model)
