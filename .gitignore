@@ -181,3 +181,6 @@ output/
 
 .vscode/
 cache/
+
+test*.py
+test*.wav
