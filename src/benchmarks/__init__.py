@@ -5,6 +5,7 @@ from .cmmlu import CMMLU
 from .zh_storycloze import zhStoryCloze
 from .voxeval import VoxEval
 from .storycloze import StoryCloze
+from .seed_tts_eval.seed_tts_eval import SeedTTSEval
 from .airbench.airbench import AIRBench
 
 benchmark_mapping = {
@@ -15,6 +16,7 @@ benchmark_mapping = {
     'zh-storycloze': zhStoryCloze,
     'voxeval': VoxEval,
     'storycloze': StoryCloze,
+    'seed-tts-eval': SeedTTSEval,
     'airbench': AIRBench,
     # Add other benchmarks here as needed
 }
