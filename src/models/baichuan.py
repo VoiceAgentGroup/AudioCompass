@@ -198,6 +198,65 @@ class BaichuanOmniAssistant(BaichuanAssistant):
 
         return wg, self.sampling_rate
 
+    def generate_at2t(
+        self,
+        audio,
+        text,
+        max_new_tokens=2048,
+    ):
+        # Create a temporary file for audio
+        with tempfile.NamedTemporaryFile(delete=False, suffix=f".wav") as temp_file:
+            temp_filename = temp_file.name
+            # Write the audio data to the file
+            sf.write(temp_file.name, audio['array'], audio['sampling_rate'], format='wav')
+
+        # Setup conversation history
+        g_history = []
+
+        # Add system message if needed
+        g_history.append({
+            "role": "system",
+            "content": "You are a helpful assistant who tries to help answer the user's question."
+        })
+
+        # Add user message with both audio and text
+        g_history.append({
+            "role": "user",
+            "content": self.audio_start_token + ujson.dumps({'path': temp_filename}, ensure_ascii=False) + self.audio_end_token + " " + text
+        })
+        
+        # Preprocess messages to create input format
+        message = self.preprocess_messages(g_history)
+        
+        # Process input through the model
+        pret = self.model.processor([message])
+        plen = pret.input_ids.shape[1]
+        
+        # Generate response
+        ret = self.model.generate(
+            pret.input_ids.cuda(),
+            attention_mask=pret.attention_mask.cuda(),
+            audios=pret.audios.cuda() if pret.audios is not None else None,
+            encoder_length=pret.encoder_length.cuda() if pret.encoder_length is not None else None,
+            bridge_length=pret.bridge_length.cuda() if pret.bridge_length is not None else None,
+            tokenizer=self.tokenizer,
+            max_new_tokens=max_new_tokens,
+            stop_strings=['<|endoftext|>'],
+            do_sample=True, temperature=0.8, top_k=20, top_p=0.85, repetition_penalty=1.1, return_dict_in_generate=True,
+        )
+        
+        # Decode generated tokens and clean up special tokens
+        text_segment = self.tokenizer.decode(ret.sequences[0, plen:])
+        full_text = re.sub(self.special_token_partten, '', text_segment)
+
+        # Clean up temporary file
+        try:
+            os.unlink(temp_filename)
+        except:
+            pass
+
+        return full_text
+    
 
 class BaichuanAudioAssistant(BaichuanAssistant):
     def load_model(self, **kwargs):
