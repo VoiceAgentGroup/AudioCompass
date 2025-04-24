@@ -5,6 +5,7 @@ from .cmmlu import CMMLU
 from .zh_storycloze import zhStoryCloze
 from .voxeval import VoxEval
 from .storycloze import StoryCloze
+from .airbench.airbench import AIRBench
 
 benchmark_mapping = {
     'voicebench': VoiceBench,
@@ -14,6 +15,7 @@ benchmark_mapping = {
     'zh-storycloze': zhStoryCloze,
     'voxeval': VoxEval,
     'storycloze': StoryCloze,
+    'airbench': AIRBench,
     # Add other benchmarks here as needed
 }
 
