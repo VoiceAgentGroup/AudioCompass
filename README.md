@@ -37,7 +37,7 @@ pip install -r requirements.txt
 To run a benchmark on a specific model:
 
 ```bash
-python main.py --model <model_name> --benchmark <dataset_name> --subset <subset_name> --split <split_name> --output-dir <output_directory> --cache-dir <cache-directory>
+python main.py --model-name <model_name> --benchmark <dataset_name> --subset <subset_name> --split <split_name> --output-dir <output_directory> --cache-dir <cache-directory>
 ```
 
 Add the `--offline` flag to run in environments without internet access, assuming models and datasets are already cached:
@@ -45,7 +45,7 @@ Add the `--offline` flag to run in environments without internet access, assumin
 For example:
 
 ```bash
-python main.py --model speechgpt2 --benchmark voicebench --subset alpacaeval --split test --output-dir output --cache-dir cache --offline
+python main.py --model-name speechgpt2 --benchmark voicebench --subset alpacaeval --split test --output-dir output --cache-dir cache --offline
 ```
 
 To list available models and benchmarks:
