@@ -7,6 +7,10 @@ import tempfile
 import soundfile as sf
 import os
 from huggingface_hub import snapshot_download
+import sys
+from generation import decode_wave_vocoder, GenerationAudioTokens
+from constants import COSY_VOCODER
+sys.path.append(os.path.join(COSY_VOCODER))
 
 
 class BaichuanAssistant(VoiceAssistant):
@@ -23,7 +27,18 @@ class BaichuanAssistant(VoiceAssistant):
         self.model.bind_processor(self.tokenizer, training=False, relative_path="/")
         self.audio_start_token = self.tokenizer.convert_ids_to_tokens(self.model.config.audio_config.audio_start_token_id)
         self.audio_end_token = self.tokenizer.convert_ids_to_tokens(self.model.config.audio_config.audio_end_token_id)
-        self.special_token_partten = re.compile('<\|endoftext\|>|<audiogen_start_baichuan>|<audiogen_end_baichuan>')
+        self.audiogen_start_token = self.tokenizer.convert_ids_to_tokens(self.model.config.audio_config.audiogen_start_token_id)
+        self.audiogen_end_token = self.tokenizer.convert_ids_to_tokens(self.model.config.audio_config.audiogen_end_token_id)
+        self.special_token_partten = re.compile(
+            '<\|endoftext\|>|'
+            '<audiogen_start_baichuan>|'
+            '<audiogen_end_baichuan>'
+        )
+        # load the waveform vocoder
+        from cosy24k_vocoder import Cosy24kVocoder
+        self.vocoder = Cosy24kVocoder.from_pretrained(
+            os.path.join(COSY_VOCODER, "hift.pt")
+        ).cuda()
 
     def load_model(self, **kwargs):
         raise NotImplementedError
@@ -76,6 +91,53 @@ class BaichuanAssistant(VoiceAssistant):
 
         return full_text
 
+    def generate_a2a(self, audio, max_new_tokens=500):
+        # write input audio to a temp wav file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
+            sf.write(tmp.name, audio['array'], audio['sampling_rate'], format='wav')
+            path = tmp.name
+
+        # build prompt: audio_in → audio_out
+        prompt = (
+            self.audio_start_token
+            + ujson.dumps({'path': path}, ensure_ascii=False)
+            + self.audio_end_token
+            + self.audiogen_start_token
+        )
+        pret = self.model.processor([prompt])
+        seq = pret.input_ids.cuda()
+
+        # generate raw audio tokens
+        audioret = GenerationAudioTokens.generate(
+            self.model,
+            seq,
+            attention_mask=torch.ones_like(seq),
+            past_key_values=None,
+            audios=pret.audios.cuda() if pret.audios is not None else None,
+            encoder_length=pret.encoder_length.cuda() if pret.encoder_length is not None else None,
+            bridge_length=pret.bridge_length.cuda() if pret.bridge_length is not None else None,
+            max_new_tokens=max_new_tokens,
+            do_sample=True, temperature=0.5,
+            top_k=5, top_p=0.85,
+            repetition_penalty=1.3,
+            return_dict_in_generate=True,
+        )
+        # decode tokens to waveform
+        wave_seg = decode_wave_vocoder(
+            audioret.audios_sequences.clone(),
+            self.vocoder,
+            self.model
+        )
+        # clamp & convert to int16 numpy
+        import numpy as np
+        wg = (
+            torch.clamp(wave_seg.squeeze(), -0.99, 0.99)
+            .cpu()
+            .numpy()
+            * 32768.0
+        ).astype(np.int16)
+        return wg, self.sampling_rate
+
 
 class BaichuanOmniAssistant(BaichuanAssistant):
     def load_model(self, **kwargs):
@@ -89,6 +151,50 @@ class BaichuanOmniAssistant(BaichuanAssistant):
             os.path.join(cache_dir, "Baichuan-Omni-1d5"), trust_remote_code=True, torch_dtype=torch.bfloat16
         ).cuda()
         self.tokenizer = AutoTokenizer.from_pretrained(os.path.join(cache_dir, "Baichuan-Omni-1d5"), trust_remote_code=True)
+
+    def tts(self, text):
+        prompt = text + self.audiogen_start_token
+        pret = self.model.processor([prompt])
+        seq = pret.input_ids.cuda()
+
+        # Generate audio tokens
+        audioret = GenerationAudioTokens.generate(
+            self.model,
+            seq,
+            labels=None,
+            audios=pret.audios.cuda() if pret.audios is not None else None,
+            encoder_length=pret.encoder_length.cuda() if pret.encoder_length is not None else None,
+            bridge_length=pret.bridge_length.cuda() if pret.bridge_length is not None else None,
+            attention_mask=torch.ones_like(seq),
+            past_key_values=None,
+            max_new_tokens=700,
+            num_beams=1,
+            do_sample=True, 
+            temperature=0.5,
+            top_k=5, 
+            top_p=0.85,
+            num_return_sequences=1,
+            repetition_penalty=1.3,
+            return_dict_in_generate=True,
+        )
+
+        # Decode tokens to waveform
+        wave_seg = decode_wave_vocoder(
+            audioret.audios_sequences.clone(),
+            self.vocoder,
+            self.model
+        )
+
+        # Convert to int16 numpy array
+        import numpy as np
+        wg = (
+            torch.clamp(wave_seg.squeeze(), -0.99, 0.99)
+            .cpu()
+            .numpy()
+            * 32768.0
+        ).astype(np.int16)
+
+        return wg, self.sampling_rate
 
 
 class BaichuanAudioAssistant(BaichuanAssistant):
