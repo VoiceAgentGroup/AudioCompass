@@ -13,8 +13,8 @@ class MMAU(BaseBenchmark):
         self.name = 'mmau'
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
-        self.dataset = self.load_data(**kwargs)
         logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
+        self.dataset = self.load_data(**kwargs)
         
         
     def load_data(self, **kwargs):

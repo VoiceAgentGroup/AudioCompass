@@ -311,39 +311,52 @@ class Inference:
             audio_tokenized = torch.tensor(token_flat)
         else:
             text = input
-
+            if (
+                text.isupper() or text.islower()
+            ):  # If the text only contains upper-case or lower-case letters, capitalize it.
+                text = text.capitalize()
+                
         assert self.greeting, "Must load greeting first"
-
-        if mode[0] == 's':  # s2t, s2s, st2t, st2s
-            user_prompt = InputSegment("", audio=audio_tokenized)
-            if mode[1] == 't':  # st2t, st2s
-                user_prompt += InputSegment(transcript)
-                system_prompt = InputSegment(
-                    f"You are an helpful assistant. You should listen to the audio and answer the user's text questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
-                )
-            else:  # st2, s2s
-                system_prompt = InputSegment(
-                    f"You are an helpful assistant. You should answer the user's speech questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
-                )
-        else:  # t2t, t2s
-            user_prompt = InputSegment(transcript)
-            system_prompt = InputSegment(
-                f"You are an helpful assistant. You should answer the user's {'text' if mode[0] == 't' else 'speech'} questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
-            )
-            
-        prompt = (
-            [
-                system_prompt,
-                *self.greeting,
+                
+        if task == 'tts':
+            prompt = [
+                InputSegment(f"[|Human|]: 请朗读这个句子: {text}"),
+                InputSegment(" ###\n"),
+                InputSegment(f"[|SpeechGPT|]: "),
             ]
-            if not self.history
-            else []
-        )
-        prompt += [
-            InputSegment(f"[|Human|]: "),
-            user_prompt,
-            InputSegment(f" ###\n[|SpeechGPT|]: "),
-        ]
+            
+        elif task == 'thought':
+
+            if mode[0] == 's':  # s2t, s2s, st2t, st2s
+                user_prompt = InputSegment("", audio=audio_tokenized)
+                if mode[1] == 't':  # st2t, st2s
+                    user_prompt += InputSegment(transcript)
+                    system_prompt = InputSegment(
+                        f"You are an helpful assistant. You should listen to the audio and answer the user's text questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
+                    )
+                else:  # st2, s2s
+                    system_prompt = InputSegment(
+                        f"You are an helpful assistant. You should answer the user's speech questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
+                    )
+            elif mode[0] == 't':  # t2t, t2s
+                user_prompt = InputSegment(transcript)
+                system_prompt = InputSegment(
+                    f"You are an helpful assistant. You should answer the user's text questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
+                )
+                
+            prompt = (
+                [
+                    system_prompt,
+                    *self.greeting,
+                ]
+                if not self.history
+                else []
+            )
+            prompt += [
+                InputSegment(f"[|Human|]: "),
+                user_prompt,
+                InputSegment(f" ###\n[|SpeechGPT|]: "),
+            ]
 
         input_ids = [seg.to_input_id(self.tokenizer, group_size) for seg in prompt]
         input_ids = torch.cat(input_ids, dim=1)
@@ -454,6 +467,7 @@ class Inference:
             input_tokens = [self.preprocess(
                 input=x,
                 group_size=self.group_size,
+                task='thought',
                 mode=mode,
             ) for x in inputs]
             max_prompt_size = max([t.shape[-1] for t in input_tokens])

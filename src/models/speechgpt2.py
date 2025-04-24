@@ -13,7 +13,8 @@ class SpeechGPT2(VoiceAssistant):
     def __init__(self, **kwargs):
         self.model_name = 'speechgpt2'
         cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
-        self.model_path = os.path.join(cache_dir, "SpeechGPT-2.0-preview-7B")
+        # self.model_path = os.path.join(cache_dir, "SpeechGPT-2.0-preview-7B")
+        self.model_path = "cache/models/checkpoint-20000"
         if not os.path.exists(os.path.join(cache_dir, "SpeechGPT-2.0-preview-Codec")):
             snapshot_download(
                 repo_id="fnlp/SpeechGPT-2.0-preview-Codec",

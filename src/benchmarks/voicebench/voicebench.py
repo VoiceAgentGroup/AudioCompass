@@ -13,8 +13,8 @@ class VoiceBench(BaseBenchmark):
         self.subset_name = subset_name
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
-        self.dataset = self.load_data()
         logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
+        self.dataset = self.load_data()
 
     
     def load_data(self):

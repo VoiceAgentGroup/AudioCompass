@@ -13,8 +13,8 @@ class CMMLU(BaseBenchmark):
     def __init__(self, data_dir="datas/cmmlu-minimax", cache_dir='cache', **kwargs):
         self.name = 'cmmlu'
         self.data_dir = os.path.join(cache_dir, data_dir)
+        logger.add(f'log/{self.name}.log', rotation='50 MB')
         self.dataset = self.load_data()
-        logger.add(f'log/{self.name}', rotation='50 MB')
 
     def concat_audio(self, question_path, choice_path) -> list:
         audio_group = []

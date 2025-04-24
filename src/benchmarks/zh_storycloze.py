@@ -12,8 +12,8 @@ class zhStoryCloze(BaseBenchmark):
     def __init__(self, data_dir="datas/zh-storycloze", cache_dir='cache', **kwargs):
         self.name = 'zh-storycloze'
         self.data_dir = os.path.join(cache_dir, data_dir)
-        self.dataset = self.load_data()
         logger.add(f'log/{self.name}.log', rotation='50 MB')
+        self.dataset = self.load_data()
         
     def concat_audio(self, prefix_path, suffix_paths):
         audio_group = []
@@ -80,7 +80,7 @@ class zhStoryCloze(BaseBenchmark):
                 correct_ppl = model.get_ppl(correct, input_type='audio')
                 sSC_ppl = model.get_ppl(sSC, input_type='audio')
                 tSC_ppl = model.get_ppl(tSC, input_type='audio')
-                logger.info(f"Generated ppl for idx{idx}: correct{correct_ppl} sSC{sSC_ppl} tSC{tSC_ppl}")
+                logger.info(f"Generated ppl for idx {idx}: correct-{correct_ppl} sSC-{sSC_ppl} tSC-{tSC_ppl}")
                 logger.info('====================================')
                 s_ppl = [correct_ppl, sSC_ppl]
                 t_ppl = [correct_ppl, tSC_ppl]

@@ -13,10 +13,10 @@ class SeedTTSEval(BaseBenchmark):
         self.name = 'seed-tts-eval'
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
+        logger.add(f'log/{self.name}', rotation='50 MB')
         self.dataset = self.load_data()
         self.transcriptor = Paraformer(**kwargs)
         self.wavlm_path = os.path.join(cache_dir, 'models', 'wavlm_large_finetune.pth')
-        logger.add(f'log/{self.name}', rotation='50 MB')
         
     def check_split(self, split):
         available_split = ['en', 'zh', 'hard']

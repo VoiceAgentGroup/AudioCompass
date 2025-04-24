@@ -18,14 +18,14 @@ class BaichuanAssistant(VoiceAssistant):
             'assistant': '<C_A>',
             'audiogen': '<audiotext_start_baichuan>'
         }
-        self.load_model()
+        self.load_model(**kwargs)
         self.model.training = False
         self.model.bind_processor(self.tokenizer, training=False, relative_path="/")
         self.audio_start_token = self.tokenizer.convert_ids_to_tokens(self.model.config.audio_config.audio_start_token_id)
         self.audio_end_token = self.tokenizer.convert_ids_to_tokens(self.model.config.audio_config.audio_end_token_id)
         self.special_token_partten = re.compile('<\|endoftext\|>|<audiogen_start_baichuan>|<audiogen_end_baichuan>')
 
-    def load_model(self):
+    def load_model(self, **kwargs):
         raise NotImplementedError
 
     def preprocess_messages(self, messages):
@@ -78,26 +78,28 @@ class BaichuanAssistant(VoiceAssistant):
 
 
 class BaichuanOmniAssistant(BaichuanAssistant):
-    def load_model(self):
-        if not os.path.exists("./cache/Baichuan-Omni-1d5"):
+    def load_model(self, **kwargs):
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
+        if not os.path.exists(os.path.join(cache_dir, "Baichuan-Omni-1d5")):
             snapshot_download(
                 repo_id="baichuan-inc/Baichuan-Omni-1d5",
-                local_dir="./cache/Baichuan-Omni-1d5",
+                local_dir=os.path.join(cache_dir, "Baichuan-Omni-1d5"),
             )
         self.model = AutoModelForCausalLM.from_pretrained(
-            './cache/Baichuan-Omni-1d5', trust_remote_code=True, torch_dtype=torch.bfloat16
+            os.path.join(cache_dir, "Baichuan-Omni-1d5"), trust_remote_code=True, torch_dtype=torch.bfloat16
         ).cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained('./cache/Baichuan-Omni-1d5', trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(os.path.join(cache_dir, "Baichuan-Omni-1d5"), trust_remote_code=True)
 
 
 class BaichuanAudioAssistant(BaichuanAssistant):
-    def load_model(self):
-        if not os.path.exists("./cache/Baichuan-Audio-Instruct"):
+    def load_model(self, **kwargs):
+        cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
+        if not os.path.exists(os.path.join(cache_dir, "Baichuan-Audio-Instruct")):
             snapshot_download(
                 repo_id="baichuan-inc/Baichuan-Audio-Instruct",
-                local_dir="./cache/Baichuan-Audio-Instruct",
+                local_dir=os.path.join(cache_dir, "Baichuan-Audio-Instruct"),
             )
         self.model = AutoModelForCausalLM.from_pretrained(
-            "./cache/Baichuan-Audio-Instruct", trust_remote_code=True, torch_dtype=torch.bfloat16
+            os.path.join(cache_dir, "Baichuan-Audio-Instruct"), trust_remote_code=True, torch_dtype=torch.bfloat16
         ).cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained("./cache/Baichuan-Audio-Instruct", trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(os.path.join(cache_dir, "Baichuan-Audio-Instruct"), trust_remote_code=True)
