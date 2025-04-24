@@ -106,7 +106,7 @@ class GenerationAudioTokens(GenerationMixin):
         tokenizer = kwargs.pop("tokenizer", None)  # Pull this out first, we only use it for stopping criteria
         generation_config, model_kwargs = self._prepare_generation_config(generation_config, **kwargs)
         self._validate_model_kwargs(model_kwargs.copy())
-        self._validate_assistant(assistant_model)
+        # self._validate_assistant(assistant_model)
 
         # 2. Set generation parameters if not already defined
         if synced_gpus is None:

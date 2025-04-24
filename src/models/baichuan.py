@@ -132,7 +132,7 @@ class BaichuanAssistant(VoiceAssistant):
         # clamp & convert to int16 numpy
         import numpy as np
         wg = (
-            torch.clamp(wave_seg.squeeze(), -0.99, 0.99)
+            torch.clamp(wave_seg[0].squeeze(), -0.99, 0.99)
             .cpu()
             .numpy()
             * 32768.0
@@ -190,7 +190,7 @@ class BaichuanOmniAssistant(BaichuanAssistant):
         # Convert to int16 numpy array
         import numpy as np
         wg = (
-            torch.clamp(wave_seg.squeeze(), -0.99, 0.99)
+            torch.clamp(wave_seg[0].squeeze(), -0.99, 0.99)
             .cpu()
             .numpy()
             * 32768.0
