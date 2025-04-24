@@ -8,8 +8,9 @@ import soundfile as sf
 import os
 from huggingface_hub import snapshot_download
 import sys
-from generation import decode_wave_vocoder, GenerationAudioTokens
-from constants import COSY_VOCODER
+from .src_baichuan.generation import decode_wave_vocoder, GenerationAudioTokens
+
+COSY_VOCODER = "src/models/src_baichuan/third_party/cosy24k_vocoder"
 sys.path.append(os.path.join(COSY_VOCODER))
 
 
@@ -176,6 +177,7 @@ class BaichuanOmniAssistant(BaichuanAssistant):
             num_return_sequences=1,
             repetition_penalty=1.3,
             return_dict_in_generate=True,
+            tokenizer=self.tokenizer,
         )
 
         # Decode tokens to waveform

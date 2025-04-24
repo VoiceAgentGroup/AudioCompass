@@ -16,7 +16,7 @@
 # from .lyra import LyraMiniAssistant, LyraBaseAssistant
 # from .freeze_omni import FreezeOmniAssistant
 # from .minicpm import MiniCPMAssistant
-# from .baichuan import BaichuanOmniAssistant, BaichuanAudioAssistant
+from .baichuan import BaichuanOmniAssistant, BaichuanAudioAssistant
 # from .step_audio import StepAssistant
 # from .phi import PhiAssistant
 from .qwen_omni_turbo import QwenOmniAssistant
@@ -45,7 +45,7 @@ model_cls_mapping = {
     # 'lyra_base': LyraBaseAssistant,
     # 'freeze_omni': FreezeOmniAssistant,
     # 'minicpm': MiniCPMAssistant,
-    # 'baichuan_omni': BaichuanOmniAssistant,
+    'baichuan_omni': BaichuanOmniAssistant,
     # 'baichuan_audio': BaichuanAudioAssistant,
     # 'step': StepAssistant,
     # 'phi': PhiAssistant,
