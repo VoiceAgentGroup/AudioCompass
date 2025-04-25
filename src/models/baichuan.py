@@ -141,6 +141,9 @@ class BaichuanAssistant(VoiceAssistant):
 
 
 class BaichuanOmniAssistant(BaichuanAssistant):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.model_name = 'baichuan_omni'
     def load_model(self, **kwargs):
         cache_dir = os.path.join(kwargs.get('cache_dir', 'cache'), 'models')
         if not os.path.exists(os.path.join(cache_dir, "Baichuan-Omni-1d5")):

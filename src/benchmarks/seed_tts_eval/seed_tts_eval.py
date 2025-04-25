@@ -5,17 +5,18 @@ from tqdm import tqdm
 from loguru import logger
 import json
 from ..base import BaseBenchmark
-from src.transcriptors import Paraformer
+from src.transcriptors import Paraformer, WhisperLargeV3
 from .evaluate import verification, process_one_wer
 
 class SeedTTSEval(BaseBenchmark):
     def __init__(self, split, data_dir="datas/seedtts_testset", cache_dir='cache', **kwargs):
         self.name = 'seed-tts-eval'
+        self.check_split(split)
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
         logger.add(f'log/{self.name}', rotation='50 MB')
         self.dataset = self.load_data()
-        self.transcriptor = Paraformer(**kwargs)
+        self.transcriptor = WhisperLargeV3(**kwargs) if split == 'en' else Paraformer(**kwargs)
         self.wavlm_path = os.path.join(cache_dir, 'models', 'wavlm_large_finetune.pth')
         
     def check_split(self, split):
@@ -32,7 +33,7 @@ class SeedTTSEval(BaseBenchmark):
             meta_path = os.path.join(self.data_dir, 'zh/meta.lst')
             wav_dir = os.path.join(self.data_dir, 'zh/wavs')
         with open(meta_path, 'r') as f:
-            lines = f.readline()
+            lines = f.readlines()
         
         dataset = []
         for line in tqdm(lines):

@@ -11,13 +11,12 @@ from src.utils.rule_extractor import extract_answer
 
 
 class VoxEval(BaseBenchmark):
-    def __init__(self, split, data_dir="datas/VoxEval", cache_dir='cache', **kwargs):
+    def __init__(self, data_dir="datas/VoxEval", cache_dir='cache', **kwargs):
         self.name = 'voxeval'
-        self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
         
         # Parameters
-        self.timbre = kwargs.get("timbre", "alloy")
+        self.check_timbre(kwargs['timbre'])
         self.shots = kwargs.get("shots", 5)
         self.prompt_mode = kwargs.get("prompt_mode", "regular")
         self.cut_audio = kwargs.get("cut_audio", True)
@@ -33,7 +32,12 @@ class VoxEval(BaseBenchmark):
         self.transcriptor = WhisperLargeV3(**kwargs)
         
         self.dataset = self.load_data(**kwargs)
-        logger.add(f'log/{self.name}-{self.prompt_mode}-{self.split}.log', rotation='50MB')
+        logger.add(f'log/{self.name}-{self.timbre}.log', rotation='50MB')
+        
+    def check_timbre(self, timbre):
+        available_timbre = ['alloy', 'echo', 'fable', 'nova', 'onyx', 'shimmer']
+        if timbre not in available_timbre:
+            raise ValueError("Timbre should be one of " + available_timbre)
     
     def concat_audio(self, audio_paths, add_silence=True):
         audio_segments = []
@@ -190,7 +194,7 @@ class VoxEval(BaseBenchmark):
             try:
                 input_audio = item['audio']
                 response_audio, sample_rate = model.generate_a2a(input_audio)
-                transcription = self.transcriptor.inference(response_audio)
+                transcription = self.transcriptor.inference(response_audio, generate_kwargs={"language": "english"})
                 
                 result_item = {k: v for k, v in item.items() if k != 'audio'}
                 result_item['idx'] = idx
@@ -283,7 +287,7 @@ class VoxEval(BaseBenchmark):
             result.pop('sample_rate')
             
         model_name = model_name.split('/')[-1]
-        results_file = os.path.join(output_dir, f"{model_name}-{self.prompt_mode}-{self.split}.json")
+        results_file = os.path.join(output_dir, f"{model_name}-{self.name}-{self.timbre}.json")
         with open(results_file, 'w') as f:
             json.dump(results, f, indent=4)
         

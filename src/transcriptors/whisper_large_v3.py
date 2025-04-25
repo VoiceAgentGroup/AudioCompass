@@ -13,9 +13,9 @@ class WhisperLargeV3:
         else:
             self.model_id = "openai/whisper-large-v3"
         self.model = AutoModelForSpeechSeq2Seq.from_pretrained(
-            self.model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True, cache_dir=cache_dir
+            self.model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
         ).to(device)
-        self.processor = AutoProcessor.from_pretrained(self.model_id, cache_dir=cache_dir)
+        self.processor = AutoProcessor.from_pretrained(self.model_id)
         self.pipe = pipeline(
             "automatic-speech-recognition",
             model=self.model,
@@ -26,8 +26,8 @@ class WhisperLargeV3:
             return_timestamps=True,
         )
         
-    def inference(self, audio):
+    def inference(self, audio, **kwargs):
         if audio.ndim > 1:
             audio = audio[0, :]
-        result = self.pipe(audio)["text"]
+        result = self.pipe(audio, **kwargs)["text"]
         return result

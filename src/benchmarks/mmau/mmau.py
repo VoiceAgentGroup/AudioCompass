@@ -17,6 +17,12 @@ class MMAU(BaseBenchmark):
         self.dataset = self.load_data(**kwargs)
         
         
+    def check_split(self, split):
+        available_split = ['test', 'test-mini']
+        if split not in available_split:
+            raise ValueError("Split should be one of " + available_split)
+        
+        
     def load_data(self, **kwargs):
         logger.info("Preparing data ...")
         if kwargs.get('offline', None) == True:

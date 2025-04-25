@@ -7,10 +7,11 @@ from src.benchmarks import load_benchmark, list_benchmarks
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('--model-name', type=str, default='speechgpt2', choices=list_models())
-    parser.add_argument('--benchmark', type=str, default='voicebench', choices=list_benchmarks())
+    parser.add_argument('--model-name', type=str, default='baichuan_omni', choices=list_models())
+    parser.add_argument('--benchmark', type=str, default='seed-tts-eval', choices=list_benchmarks())
     parser.add_argument('--subset', type=str, default='alpacaeval')
-    parser.add_argument('--split', type=str, default='test')
+    parser.add_argument('--split', type=str, default='en')
+    parser.add_argument('--timbre', type=str, default=None)
     parser.add_argument('--output-dir', type=str, default='output')
     parser.add_argument('--cache-dir', type=str, default='cache')
     parser.add_argument('--offline', action="store_true")
