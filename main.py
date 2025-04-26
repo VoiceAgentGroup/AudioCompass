@@ -24,7 +24,7 @@ def main():
     benchmark = load_benchmark(benchmark_name=args.benchmark, subset_name=args.subset, split=args.split, timbre=args.timbre, cache_dir=args.cache_dir, offline=args.offline)
     
     # load model
-    model = load_model(args.model_name)
+    model = load_model(model_name=args.model_name, cache_dir=args.cache_dir, offline=args.offline)
 
     # generate results
     result = benchmark.run(model, args.output_dir)

@@ -22,7 +22,7 @@ benchmark_mapping = {
 }
 
 
-def load_benchmark(benchmark_name, subset_name, split, **kwargs):
+def load_benchmark(benchmark_name, **kwargs):
     """
     Load a dataset based on the provided benchmark name, subset name, and split.
     
@@ -32,10 +32,10 @@ def load_benchmark(benchmark_name, subset_name, split, **kwargs):
         split (str): The split of the benchmark to load (e.g., 'train', 'test').
     """
     if benchmark_name not in benchmark_mapping:
-        raise ValueError(f"Benchmark {benchmark_name} is not supported.")
+        raise ValueError(f"Benchmark {benchmark_name} is not supported. Available benchmarks: {list_benchmarks()}")
     
     dataset_class = benchmark_mapping[benchmark_name]
-    return dataset_class(subset_name=subset_name, split=split, **kwargs)
+    return dataset_class(**kwargs)
 
 
 def list_benchmarks():

@@ -31,7 +31,7 @@ class SeedTTSEval(BaseBenchmark):
             meta_path = os.path.join(self.data_dir, self.split, 'meta.lst')
             wav_dir = os.path.join(self.data_dir, self.split, 'wavs')
         else:
-            meta_path = os.path.join(self.data_dir, 'zh/meta.lst')
+            meta_path = os.path.join(self.data_dir, 'zh/hardcase.lst')
             wav_dir = os.path.join(self.data_dir, 'zh/wavs')
         with open(meta_path, 'r') as f:
             lines = f.readlines()

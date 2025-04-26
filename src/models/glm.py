@@ -16,19 +16,23 @@ from .src_glm.audio_process import AudioStreamProcessor
 class GLMAssistant(VoiceAssistant):
     def __init__(self, **kwargs):
         self.model_name = 'glm'
-        model_path = 'THUDM/glm-4-voice-9b'
         cache_dir = os.path.join(kwargs.get('cache_dir', './cache'), 'models')
+        if kwargs.get('offline', False):
+            model_path = os.path.join(cache_dir, 'glm-4-voice-9b')
+            tokenizer_path = os.path.join(cache_dir, 'glm-4-voice-tokenizer')
+        else:
+            model_path = 'THUDM/glm-4-voice-9b'
+            tokenizer_path = 'THUDM/glm-4-voice-tokenizer'
+        self.glm_tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         self.glm_model = AutoModel.from_pretrained(
             model_path,
             trust_remote_code=True,
             quantization_config=None,
             device_map={"": 0},
-            cache_dir=cache_dir,
             torch_dtype=torch.bfloat16,
         ).eval()
-        self.glm_tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True, cache_dir=cache_dir)
-        self.feature_extractor = WhisperFeatureExtractor.from_pretrained("THUDM/glm-4-voice-tokenizer", cache_dir=cache_dir)
-        self.whisper_model = WhisperVQEncoder.from_pretrained("THUDM/glm-4-voice-tokenizer", cache_dir=cache_dir).eval().to("cuda")
+        self.feature_extractor = WhisperFeatureExtractor.from_pretrained(tokenizer_path)
+        self.whisper_model = WhisperVQEncoder.from_pretrained(tokenizer_path).eval().to("cuda")
         
         # Initialize AudioDecoder for generate_a2a method
         flow_config = os.path.join(cache_dir, 'glm-4-voice-decoder', 'config.yaml')

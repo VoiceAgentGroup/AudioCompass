@@ -8,7 +8,7 @@
 # from .naive3 import Naive3Assistant
 # from .naive4 import Naive4Assistant
 # from .moshi import MoshiAssistant
-# from .glm import GLMAssistant
+from .glm import GLMAssistant
 # from .ultravox import UltravoxAssistant, Ultravox0d5Assistant
 # from .ichigo import IchigoeAssistant
 # from .megrez import MegrezAssistant
@@ -35,7 +35,7 @@ model_cls_mapping = {
     # 'gpt4o': GPT4oAssistant,
     # 'gpt4o_mini': GPT4oMiniAssistant,
     # 'moshi': MoshiAssistant,
-    # 'glm': GLMAssistant,
+    'glm': GLMAssistant,
     # 'ultravox': UltravoxAssistant,
     # 'ultravox0_5': Ultravox0d5Assistant,
     # 'ichigo': IchigoeAssistant,
@@ -54,7 +54,7 @@ model_cls_mapping = {
     'localhost': LocalAssistant,
 }
 
-def load_model(model_name):
+def load_model(model_name, **kwargs):
     """
     Load a model by its name.
     
@@ -67,7 +67,7 @@ def load_model(model_name):
     if model_name not in model_cls_mapping:
         raise ValueError(f"Model '{model_name}' is not available. Available models: {list_models()}")
     
-    return model_cls_mapping[model_name]()
+    return model_cls_mapping[model_name](**kwargs)
 
 def list_models():
     """
