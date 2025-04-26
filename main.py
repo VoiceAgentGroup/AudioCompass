@@ -8,10 +8,10 @@ from src.benchmarks import load_benchmark, list_benchmarks
 def main():
     parser = ArgumentParser()
     parser.add_argument('--model-name', type=str, default='baichuan_omni', choices=list_models())
-    parser.add_argument('--benchmark', type=str, default='seed-tts-eval', choices=list_benchmarks())
+    parser.add_argument('--benchmark', type=str, default='mmau', choices=list_benchmarks())
     parser.add_argument('--subset', type=str, default='alpacaeval')
-    parser.add_argument('--split', type=str, default='en')
-    parser.add_argument('--timbre', type=str, default=None)
+    parser.add_argument('--split', type=str, default='test_mini')
+    parser.add_argument('--timbre', type=str, default='echo')
     parser.add_argument('--output-dir', type=str, default='output')
     parser.add_argument('--cache-dir', type=str, default='cache')
     parser.add_argument('--offline', action="store_true")
@@ -21,7 +21,7 @@ def main():
         os.environ['HF_HUB_OFFLINE'] = '1'
 
     # load benchmark
-    benchmark = load_benchmark(benchmark_name=args.benchmark, subset_name=args.subset, split=args.split, cache_dir=args.cache_dir, offline=args.offline)
+    benchmark = load_benchmark(benchmark_name=args.benchmark, subset_name=args.subset, split=args.split, timbre=args.timbre, cache_dir=args.cache_dir, offline=args.offline)
     
     # load model
     model = load_model(args.model_name)

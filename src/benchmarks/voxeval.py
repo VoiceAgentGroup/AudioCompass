@@ -11,12 +11,12 @@ from src.utils.rule_extractor import extract_answer
 
 
 class VoxEval(BaseBenchmark):
-    def __init__(self, data_dir="datas/VoxEval", cache_dir='cache', **kwargs):
+    def __init__(self, timbre='alloy', data_dir="datas/VoxEval", cache_dir='cache', **kwargs):
         self.name = 'voxeval'
         self.data_dir = os.path.join(cache_dir, data_dir)
         
         # Parameters
-        self.check_timbre(kwargs['timbre'])
+        self.check_timbre(timbre)
         self.shots = kwargs.get("shots", 5)
         self.prompt_mode = kwargs.get("prompt_mode", "regular")
         self.cut_audio = kwargs.get("cut_audio", True)
@@ -38,6 +38,7 @@ class VoxEval(BaseBenchmark):
         available_timbre = ['alloy', 'echo', 'fable', 'nova', 'onyx', 'shimmer']
         if timbre not in available_timbre:
             raise ValueError("Timbre should be one of " + available_timbre)
+        self.timbre = timbre
     
     def concat_audio(self, audio_paths, add_silence=True):
         audio_segments = []
@@ -279,7 +280,7 @@ class VoxEval(BaseBenchmark):
         os.makedirs(wav_dir, exist_ok=True)
         
         for result in results:
-            wav_path = os.path.join(wav_dir, f"{model_name}-{result['idx']}.wav")
+            wav_path = os.path.join(wav_dir, f"{model_name}-{self.timbre}-{result['idx']}.wav")
             wav = result['response_audio'] if result['response_audio'].ndim == 2 else result['response_audio'].unsqueeze(0)
             torchaudio.save(wav_path, wav, result['sample_rate'])
             result['response_audio_path'] = wav_path

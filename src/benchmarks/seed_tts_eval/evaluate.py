@@ -13,22 +13,22 @@ punctuation_all = punctuation + string.punctuation
 MODEL_LIST = ['ecapa_tdnn', 'hubert_large', 'wav2vec2_xlsr', 'unispeech_sat', "wavlm_base_plus", "wavlm_large"]
 
 
-def init_model(model_name, checkpoint=None):
+def init_model(model_name, checkpoint=None, **kwargs):
     if model_name == 'unispeech_sat':
         config_path = 'config/unispeech_sat.th'
-        model = ECAPA_TDNN_SMALL(feat_dim=1024, feat_type='unispeech_sat', config_path=config_path)
+        model = ECAPA_TDNN_SMALL(feat_dim=1024, feat_type='unispeech_sat', config_path=config_path, **kwargs)
     elif model_name == 'wavlm_base_plus':
         config_path = None
-        model = ECAPA_TDNN_SMALL(feat_dim=768, feat_type='wavlm_base_plus', config_path=config_path)
+        model = ECAPA_TDNN_SMALL(feat_dim=768, feat_type='wavlm_base_plus', config_path=config_path, **kwargs)
     elif model_name == 'wavlm_large':
         config_path = None
-        model = ECAPA_TDNN_SMALL(feat_dim=1024, feat_type='wavlm_large', config_path=config_path)
+        model = ECAPA_TDNN_SMALL(feat_dim=1024, feat_type='wavlm_large', config_path=config_path, **kwargs)
     elif model_name == 'hubert_large':
         config_path = None
-        model = ECAPA_TDNN_SMALL(feat_dim=1024, feat_type='hubert_large_ll60k', config_path=config_path)
+        model = ECAPA_TDNN_SMALL(feat_dim=1024, feat_type='hubert_large_ll60k', config_path=config_path, **kwargs)
     elif model_name == 'wav2vec2_xlsr':
         config_path = None
-        model = ECAPA_TDNN_SMALL(feat_dim=1024, feat_type='wav2vec2_xlsr', config_path=config_path)
+        model = ECAPA_TDNN_SMALL(feat_dim=1024, feat_type='wav2vec2_xlsr', config_path=config_path, **kwargs)
     else:
         model = ECAPA_TDNN_SMALL(feat_dim=40, feat_type='fbank')
 
@@ -39,10 +39,10 @@ def init_model(model_name, checkpoint=None):
     return model
 
 
-def verification(model_name, wav1, wav2, use_gpu=True, checkpoint=None, wav1_start_sr=0, wav2_start_sr=0, wav1_end_sr=-1, wav2_end_sr=-1, model=None, wav2_cut_wav1=False, device="cuda:0"):
+def verification(model_name, wav1, wav2, use_gpu=True, checkpoint=None, wav1_start_sr=0, wav2_start_sr=0, wav1_end_sr=-1, wav2_end_sr=-1, model=None, wav2_cut_wav1=False, device="cuda:0", **kwargs):
 
     assert model_name in MODEL_LIST, 'The model_name should be in {}'.format(MODEL_LIST)
-    model = init_model(model_name, checkpoint) if model is None else model
+    model = init_model(model_name, checkpoint, **kwargs) if model is None else model
 
     wav1, sr1 = librosa.load(wav1, sr=None, mono=False)
 
@@ -82,7 +82,7 @@ def verification(model_name, wav1, wav2, use_gpu=True, checkpoint=None, wav1_sta
     # print("The similarity score between two audios is {:.4f} (-1.0, 1.0).".format(sim[0].item()))
     return sim, model
 
-def process_one_wer(self, hypo, truth):
+def process_one_wer(split, hypo, truth):
     raw_truth = truth
     raw_hypo = hypo
 
@@ -95,10 +95,10 @@ def process_one_wer(self, hypo, truth):
     truth = truth.replace('  ', ' ')
     hypo = hypo.replace('  ', ' ')
 
-    if self.split == "zh":
+    if split == "zh" or split == 'hard':
         truth = " ".join([x for x in truth])
         hypo = " ".join([x for x in hypo])
-    elif self.split == "en":
+    elif split == "en":
         truth = truth.lower()
         hypo = hypo.lower()
     else:

@@ -11,6 +11,7 @@ from ..base import BaseBenchmark
 class MMAU(BaseBenchmark):
     def __init__(self, split, data_dir='datas/mmau', cache_dir='cache', **kwargs):
         self.name = 'mmau'
+        self.check_split(split)
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
         logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
@@ -18,7 +19,7 @@ class MMAU(BaseBenchmark):
         
         
     def check_split(self, split):
-        available_split = ['test', 'test-mini']
+        available_split = ['test', 'test_mini']
         if split not in available_split:
             raise ValueError("Split should be one of " + available_split)
         

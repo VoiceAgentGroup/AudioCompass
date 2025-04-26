@@ -14,8 +14,9 @@ class SeedTTSEval(BaseBenchmark):
         self.check_split(split)
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
-        logger.add(f'log/{self.name}', rotation='50 MB')
+        logger.add(f'log/{self.name}-{self.split}.log', rotation='50 MB')
         self.dataset = self.load_data()
+        self.offline = kwargs.get('offline', False)
         self.transcriptor = WhisperLargeV3(**kwargs) if split == 'en' else Paraformer(**kwargs)
         self.wavlm_path = os.path.join(cache_dir, 'models', 'wavlm_large_finetune.pth')
         
@@ -63,11 +64,12 @@ class SeedTTSEval(BaseBenchmark):
         for idx, data in enumerate(tqdm(self.dataset)):
             try:
                 response_audio, sample_rate = model.tts(data['infer_text'])
+                response_audio = torch.tensor(response_audio, dtype=torch.float32)
                 transcription = self.transcriptor.inference(response_audio)
                 results.append({
                     'idx': idx,
                     'infer_text': data['infer_text'],
-                    'tts_wav': torch.tensor(response_audio),
+                    'tts_wav': response_audio,
                     'sample_rate': sample_rate,
                     'transcription': transcription,
                     'ref_wav_path': data['ref_wav_path'],
@@ -87,9 +89,9 @@ class SeedTTSEval(BaseBenchmark):
         total_wer = 0
         total_sim = 0
         for result in tqdm(results):
-            raw_truth, raw_hypo, wer, subs, dele, inse = process_one_wer(result['transcription'], result['infer_text'])
+            raw_truth, raw_hypo, wer, subs, dele, inse = process_one_wer(self.split, result['transcription'], result['infer_text'])
             total_wer += wer
-            sim, model = verification(model_name='wavlm_large', wav1=result['tts_wav_path'], wav2=results['ref_wav_path'], checkpoint=self.wavlm_path)
+            sim, model = verification(model_name='wavlm_large', wav1=result['tts_wav_path'], wav2=result['ref_wav_path'], checkpoint=self.wavlm_path, offline=self.offline)
             total_sim += sim.cpu().item()
         avg_wer = total_wer / len(results)
         avg_sim = total_sim / len(results)
@@ -103,7 +105,7 @@ class SeedTTSEval(BaseBenchmark):
         os.makedirs(output_dir, exist_ok=True)
         os.makedirs(wav_dir, exist_ok=True)
         for result in results:
-            wav_path = os.path.join(wav_dir, f"{model_name}-{result['idx']}.wav")
+            wav_path = os.path.join(wav_dir, f"{model_name}-{self.split}-{result['idx']}.wav")
             wav = result['tts_wav'] if result['tts_wav'].ndim == 2 else result['tts_wav'].unsqueeze(0)
             torchaudio.save(wav_path, wav, result['sample_rate'])
             result['tts_wav_path'] = wav_path

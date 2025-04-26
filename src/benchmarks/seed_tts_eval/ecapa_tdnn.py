@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchaudio.transforms as trans
+import os
 # from .utils import UpstreamExpert
 
 
@@ -162,7 +163,7 @@ class AttentiveStatsPool(nn.Module):
 
 class ECAPA_TDNN(nn.Module):
     def __init__(self, feat_dim=80, channels=512, emb_dim=192, global_context_att=False,
-                 feat_type='fbank', sr=16000, feature_selection="hidden_states", update_extract=False, config_path=None):
+                 feat_type='fbank', sr=16000, feature_selection="hidden_states", update_extract=False, config_path=None, **kwargs):
         super().__init__()
 
         self.feat_type = feat_type
@@ -194,7 +195,12 @@ class ECAPA_TDNN(nn.Module):
         else:
             if config_path is None:
                 torch.hub._validate_not_a_forked_repo=lambda a,b,c: True
-                self.feature_extract = torch.hub.load('s3prl/s3prl', feat_type)
+                if kwargs.get('offline', False):
+                    cache_dir = kwargs.get('cache_dir', 'cache')
+                    model_dir = os.path.join(cache_dir, 'models')
+                    self.feature_extract = torch.hub.load(os.path.join(model_dir, 's3prl'), feat_type, source='local', download=False)
+                else:
+                    self.feature_extract = torch.hub.load('s3prl/s3prl', feat_type)
             else:
                 self.feature_extract = UpstreamExpert(config_path)
             if len(self.feature_extract.model.encoder.layers) == 24 and hasattr(self.feature_extract.model.encoder.layers[23].self_attn, "fp32_attention"):
@@ -287,9 +293,9 @@ class ECAPA_TDNN(nn.Module):
         return out
 
 
-def ECAPA_TDNN_SMALL(feat_dim, emb_dim=256, feat_type='fbank', sr=16000, feature_selection="hidden_states", update_extract=False, config_path=None):
+def ECAPA_TDNN_SMALL(feat_dim, emb_dim=256, feat_type='fbank', sr=16000, feature_selection="hidden_states", update_extract=False, config_path=None, **kwargs):
     return ECAPA_TDNN(feat_dim=feat_dim, channels=512, emb_dim=emb_dim,
-                      feat_type=feat_type, sr=sr, feature_selection=feature_selection, update_extract=update_extract, config_path=config_path)
+                      feat_type=feat_type, sr=sr, feature_selection=feature_selection, update_extract=update_extract, config_path=config_path, **kwargs)
 
 if __name__ == '__main__':
     x = torch.zeros(2, 32000)
