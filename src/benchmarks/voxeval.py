@@ -170,9 +170,8 @@ class VoxEval(BaseBenchmark):
                     prepared_data.append({
                         'subject': subject,
                         'question_id': i,
-                        'question': df.iloc[i, 1],
-                        'options': df.iloc[i, 2],
-                        'answer': df.iloc[i, 3],
+                        'question': df.iloc[i, 0],
+                        'answer': df.iloc[i, 5],
                         'audio': input_audio
                     })
                     

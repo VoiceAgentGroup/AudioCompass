@@ -8,8 +8,8 @@ import soundfile as sf
 class QwenOmniAssistant(VoiceAssistant):
     def __init__(self, **kwargs):
         self.client = OpenAI(
-            api_key=os.getenv("OPENAI_API_KEY"),
-            base_url=os.getenv("OPENAI_URL"),
+            api_key=os.getenv("DASHSCOPE_API_KEY"),
+            base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
         )
         self.model_name = "qwen-omni-turbo"
     
@@ -48,6 +48,7 @@ class QwenOmniAssistant(VoiceAssistant):
                     ]
                 }
             ],
+            modalities=["text"],
             stream=True,
             stream_options={"include_usage": True},
         )
@@ -61,7 +62,7 @@ class QwenOmniAssistant(VoiceAssistant):
         
         full_response = "".join(collected_messages)
         
-        return full_response, None
+        return full_response
 
 
     def generate_at2t(
@@ -104,6 +105,7 @@ class QwenOmniAssistant(VoiceAssistant):
                     ]
                 }
             ],
+            modalities=["text"],
             stream=True,
             stream_options={"include_usage": True},
         )
