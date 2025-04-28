@@ -52,6 +52,14 @@ class VoiceAssistant:
         raise NotImplementedError
     
     @torch.no_grad()
+    def asr(
+        self,
+        audio,
+        max_new_tokens=2048,
+    ):
+        raise NotImplementedError
+    
+    @torch.no_grad()
     def get_ppl(
         self,
         input,
