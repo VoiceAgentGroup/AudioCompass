@@ -6,6 +6,7 @@ import io
 import base64
 from openai import OpenAI
 import soundfile as sf
+import tempfile
 
 
 class GPTAssistant(VoiceAssistant):
@@ -38,14 +39,43 @@ class GPTAssistant(VoiceAssistant):
 
         return completion.choices[0].message.content
     
+    def asr(self, audio):
+        buffer = io.BytesIO()
+        sf.write(buffer, audio['array'], audio['sampling_rate'], format='WAV')
+        buffer.seek(0)
+
+        transcript = self.client.audio.transcriptions.create(
+            model=self.asr_model_name,
+            file=buffer,
+        )
+
+        return transcript['text']
+
+    def tts(self, text):
+        with self.client.audio.with_streaming_response.create(
+            model=self.tts_model_name,
+            text=text,
+            response_format="wav"
+        ) as response:
+            # with tempfile.NamedTemporaryFile(suffix='.wav', delete=True) as temp_file:
+            #     response.stream_to_file(temp_file.name)
+            #     audio_array, sample_rate = sf.read(temp_file.name)
+            audio_array, sample_rate = sf.read(io.BytesIO(response.content))
+                
+        return audio_array, sample_rate
+    
 
 class GPT4oAssistant(GPTAssistant):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model_name = "gpt-4o-audio-preview"
+        self.asr_model_name = "gpt-4o-transcribe"
+        self.tts_model_name = "gpt-4o-mini-tts"
 
 
 class GPT4oMiniAssistant(VoiceAssistant):
-    def __init__(self):
-        self.client = OpenAI()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.model_name = "gpt-4o-mini-audio-preview"
+        self.asr_model_name = "gpt-4o-mini-transcribe"
+        self.tts_model_name = "gpt-4o-mini-tts"
