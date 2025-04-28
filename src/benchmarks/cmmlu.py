@@ -114,7 +114,4 @@ class CMMLU(BaseBenchmark):
         logger.info(f"Generated results saved to {output_file}.")    
     
     def run(self, model, output_dir):
-        generated_results = self.generate(model)
-        self.save_generated_results(generated_results, output_dir, model.model_name)
-        evaluated_result = self.evaluate(generated_results)
-        return evaluated_result
+        return super().run(model, output_dir)

@@ -14,12 +14,12 @@ class BaseBenchmark:
         """
         raise NotImplementedError("This method should be overridden by subclasses.")
     
-    def evaluate(self, data):
+    def evaluate(self, results):
         """
         Evaluate the generated results.
 
         Args:
-            data (list): The generated results to be evaluated.
+            results (list): The generated results to be evaluated.
 
         Returns:
             dict: The evaluation results.
@@ -49,6 +49,9 @@ class BaseBenchmark:
             output_dir (str): The directory where the output will be saved.
 
         Returns:
-            None
+            dict: The evaluation results.
         """
-        raise NotImplementedError("This method should be overridden by subclasses.")
+        generated_results = self.generate(model)
+        self.save_generated_results(generated_results, output_dir, model.model_name)
+        evaluated_result = self.evaluate(generated_results)
+        return evaluated_result
