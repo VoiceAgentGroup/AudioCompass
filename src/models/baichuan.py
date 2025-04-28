@@ -259,6 +259,59 @@ class BaichuanOmniAssistant(BaichuanAssistant):
             pass
 
         return full_text
+
+    def asr(
+        self,
+        audio,
+        max_new_tokens=2048,
+    ):
+        # Create a temporary file for the audio
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
+            temp_filename = temp_file.name
+            # Write the audio data to the file
+            sf.write(temp_file.name, audio['array'], audio['sampling_rate'], format='wav')
+            
+        # Create the ASR prompt following the demo pattern
+        prompt = '将语音转录为文本:' + self.audio_start_token + ujson.dumps({'path': temp_filename}, ensure_ascii=False) + self.audio_end_token
+        
+        # Process the prompt
+        try:
+            pret = self.model.processor([prompt])
+        except Exception as e:
+            try:
+                os.unlink(temp_filename)
+            except:
+                pass
+            return f"Error processing audio: {str(e)}"
+        
+        # Generate transcription
+        predicted_ids = self.model.generate(
+            input_ids=pret.input_ids.cuda(),
+            attention_mask=pret.attention_mask.cuda(),
+            labels=None,
+            audios=pret.audios.cuda() if pret.audios is not None else None,
+            encoder_length=pret.encoder_length.cuda() if pret.encoder_length is not None else None,
+            bridge_length=pret.bridge_length.cuda() if pret.bridge_length is not None else None,
+            max_new_tokens=max_new_tokens,
+            num_beams=1,
+            do_sample=False,
+            top_k=5,
+            top_p=0.85,
+            temperature=0.5,
+            num_return_sequences=1,
+            repetition_penalty=1.3,
+        )
+        
+        # Decode the generated tokens
+        generated_text = self.tokenizer.decode(predicted_ids[0, pret.input_ids.shape[1]:], skip_special_tokens=True)
+        
+        # Clean up temporary file
+        try:
+            os.unlink(temp_filename)
+        except:
+            pass
+            
+        return generated_text
     
 
 class BaichuanAudioAssistant(BaichuanAssistant):
