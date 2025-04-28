@@ -7,6 +7,7 @@ from .voxeval import VoxEval
 from .storycloze import StoryCloze
 from .seed_tts_eval.seed_tts_eval import SeedTTSEval
 from .airbench.airbench import AIRBench
+from .commonvoice import CommonVoice
 
 benchmark_mapping = {
     'voicebench': VoiceBench,
@@ -18,6 +19,7 @@ benchmark_mapping = {
     'storycloze': StoryCloze,
     'seed-tts-eval': SeedTTSEval,
     'airbench': AIRBench,
+    'commonvoice': CommonVoice,
     # Add other benchmarks here as needed
 }
 
