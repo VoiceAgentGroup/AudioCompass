@@ -47,7 +47,6 @@ class VoiceAssistant:
     def tts(
         self,
         text,
-        max_new_tokens=2048,
     ):
         raise NotImplementedError
     
@@ -55,7 +54,6 @@ class VoiceAssistant:
     def asr(
         self,
         audio,
-        max_new_tokens=2048,
     ):
         raise NotImplementedError
     

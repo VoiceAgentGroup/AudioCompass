@@ -263,7 +263,6 @@ class BaichuanOmniAssistant(BaichuanAssistant):
     def asr(
         self,
         audio,
-        max_new_tokens=2048,
     ):
         # Create a temporary file for the audio
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
@@ -292,7 +291,6 @@ class BaichuanOmniAssistant(BaichuanAssistant):
             audios=pret.audios.cuda() if pret.audios is not None else None,
             encoder_length=pret.encoder_length.cuda() if pret.encoder_length is not None else None,
             bridge_length=pret.bridge_length.cuda() if pret.bridge_length is not None else None,
-            max_new_tokens=max_new_tokens,
             num_beams=1,
             do_sample=False,
             top_k=5,
