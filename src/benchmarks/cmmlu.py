@@ -109,7 +109,7 @@ class CMMLU(BaseBenchmark):
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
-        output_file = os.path.join(output_dir, f'{model_name}-{self.name}.json')
+        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}.json')
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=4)
         logger.info(f"Generated results saved to {output_file}.")    
