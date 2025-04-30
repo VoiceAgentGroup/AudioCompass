@@ -52,4 +52,4 @@ def gen_meta(base_path):
     return meta_datas
     
 if __name__ == '__main__':
-    gen_meta(base_path='datas/storycloze')
+    gen_meta(base_path='cache/datas/storycloze')
