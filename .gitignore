@@ -184,3 +184,6 @@ cache/
 
 test*.py
 test*.wav
+
+cosyvoice/
+third_party/
