@@ -29,7 +29,7 @@ model_cls_mapping = {
     'localhost': ('.localhost', 'LocalAssistant'),
 }
 
-def load_model(model_name):
+def load_model(model_name, **kwargs):
     """
     Load a model by its name.
     
@@ -47,7 +47,7 @@ def load_model(model_name):
     module = importlib.import_module(module_path, package="src.models")
     model_class = getattr(module, class_name)
     
-    return model_class()
+    return model_class(**kwargs)
 
 def list_models():
     """

@@ -26,7 +26,7 @@ def load_benchmark(benchmark_name, subset_name, split, **kwargs):
     module = importlib.import_module(module_path, package="src.benchmarks")
     dataset_class = getattr(module, class_name)
     
-    return dataset_class(subset_name=subset_name, split=split, **kwargs)
+    return dataset_class(**kwargs)
 
 
 def list_benchmarks():
