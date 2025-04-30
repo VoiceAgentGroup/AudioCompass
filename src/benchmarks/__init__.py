@@ -10,7 +10,7 @@ benchmark_mapping = {
 }
 
 
-def load_benchmark(benchmark_name, subset_name, split, **kwargs):
+def load_benchmark(benchmark_name, **kwargs):
     """
     Load a dataset based on the provided benchmark name, subset name, and split.
     
