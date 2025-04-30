@@ -3,6 +3,7 @@ benchmark_mapping = {
     'mmau': ('.mmau.mmau', 'MMAU'),
     'openaudiobench': ('.openaudiobench.openaudiobench', 'OpenAudioBench'),
     'cmmlu': ('.cmmlu', 'CMMLU'),
+    'mmlu': ('.mmlu', 'MMLU'),
     'zh-storycloze': ('.zh_storycloze', 'zhStoryCloze'),
     'voxeval': ('.voxeval', 'VoxEval'),
     'storycloze': ('.storycloze', 'StoryCloze'),
