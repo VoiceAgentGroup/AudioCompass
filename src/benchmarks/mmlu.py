@@ -14,7 +14,7 @@ class MMLU(BaseBenchmark):
         self.name = 'mmlu'
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
-        logger.add(f'log/{self.name}.log', rotation='50 MB')
+        logger.add(f'log/{self.name}-{self.split}.log', rotation='50 MB')
         self.dataset = self.load_data()
 
     def concat_audio(self, question_path, choice_path) -> list:
