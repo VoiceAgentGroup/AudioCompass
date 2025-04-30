@@ -1,30 +1,15 @@
-from .voicebench.voicebench import VoiceBench
-from .mmau.mmau import MMAU
-from .openaudiobench.openaudiobench import OpenAudioBench
-from .cmmlu import CMMLU
-from .zh_storycloze import zhStoryCloze
-from .voxeval import VoxEval
-from .storycloze import StoryCloze
-from .seed_tts_eval.seed_tts_eval import SeedTTSEval
-from .airbench.airbench import AIRBench
-from .commonvoice import CommonVoice
-
 benchmark_mapping = {
-    'voicebench': VoiceBench,
-    'mmau': MMAU,
-    'openaudiobench': OpenAudioBench,
-    'cmmlu': CMMLU,
-    'zh-storycloze': zhStoryCloze,
-    'voxeval': VoxEval,
-    'storycloze': StoryCloze,
-    'seed-tts-eval': SeedTTSEval,
-    'airbench': AIRBench,
-    'commonvoice': CommonVoice,
-    # Add other benchmarks here as needed
+    'voicebench': ('.voicebench.voicebench', 'VoiceBench'),
+    'mmau': ('.mmau.mmau', 'MMAU'),
+    'openaudiobench': ('.openaudiobench.openaudiobench', 'OpenAudioBench'),
+    'cmmlu': ('.cmmlu', 'CMMLU'),
+    'zh-storycloze': ('.zh_storycloze', 'zhStoryCloze'),
+    'voxeval': ('.voxeval', 'VoxEval'),
+    'storycloze': ('.storycloze', 'StoryCloze'),
 }
 
 
-def load_benchmark(benchmark_name, **kwargs):
+def load_benchmark(benchmark_name, subset_name, split, **kwargs):
     """
     Load a dataset based on the provided benchmark name, subset name, and split.
     
@@ -34,10 +19,14 @@ def load_benchmark(benchmark_name, **kwargs):
         split (str): The split of the benchmark to load (e.g., 'train', 'test').
     """
     if benchmark_name not in benchmark_mapping:
-        raise ValueError(f"Benchmark {benchmark_name} is not supported. Available benchmarks: {list_benchmarks()}")
+        raise ValueError(f"Benchmark {benchmark_name} is not supported.")
     
-    dataset_class = benchmark_mapping[benchmark_name]
-    return dataset_class(**kwargs)
+    import importlib
+    module_path, class_name = benchmark_mapping[benchmark_name]
+    module = importlib.import_module(module_path, package="src.benchmarks")
+    dataset_class = getattr(module, class_name)
+    
+    return dataset_class(subset_name=subset_name, split=split, **kwargs)
 
 
 def list_benchmarks():

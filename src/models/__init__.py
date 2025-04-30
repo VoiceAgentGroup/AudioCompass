@@ -1,60 +1,35 @@
-# from .diva import DiVAAssistant
-# from .qwen2 import Qwen2Assistant
-# from .naive import NaiveAssistant
-# from .mini_omni import MiniOmniAssistant
-# from .mini_omni2 import MiniOmni2Assistant
-# from .gpt4o import GPT4oAssistant, GPT4oMiniAssistant
-# from .naive2 import Naive2Assistant
-# from .naive3 import Naive3Assistant
-# from .naive4 import Naive4Assistant
-# from .moshi import MoshiAssistant
-from .glm import GLMAssistant
-# from .ultravox import UltravoxAssistant, Ultravox0d5Assistant
-# from .ichigo import IchigoeAssistant
-# from .megrez import MegrezAssistant
-# from .meralion import MERaLiONAssistant
-# from .lyra import LyraMiniAssistant, LyraBaseAssistant
-# from .freeze_omni import FreezeOmniAssistant
-# from .minicpm import MiniCPMAssistant
-from .baichuan import BaichuanOmniAssistant, BaichuanAudioAssistant
-# from .step_audio import StepAssistant
-# from .phi import PhiAssistant
-from .qwen_omni_turbo import QwenOmniAssistant
-from .speechgpt2 import SpeechGPT2
-from .localhost import LocalAssistant
-
 model_cls_mapping = {
-    # 'qwen2': Qwen2Assistant,
-    # 'diva': DiVAAssistant,
-    # 'naive': NaiveAssistant,
-    # 'naive2': Naive2Assistant,
-    # 'naive3': Naive3Assistant,
-    # 'naive4': Naive4Assistant,
-    # 'mini_omni': MiniOmniAssistant,
-    # 'mini_omni2': MiniOmni2Assistant,
-    # 'gpt4o': GPT4oAssistant,
-    # 'gpt4o_mini': GPT4oMiniAssistant,
-    # 'moshi': MoshiAssistant,
-    'glm': GLMAssistant,
-    # 'ultravox': UltravoxAssistant,
-    # 'ultravox0_5': Ultravox0d5Assistant,
-    # 'ichigo': IchigoeAssistant,
-    # 'megrez': MegrezAssistant,
-    # 'meralion': MERaLiONAssistant,
-    # 'lyra_mini': LyraMiniAssistant,
-    # 'lyra_base': LyraBaseAssistant,
-    # 'freeze_omni': FreezeOmniAssistant,
-    # 'minicpm': MiniCPMAssistant,
-    'baichuan_omni': BaichuanOmniAssistant,
-    # 'baichuan_audio': BaichuanAudioAssistant,
-    # 'step': StepAssistant,
-    # 'phi': PhiAssistant,
-    'qwen_omni_turbo': QwenOmniAssistant,
-    'speechgpt2': SpeechGPT2,
-    'localhost': LocalAssistant,
+    'qwen2': ('.qwen2', 'Qwen2Assistant'),
+    'diva': ('.diva', 'DiVAAssistant'),
+    'naive': ('.naive', 'NaiveAssistant'),
+    'naive2': ('.naive2', 'Naive2Assistant'),
+    'naive3': ('.naive3', 'Naive3Assistant'),
+    'naive4': ('.naive4', 'Naive4Assistant'),
+    'mini_omni': ('.mini_omni', 'MiniOmniAssistant'),
+    'mini_omni2': ('.mini_omni2', 'MiniOmni2Assistant'),
+    'gpt4o': ('.gpt4o', 'GPT4oAssistant'),
+    'gpt4o_mini': ('.gpt4o', 'GPT4oMiniAssistant'),
+    'moshi': ('.moshi', 'MoshiAssistant'),
+    'glm': ('.glm', 'GLMAssistant'),
+    'ultravox': ('.ultravox', 'UltravoxAssistant'),
+    'ultravox0_5': ('.ultravox', 'Ultravox0d5Assistant'),
+    'ichigo': ('.ichigo', 'IchigoeAssistant'),
+    'megrez': ('.megrez', 'MegrezAssistant'),
+    'meralion': ('.meralion', 'MERaLiONAssistant'),
+    'lyra_mini': ('.lyra', 'LyraMiniAssistant'),
+    'lyra_base': ('.lyra', 'LyraBaseAssistant'),
+    'freeze_omni': ('.freeze_omni', 'FreezeOmniAssistant'),
+    'minicpm': ('.minicpm', 'MiniCPMAssistant'),
+    'baichuan_omni': ('.baichuan', 'BaichuanOmniAssistant'),
+    'baichuan_audio': ('.baichuan', 'BaichuanAudioAssistant'),
+    'step': ('.step_audio', 'StepAssistant'),
+    'phi': ('.phi', 'PhiAssistant'),
+    'qwen_omni_turbo': ('.qwen_omni_turbo', 'QwenOmniAssistant'),
+    'speechgpt2': ('.speechgpt2', 'SpeechGPT2'),
+    'localhost': ('.localhost', 'LocalAssistant'),
 }
 
-def load_model(model_name, **kwargs):
+def load_model(model_name):
     """
     Load a model by its name.
     
@@ -67,7 +42,12 @@ def load_model(model_name, **kwargs):
     if model_name not in model_cls_mapping:
         raise ValueError(f"Model '{model_name}' is not available. Available models: {list_models()}")
     
-    return model_cls_mapping[model_name](**kwargs)
+    import importlib
+    module_path, class_name = model_cls_mapping[model_name]
+    module = importlib.import_module(module_path, package="src.models")
+    model_class = getattr(module, class_name)
+    
+    return model_class()
 
 def list_models():
     """
