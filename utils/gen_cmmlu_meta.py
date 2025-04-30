@@ -1,9 +1,7 @@
 import os
 import json
 
-split = 'test'
-
-def gen_meta(base_path):
+def gen_meta(base_path, split):
     cwd = os.getcwd()
     os.chdir(base_path)
     
@@ -34,7 +32,7 @@ def gen_meta(base_path):
                 aggregated_data['qa'].append(qa)
         aggregated_datas.append(aggregated_data)
 
-    with open('meta_data.json', 'w') as f:
+    with open(f'{split}_meta_data.json', 'w') as f:
         json.dump(aggregated_datas, f, indent=4, ensure_ascii=False)
         
     os.chdir(cwd)
@@ -42,4 +40,4 @@ def gen_meta(base_path):
     return aggregated_datas
     
 if __name__ == '__main__':
-    gen_meta(base_path='datas/cmmlu-minimax')
+    gen_meta(base_path='cache/datas/cmmlu-new', split='test')

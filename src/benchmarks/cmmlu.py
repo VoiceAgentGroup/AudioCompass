@@ -10,8 +10,9 @@ from utils import gen_cmmlu_meta
 
 
 class CMMLU(BaseBenchmark):
-    def __init__(self, data_dir="datas/cmmlu-minimax", cache_dir='cache', **kwargs):
+    def __init__(self, split, data_dir="datas/cmmlu-new", cache_dir='cache', **kwargs):
         self.name = 'cmmlu'
+        self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
         logger.add(f'log/{self.name}.log', rotation='50 MB')
         self.dataset = self.load_data()
@@ -49,9 +50,9 @@ class CMMLU(BaseBenchmark):
     def load_data(self) -> list:
         logger.info("Preparing data ...")
         dataset = []
-        meta_path = os.path.join(self.data_dir, "meta_data.json")
+        meta_path = os.path.join(self.data_dir, f"{self.split}_meta_data.json")
         if not os.path.exists(meta_path):
-            meta_data = gen_cmmlu_meta(base_path=self.data_dir)
+            meta_data = gen_cmmlu_meta(base_path=self.data_dir, split=self.split)
         else:
             with open(meta_path, "r") as f:
                 meta_data = json.load(f)
