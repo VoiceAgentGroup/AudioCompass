@@ -3,6 +3,7 @@ import json
 from tqdm import tqdm
 from loguru import logger
 import pandas as pd
+import torchaudio
 from ..base import BaseBenchmark
 from src.utils.ai_judge import OPENAI_Judge
 
@@ -12,15 +13,13 @@ class AIRBench(BaseBenchmark):
       - chat: simple question-response style with AI judge scoring
       - foundation: multiple-choice style with exact-match accuracy
     """
-    def __init__(self, split, data_dir="datas/AIR-Bench", cache_dir='cache', infer_mode="chat", **kwargs):
+    def __init__(self, split, data_dir="datas/AIR-Bench", cache_dir='cache', **kwargs):
         self.name = 'airbench'
-        self.split = split
-        self.infer_mode = infer_mode  # 'chat' or 'foundation'
-        # Base path under cache_dir
+        self.split = split  # 'chat' or 'foundation'
         self.data_dir = os.path.join(cache_dir, data_dir)
 
         # Logging
-        logger.add(f'log/{self.name}-{self.infer_mode}-{self.split}.log', rotation='50MB')
+        logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
 
         # Load dataset metadata
         self.dataset = self.load_data()
@@ -28,7 +27,7 @@ class AIRBench(BaseBenchmark):
     def load_data(self):
         logger.info("Loading AIR-Bench data...")
         # Determine meta file path based on mode
-        if self.infer_mode == 'chat':
+        if self.split == 'chat':
             meta_file = os.path.join(self.data_dir, 'Chat', 'Chat_meta.json')
         else:
             meta_file = os.path.join(self.data_dir, 'Foundation', 'Foundation_meta.json')
@@ -45,16 +44,25 @@ class AIRBench(BaseBenchmark):
             dataset_name = item.get('dataset_name')
             wav = item.get('path')
             # Handle flac for grounding
-            if self.infer_mode == 'foundation' and task == 'Audio_Grounding':
+            if self.split == 'foundation' and task == 'Audio_Grounding':
                 wav = wav[:-3] + 'flac'
-            audio_path = os.path.join(self.data_dir, f"{task}_{dataset_name}", wav)
+            audio_path = os.path.join(self.data_dir, self.split.capitalize(), f"{task}_{dataset_name}", wav)
             if not os.path.exists(audio_path):
                 logger.warning(f"Missing audio file: {audio_path}")
                 continue
-            item['audio_path'] = audio_path
+            try:
+                waveform, sample_rate = torchaudio.load(audio_path)
+            except Exception as e:
+                logger.error(f"Error loading audio file {audio_path}: {e}")
+                continue
+            audio = {
+                'array': waveform.squeeze(0).numpy(),
+                'sampling_rate': sample_rate
+            }
+            item['audio'] = audio
             prepared.append(item)
 
-        logger.info(f"Loaded {len(prepared)} examples for mode '{self.infer_mode}'")
+        logger.info(f"Loaded {len(prepared)} examples for mode '{self.split}'")
         return prepared
 
     def generate(self, model):
@@ -64,26 +72,34 @@ class AIRBench(BaseBenchmark):
 
         results = []
         for rec in tqdm(self.dataset, desc="AIR-Bench Inference"):
-            audio_path = rec['audio_path']
+            audio = rec['audio']
             question = rec.get('question', '')
-            if self.infer_mode == 'chat':
-                instruction = question
-                output = model.generate_at2t(audio_path, instruction)
-            else:
-                # single-choice foundation
-                prompt = (
-                    'Choose the most suitable answer from A, B, C, D. ' \
-                    'Provide only the option letter.'
-                )
-                choices = [f"A. {rec.get('choice_a')}", f"B. {rec.get('choice_b')}"]
-                if rec.get('choice_c') is not None:
-                    choices.append(f"C. {rec.get('choice_c')}")
-                if rec.get('choice_d') is not None:
-                    choices.append(f"D. {rec.get('choice_d')}")
-                instruction = '\n'.join([prompt, question] + choices)
-                output = model.generate_at2t(audio_path, instruction)
-            rec['response'] = output.strip()
-            results.append(rec)
+            logger.info(f"Processing record: {rec['task_name']}, question: {question}")
+            try:
+                if self.split == 'chat':
+                    instruction = question
+                    output = model.generate_at2t(audio, instruction)
+                else:
+                    # single-choice foundation
+                    prompt = (
+                        'Choose the most suitable answer from A, B, C, D. ' \
+                        'Provide only the option letter.'
+                    )
+                    choices = [f"A. {rec.get('choice_a')}", f"B. {rec.get('choice_b')}"]
+                    if rec.get('choice_c') is not None:
+                        choices.append(f"C. {rec.get('choice_c')}")
+                    if rec.get('choice_d') is not None:
+                        choices.append(f"D. {rec.get('choice_d')}")
+                    instruction = '\n'.join([prompt, question] + choices)
+                    output = model.generate_at2t(audio, instruction)
+                rec['response'] = output.strip()
+                logger.info(f"Generated response: {output}")
+                logger.info('====================================')
+                results.append(rec)
+            except Exception as e:
+                logger.error(e)
+                logger.error('====================================')
+                continue
         return results
 
     def evaluate(self, results):
@@ -93,7 +109,7 @@ class AIRBench(BaseBenchmark):
             logger.warning("No results to evaluate.")
             return summary
 
-        if self.infer_mode == 'chat':
+        if self.split == 'chat':
             # Use AI judge for scoring chat-style
             judge = OPENAI_Judge()
             total_score = 0
@@ -159,20 +175,22 @@ class AIRBench(BaseBenchmark):
                 summary['by_task'][task] = {'accuracy': acc, 'correct': stats['correct'], 'total': stats['total']}
         return summary
 
-    def save_results(self, results, output_dir, model_name):
+    def save_results(self, results, save_dir, model_name):
         logger.info("Saving AIR-Bench results...")
-        save_dir = os.path.join(output_dir, self.name)
-        os.makedirs(save_dir, exist_ok=True)
-        out_file = os.path.join(save_dir, f"{model_name}-{self.infer_mode}-{self.split}.jsonl")
+        out_file = os.path.join(save_dir, f"{model_name}-{self.split}.jsonl")
         with open(out_file, 'w', encoding='utf-8') as fout:
             for rec in results:
                 fout.write(json.dumps(rec, ensure_ascii=False) + '\n')
-        summary = self.evaluate(results)
-        summary_file = os.path.join(save_dir, f"{model_name}-{self.infer_mode}-{self.split}-eval.json")
-        with open(summary_file, 'w', encoding='utf-8') as fsum:
-            json.dump(summary, fsum, indent=2, ensure_ascii=False)
 
     def run(self, model, output_dir):
+        save_dir = os.path.join(output_dir, self.name)
+        os.makedirs(save_dir, exist_ok=True)
+        
         results = self.generate(model)
-        self.save_results(results, output_dir, self.model_name)
-        return self.evaluate(results)
+        self.save_results(results, save_dir, model.model_name)
+
+        summary = self.evaluate(results)
+        summary_file = os.path.join(save_dir, f"{model.model_name}-{self.split}-eval.json")
+        with open(summary_file, 'w', encoding='utf-8') as fsum:
+            json.dump(summary, fsum, indent=2, ensure_ascii=False)
+        return None
