@@ -7,6 +7,7 @@ benchmark_mapping = {
     'zh-storycloze': ('.zh_storycloze', 'zhStoryCloze'),
     'voxeval': ('.voxeval', 'VoxEval'),
     'storycloze': ('.storycloze', 'StoryCloze'),
+    'airbench': ('.airbench.airbench', 'AIRBench'),
 }
 
 
