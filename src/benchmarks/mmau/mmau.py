@@ -30,7 +30,7 @@ class MMAU(BaseBenchmark):
             dataset = load_dataset('parquet', data_dir=self.data_dir, trust_remote_code=True)
             dataset = dataset[self.split]
         else:
-            dataset = load_dataset('lmms-lab/mmau', split=self.split, **kwargs)
+            dataset = load_dataset('lmms-lab/mmau', split=self.split)
         return dataset
     
     
