@@ -8,6 +8,7 @@ benchmark_mapping = {
     'voxeval': ('.voxeval', 'VoxEval'),
     'storycloze': ('.storycloze', 'StoryCloze'),
     'airbench': ('.airbench.airbench', 'AIRBench'),
+    'seedttseval': ('.seed_tts_eval.seed_tts_eval', 'SeedTTSEval')
 }
 
 
