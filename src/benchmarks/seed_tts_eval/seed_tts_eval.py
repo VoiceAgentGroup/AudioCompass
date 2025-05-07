@@ -64,7 +64,6 @@ class SeedTTSEval(BaseBenchmark):
         for idx, data in enumerate(tqdm(self.dataset)):
             try:
                 response_audio, sample_rate = model.tts(data['infer_text'])
-                response_audio = torch.tensor(response_audio, dtype=torch.float32)
                 transcription = self.transcriptor.inference(response_audio)
                 results.append({
                     'idx': idx,
@@ -91,12 +90,13 @@ class SeedTTSEval(BaseBenchmark):
         for result in tqdm(results):
             raw_truth, raw_hypo, wer, subs, dele, inse = process_one_wer(self.split, result['transcription'], result['infer_text'])
             total_wer += wer
-            sim, model = verification(model_name='wavlm_large', wav1=result['tts_wav_path'], wav2=result['ref_wav_path'], checkpoint=self.wavlm_path, offline=self.offline)
-            total_sim += sim.cpu().item()
+            # sim, model = verification(model_name='wavlm_large', wav1=result['tts_wav_path'], wav2=result['ref_wav_path'], checkpoint=self.wavlm_path, offline=self.offline)
+            # total_sim += sim.cpu().item()
         avg_wer = total_wer / len(results)
-        avg_sim = total_sim / len(results)
+        # avg_sim = total_sim / len(results)
         
-        return {'wer': avg_wer, 'sim': avg_sim}
+        # return {'wer': avg_wer, 'sim': avg_sim}
+        return {'wer': avg_wer}
     
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
@@ -106,7 +106,7 @@ class SeedTTSEval(BaseBenchmark):
         os.makedirs(wav_dir, exist_ok=True)
         for result in results:
             wav_path = os.path.join(wav_dir, f"{model_name}-{self.split}-{result['idx']}.wav")
-            wav = result['tts_wav'] if result['tts_wav'].ndim == 2 else result['tts_wav'].unsqueeze(0)
+            wav = torch.tensor(result['tts_wav'], dtype=torch.float32) if result['tts_wav'].ndim == 2 else torch.tensor(result['tts_wav'], dtype=torch.float32).unsqueeze(0)
             torchaudio.save(wav_path, wav, result['sample_rate'])
             result['tts_wav_path'] = wav_path
             result.pop('tts_wav')
@@ -114,7 +114,7 @@ class SeedTTSEval(BaseBenchmark):
         model_name = model_name.split('/')[-1]
         output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}.json')
         with open(output_file, 'w') as f:
-            json.dump(results, f, indent=4)
+            json.dump(results, f, indent=4, ensure_ascii=False)
         logger.info(f"Generated results saved to {output_file}.")
         
     def run(self, model, output_dir):
