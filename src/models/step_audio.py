@@ -9,6 +9,9 @@ import os
 import tempfile
 import soundfile as sf
 
+import sys
+sys.path.append('third_party/Matcha-TTS')
+sys.path.append('src/models/src_step_audio')
 
 class StepAssistant(VoiceAssistant):
     def __init__(self, **kwargs):
@@ -38,7 +41,7 @@ class StepAssistant(VoiceAssistant):
             model_path, trust_remote_code=True
         )
         self.encoder = StepAudioTokenizer(tokenizer_path)
-        # self.decoder = StepAudioTTS(tts_path, self.encoder)
+        self.decoder = StepAudioTTS(tts_path, self.encoder)
 
         self.llm = AutoModelForCausalLM.from_pretrained(
             model_path,
@@ -129,6 +132,17 @@ class StepAssistant(VoiceAssistant):
                 elif content["type"] == "audio":
                     audio_tokens = self.encode_audio(content["audio"])
                     text_with_audio += f"<|BOT|>{role}\n{audio_tokens}<|EOT|>"
+            elif isinstance(content, list):
+                text_with_audio += f"<|BOT|>{role}"
+                for cont in content:
+                    if cont["type"] == "text":
+                        text_with_audio += f"\n{cont['text']}"
+                    elif cont["type"] == "audio":
+                        audio_tokens = self.encode_audio(cont["audio"])
+                        text_with_audio += f"\n{audio_tokens}"
+                    else:
+                        raise ValueError(f"Unsupported content type: {cont['type']}")
+                text_with_audio += "<|EOT|>"
             elif content is None:
                 text_with_audio += f"<|BOT|>{role}\n"
             else:

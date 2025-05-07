@@ -13,7 +13,8 @@ from .src_glm.flow_inference import AudioDecoder
 from .src_glm.audio_process import AudioStreamProcessor
 
 import sys
-sys.path.append('third_party/Matcha-TTS')
+sys.path.append('src/models/src_glm/third_party/Matcha-TTS')
+sys.path.append('src/models/src_glm')
 
 class GLMAssistant(VoiceAssistant):
     def __init__(self, **kwargs):
