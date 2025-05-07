@@ -89,7 +89,7 @@ class StepAssistant(VoiceAssistant):
         output_token_ids = outputs[:, token_ids.shape[-1]: -1].tolist()[0]
         output_text = self.llm_tokenizer.decode(output_token_ids)
         output_audio, sample_rate = self.decoder(output_text, "Tingting")
-        return output_audio, sample_rate
+        return output_audio[0].numpy(), sample_rate
     
     def generate_at2t(
         self,
@@ -174,7 +174,7 @@ class StepAssistant(VoiceAssistant):
     
     def tts(self, text):
         output_audio, sample_rate = self.decoder(text, "Tingting")
-        return output_audio, sample_rate
+        return output_audio[0].numpy(), sample_rate
 
     def tts_clone(self, text, prompt_audio_path, prompt_text):
         clone_speaker = {
