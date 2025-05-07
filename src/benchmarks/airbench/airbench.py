@@ -56,7 +56,7 @@ class AIRBench(BaseBenchmark):
                 logger.error(f"Error loading audio file {audio_path}: {e}")
                 continue
             audio = {
-                'array': waveform.squeeze(0).numpy(),
+                'array': waveform[0].numpy(),
                 'sampling_rate': sample_rate
             }
             item['audio'] = audio
@@ -95,6 +95,7 @@ class AIRBench(BaseBenchmark):
                 rec['response'] = output.strip()
                 logger.info(f"Generated response: {output}")
                 logger.info('====================================')
+                del rec['audio']
                 results.append(rec)
             except Exception as e:
                 logger.error(e)
