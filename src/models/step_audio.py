@@ -1,6 +1,9 @@
 from .base import VoiceAssistant
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+import sys
+sys.path.append('src/models/src_step_audio')
+sys.path.append('src/models/src_step_audio/cosyvoice')
 from src.models.src_step_audio.tokenizer import StepAudioTokenizer
 from src.models.src_step_audio.tts import StepAudioTTS
 from src.models.src_step_audio.utils import load_audio
@@ -9,9 +12,6 @@ import os
 import tempfile
 import soundfile as sf
 
-import sys
-sys.path.append('third_party/Matcha-TTS')
-sys.path.append('src/models/src_step_audio')
 
 class StepAssistant(VoiceAssistant):
     def __init__(self, **kwargs):
@@ -167,7 +167,7 @@ class StepAssistant(VoiceAssistant):
         text_with_audio = self.apply_chat_template(messages)
         token_ids = self.llm_tokenizer.encode(text_with_audio, return_tensors="pt")
         
-        output = self.llm.forward(token_ids, labels=token_ids)
+        output = self.llm.forward(token_ids, labels=token_ids, use_cache=True)
         loss = output.loss
         
         return loss.item()

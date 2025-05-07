@@ -119,11 +119,11 @@ class StepAudioTTS:
     def register_speakers(self):
         self.speakers_info = {}
 
-        with open("speakers/speakers_info.json", "r") as f:
+        with open("src/models/src_step_audio/speakers/speakers_info.json", "r") as f:
             speakers_info = json.load(f)
 
         for speaker_id, prompt_text in speakers_info.items():
-            prompt_wav_path = f"speakers/{speaker_id}_prompt.wav"
+            prompt_wav_path = f"src/models/src_step_audio/speakers/{speaker_id}_prompt.wav"
             prompt_code, prompt_token, prompt_token_len, speech_feat, speech_feat_len, speech_embedding = (
                 self.preprocess_prompt_wav(prompt_wav_path)
             )
