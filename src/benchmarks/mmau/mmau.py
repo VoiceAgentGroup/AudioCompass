@@ -14,7 +14,11 @@ class MMAU(BaseBenchmark):
         self.check_split(split)
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
-        logger.add(f'log/{self.name}-{self.split}.log', rotation='50MB')
+        
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        logger.add(f'log/{self.name}-{self.split}-{timestamp}.log', rotation='50MB')
+        
         self.dataset = self.load_data(**kwargs)
         
         
