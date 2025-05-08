@@ -18,7 +18,7 @@ class CommonVoice(BaseBenchmark):
         self.dataset = self.load_data(**kwargs)
         
     def check_split(self, split):
-        available_split = ['zh-CN',]
+        available_split = ['zh-CN', 'en']
         if split not in available_split:
             raise ValueError("Split should be one of " + available_split)
         
@@ -60,18 +60,19 @@ class CommonVoice(BaseBenchmark):
                 logger.error(e)
                 logger.error('====================================')
                 continue
+        return results
             
     def evaluate(self, results):
         logger.info("Evaluating results ...")
         total_er = 0
         if self.split == 'zh-CN':
             for result in tqdm(results):
-                cer = jiwer.cer(result['ref_text'], results['res_text'])
+                cer = jiwer.cer(result['ref_text'], result['res_text'])
                 total_er += cer
             return {'cer': total_er / len(results)}
         else:
             for result in tqdm(results):
-                wer = jiwer.wer(result['ref_text'], results['res_text'])
+                wer = jiwer.wer(result['ref_text'], result['res_text'])
                 total_er += wer
             return {'wer': total_er / len(results)}
         
@@ -80,7 +81,7 @@ class CommonVoice(BaseBenchmark):
         model_name = model_name.split('/')[-1]
         output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}.json')
         with open(output_file, 'w') as f:
-            json.dump(results, f, indent=4)
+            json.dump(results, f, indent=4, ensure_ascii=False)
         logger.info(f"Generated results saved to {output_file}.")
         
     def run(self, model, output_dir):
