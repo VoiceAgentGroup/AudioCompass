@@ -28,7 +28,7 @@ class CommonVoice(BaseBenchmark):
         df = pd.read_csv(meta_path, sep='\t')
         
         dataset = []
-        for i in range(len(df)):
+        for i in tqdm(range(len(df))):
             audio_path = os.path.join(self.data_dir, 'clips', df.iloc[0, 1])
             wav, sample_rate = torchaudio.load(audio_path)
             audio = {
