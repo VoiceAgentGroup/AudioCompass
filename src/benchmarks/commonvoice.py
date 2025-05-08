@@ -29,13 +29,13 @@ class CommonVoice(BaseBenchmark):
         
         dataset = []
         for i in tqdm(range(len(df))):
-            audio_path = os.path.join(self.data_dir, 'clips', df.iloc[0, 1])
+            audio_path = os.path.join(self.data_dir, 'clips', df.iloc[i, 1])
             wav, sample_rate = torchaudio.load(audio_path)
             audio = {
                 'array': wav.squeeze(0).numpy(),
                 'sampling_rate': sample_rate
             }
-            sentence = df.iloc[0, 3]
+            sentence = df.iloc[i, 3]
             dataset.append({
                 'audio': audio,
                 'ref_text': sentence
