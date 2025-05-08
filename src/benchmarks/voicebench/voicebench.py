@@ -10,10 +10,15 @@ from ..base import BaseBenchmark
 class VoiceBench(BaseBenchmark):
     def __init__(self, subset_name, split, data_dir='datas/voicebench', cache_dir='cache', **kwargs):
         self.name = 'voicebench'
+        assert subset_name in ['alpacaeval', 'commoneval', 'wildvoice', 'sd-qa', 'ifeval', 'advbench', 'openbookqa', 'mmsu', 'bbh']
         self.subset_name = subset_name
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
-        logger.add(f'log/{self.name}-{self.subset_name}-{self.split}.log', rotation='50MB')
+        
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        logger.add(f'log/{self.name}-{self.subset_name}-{self.split}-{timestamp}.log', rotation='50MB')
+        
         self.dataset = self.load_data()
 
     
@@ -53,14 +58,17 @@ class VoiceBench(BaseBenchmark):
     
     
     def evaluate(self, data):
+        logger.info("Evaluating results ...")
         dataset_evaluator_mapping = {
             'alpacaeval': 'open',
             'commoneval': 'open',
+            'wildvoice': 'open',
             'sd-qa': 'qa',
             'ifeval': 'ifeval',
             'advbench': 'harm',
             'openbookqa': 'mcq',
             'mmsu': 'mcq',
+            'bbh': 'bbh',
         }
         evaluated_results = _evaluate(data, dataset_evaluator_mapping[self.subset_name])
         logger.info("Evaluation completed.")
