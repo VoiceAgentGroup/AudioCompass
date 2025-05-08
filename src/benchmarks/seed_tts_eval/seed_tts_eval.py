@@ -61,7 +61,7 @@ class SeedTTSEval(BaseBenchmark):
         logger.info("Generating results ...")
         results = []
         
-        for idx, data in enumerate(tqdm(self.dataset)):
+        for idx, data in tqdm(enumerate(self.dataset)):
             try:
                 response_audio, sample_rate = model.tts(data['infer_text'])
                 transcription = self.transcriptor.inference(response_audio)
