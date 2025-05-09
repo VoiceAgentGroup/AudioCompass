@@ -1,4 +1,4 @@
-from datasets import load_dataset, Audio
+from datasets import load_dataset, Audio, concatenate_datasets
 from loguru import logger
 from tqdm import tqdm
 import json
@@ -29,7 +29,11 @@ class VoiceBench(BaseBenchmark):
         #     dataset = dataset[self.subset_name][self.split]
         # else:
         #     dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=self.data_dir)
-        dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=self.data_dir)
+        if self.subset_name == 'mmsu' and (self.split == None or self.split == 'test'):
+            splits = ['law', 'engineering', 'other', 'biology', 'business', 'economics', 'health', 'philosophy', 'psychology', 'history', 'chemistry', 'physics']
+            dataset = concatenate_datasets([load_dataset('hlt-lab/voicebench', self.subset_name, split=split, cache_dir=self.data_dir) for split in splits])
+        else:
+            dataset = load_dataset('hlt-lab/voicebench', self.subset_name, split=self.split, cache_dir=self.data_dir)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=16_000))
         return dataset
     
