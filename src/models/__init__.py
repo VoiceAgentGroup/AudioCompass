@@ -27,6 +27,8 @@ model_cls_mapping = {
     'qwen_omni_turbo': ('.qwen_omni_turbo', 'QwenOmniAssistant'),
     'speechgpt2': ('.speechgpt2', 'SpeechGPT2'),
     'localhost': ('.localhost', 'LocalAssistant'),
+    'checkpoint': ('.checkpoint', 'CKPT'),
+    'kimi': ('.kimi', 'KimiAssistant')
 }
 
 def load_model(model_name, **kwargs):
