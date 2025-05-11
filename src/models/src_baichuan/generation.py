@@ -29,16 +29,16 @@ from transformers.generation.utils import (
     GenerateDecoderOnlyOutput,
     GenerateNonBeamOutput,
     is_deepspeed_zero3_enabled,
-    is_torchdynamo_compiling,
     NEED_SETUP_CACHE_CLASSES_MAPPING,
     QUANT_BACKEND_CLASSES_MAPPING,
     is_hqq_available,
     QuantizedCacheConfig,
-    is_quanto_available,
+    is_optimum_quanto_available,
     DynamicCache,
     EncoderDecoderCache,
     logging
 )
+from torch.compiler import is_dynamo_compiling
 # from transformers.generation.stopping_criteria import validate_stopping_criteria
 
 @dataclass
@@ -132,7 +132,7 @@ class GenerationAudioTokens(GenerationMixin):
         self._prepare_special_tokens(generation_config, kwargs_has_attention_mask, device=device)
 
         # decoder-only models must use left-padding for batched generation.
-        if not self.config.is_encoder_decoder and not is_torchdynamo_compiling():
+        if not self.config.is_encoder_decoder and not is_dynamo_compiling():
             # If `input_ids` was given, check if the last id in any sequence is `pad_token_id`
             # Note: If using, `inputs_embeds` this check does not work, because we want to be more hands-off.
             if (
@@ -233,7 +233,7 @@ class GenerationAudioTokens(GenerationMixin):
                 )
                 cache_class = QUANT_BACKEND_CLASSES_MAPPING[cache_config.backend]
 
-                if cache_config.backend == "quanto" and not is_quanto_available():
+                if cache_config.backend == "quanto" and not is_optimum_quanto_available():
                     raise ImportError(
                         "You need to install `quanto` in order to use KV cache quantization with quanto backend. "
                         "Please install it via  with `pip install quanto`"

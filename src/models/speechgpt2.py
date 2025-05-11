@@ -36,7 +36,7 @@ class SpeechGPT2(VoiceAssistant):
             codec_config_path="./src/models/src_speechgpt2/Codec/config/sg2_codec_config.yaml"
         )
 
-    def process_input(self, audio_input, text_input, task, mode=None):
+    def process_input(self, audio_input, text_input, task, mode=None, max_new_tokens=2048):
         if audio_input is not None:
             buffer = io.BytesIO()
             sf.write(buffer, audio_input['array'], audio_input['sampling_rate'], format='WAV')
@@ -46,37 +46,37 @@ class SpeechGPT2(VoiceAssistant):
             input_data = text_input
 
         return self.model.forward(
-            task=task, input=input_data, text=text_input, mode=mode
+            task=task, input=input_data, text=text_input, mode=mode, max_new_tokens=max_new_tokens
         )
 
-    def generate_a2t(self, audio):
+    def generate_a2t(self, audio, max_new_tokens=2048):
         self.model.process_greeting()
-        response, _ = self.process_input(audio, None, task='thought', mode='s2t')
+        response, _ = self.process_input(audio, None, task='thought', mode='s2t', max_new_tokens=max_new_tokens)
         return response
     
-    def generate_t2t(self, text):
+    def generate_t2t(self, text, max_new_tokens=2048):
         self.model.process_greeting()
-        response, _ = self.process_input(None, text, task='thought', mode='t2t')
+        response, _ = self.process_input(None, text, task='thought', mode='t2t', max_new_tokens=max_new_tokens)
         return response
     
-    def generate_t2a(self, text):
+    def generate_t2a(self, text, max_new_tokens=2048):
         self.model.process_greeting()
-        _, (sample_rate, wav) = self.process_input(None, text, task='thought', mode='t2s')
+        _, (sample_rate, wav) = self.process_input(None, text, task='thought', mode='t2s', max_new_tokens=max_new_tokens)
         return wav, sample_rate
     
-    def generate_a2a(self, audio):
+    def generate_a2a(self, audio, max_new_tokens=2048):
         self.model.process_greeting()
-        _, (sample_rate, wav) = self.process_input(audio, None, task='thought', mode='s2s')
+        _, (sample_rate, wav) = self.process_input(audio, None, task='thought', mode='s2s', max_new_tokens=max_new_tokens)
         return wav, sample_rate
     
-    def generate_at2t(self, audio, text):
+    def generate_at2t(self, audio, text, max_new_tokens=2048):
         self.model.process_greeting()
-        response, _ = self.process_input(audio, text, task='thought', mode='st2t')
+        response, _ = self.process_input(audio, text, task='thought', mode='st2t', max_new_tokens=max_new_tokens)
         return response
     
-    def generate_at2a(self, audio, text):
+    def generate_at2a(self, audio, text, max_new_tokens=2048):
         self.model.process_greeting()
-        _, (sample_rate, wav) = self.process_input(audio, text, task='thought', mode='st2s')
+        _, (sample_rate, wav) = self.process_input(audio, text, task='thought', mode='st2s', max_new_tokens=max_new_tokens)
         return wav, sample_rate
     
     def tts(self, text):

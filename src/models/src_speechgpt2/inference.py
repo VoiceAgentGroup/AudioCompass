@@ -334,12 +334,12 @@ class Inference:
                     system_prompt = InputSegment(
                         f"You are an helpful assistant. You should listen to the audio and answer the user's text questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
                     )
-                else:  # st2, s2s
+                else:  # s2t, s2s
                     system_prompt = InputSegment(
                         f"You are an helpful assistant. You should answer the user's speech questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
                     )
             elif mode[0] == 't':  # t2t, t2s
-                user_prompt = InputSegment(transcript)
+                user_prompt = InputSegment(text)
                 system_prompt = InputSegment(
                     f"You are an helpful assistant. You should answer the user's text questions in {'text' if mode[-1] == 't' else 'speech'}.\n\n\n",
                 )
