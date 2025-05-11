@@ -1,6 +1,5 @@
 import os
 
-import tqdm
 import torch
 from loguru import logger
 from huggingface_hub import cached_assets_path
@@ -108,9 +107,7 @@ class KimiAudio(object):
         valid_text_length = 0
         valid_audio_length = 0
 
-        for i in tqdm.tqdm(
-            range(max_new_tokens), desc="Generating tokens", disable=False
-        ):
+        for i in range(max_new_tokens):
             audio_logits, text_logits, past_key_values = self.alm.forward(
                 input_ids=decoder_input_audio_ids,
                 text_input_ids=decoder_input_text_ids,
