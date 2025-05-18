@@ -43,7 +43,7 @@ class MMAR(BaseBenchmark):
         logger.info("Generating results ...")
         
         results = []
-        output_keys = ['question', 'choices', 'answer', 'task', 'sub-category', 'difficulty']
+        output_keys = ['question', 'choices', 'answer', 'category', 'sub-category', 'modality']
         
         for item in tqdm(self.dataset):
             tmp = {k: v for k, v in item.items() if k in output_keys}
