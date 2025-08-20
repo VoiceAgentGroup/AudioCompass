@@ -35,8 +35,8 @@ class Qwen2Assistant(VoiceAssistant):
         return response
 
     def generate_t2t(
-            self,
-            text,
+        self,
+        text,
     ):
         content = [{"type": "text", "text": text}]
         conversation = [
