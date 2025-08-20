@@ -6,6 +6,9 @@ from src.utils.ai_judge import generate_text_chat
 from argparse import ArgumentParser
 import os
 import httpx
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 meta_prompt_open = """
