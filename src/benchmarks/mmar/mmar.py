@@ -47,7 +47,7 @@ class MMAR(BaseBenchmark):
         
         for item in tqdm(self.dataset):
             tmp = {k: v for k, v in item.items() if k in output_keys}
-            input_text = item['question'] + ' ' + item['choices']
+            input_text = item['question'] + ' ' + str(item['choices'])
             input_audio = item['audio']
             logger.info(input_text)
             try:
