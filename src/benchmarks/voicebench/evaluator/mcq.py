@@ -1,6 +1,8 @@
 from .base import Evaluator
 import numpy as np
 import random
+import json
+from argparse import ArgumentParser
 
 class MCQEvaluator(Evaluator):
     def extract_answer(self, response):
@@ -67,6 +69,8 @@ class MCQEvaluator(Evaluator):
             'would be ([CHOICE])',
             'would be option ([CHOICE])',
             'is [CHOICE],',
+            "is '[CHOICE]'",
+            "is actually [CHOICE]",
             'is typically [CHOICE],',
             'is typically [CHOICE].',
             "i'd say [CHOICE].",
@@ -74,6 +78,7 @@ class MCQEvaluator(Evaluator):
             "option [CHOICE]:",
             "option [CHOICE],",
             "the answer is:\n**[CHOICE]",
+            "would be '[CHOICE]",
             "is [CHOICE]:",
             "is [CHOICE].",
             "is [CHOICE],",
@@ -81,7 +86,11 @@ class MCQEvaluator(Evaluator):
             "is ([CHOICE])",
             "is:\n**[CHOICE])",
             "is likely **[CHOICE]:",
+            "is actually '[CHOICE]",
             "is the **[CHOICE])",
+            "'[CHOICE]' would be",
+            "[CHOICE] is the",
+            "[CHOICE] makes sense",
             ":\n[CHOICE].",
             ":\n[CHOICE])",
             ":\n[CHOICE],",
@@ -147,6 +156,7 @@ class MCQEvaluator(Evaluator):
             "be **[CHOICE]**",
             "be: \n\n[CHOICE])",
             "is:\n\\[ \\boxed{[CHOICE]}",
+            "is '[CHOICE]",
             "is:  \n**[CHOICE]:",
             "is: \\( \\text{[CHOICE])",
             "is likely: **[CHOICE],",
@@ -223,3 +233,14 @@ class MCQEvaluator(Evaluator):
             'acc': accuracy * 100, 'fail': 100 * cnt / len(preds)
         }
 
+if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument('--src-file', type=str, default="output/repulsar_sft-voicebench-openbookqa-test.jsonl")
+    args = parser.parse_args()
+    data = []
+    with open(args.src_file, 'r') as f:
+        for line in f:
+            json_obj = json.loads(line.strip())  # Convert JSON string to dictionary
+            data.append(json_obj)
+    results = MCQEvaluator().evaluate(data)
+    print(results)
