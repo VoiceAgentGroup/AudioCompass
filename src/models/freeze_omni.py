@@ -54,20 +54,20 @@ class audioEncoderProcessor:
 class FreezeOmniAssistant(VoiceAssistant):
     def __init__(self, **kwargs):
         cache_dir = kwargs.get('cache_dir', './cache')
-        if not os.path.exists(os.path.join(cache_dir, "Freeze-Omni")):
+        if not os.path.exists(os.path.join(cache_dir, "models/Freeze-Omni")):
             snapshot_download(
                 repo_id="VITA-MLLM/Freeze-Omni",
-                local_dir=os.path.join(cache_dir, "Freeze-Omni"),
+                local_dir=os.path.join(cache_dir, "models/Freeze-Omni"),
             )
-        if not os.path.exists(os.path.join(cache_dir, "Qwen2-7B-Instruct")):
+        if not os.path.exists(os.path.join(cache_dir, "models/Qwen2-7B-Instruct")):
             snapshot_download(
                 repo_id='Qwen/Qwen2-7B-Instruct',
-                local_dir=os.path.join(cache_dir, "Qwen2-7B-Instruct"),
+                local_dir=os.path.join(cache_dir, "models/Qwen2-7B-Instruct"),
             )
 
         configs = argparse.Namespace(
-            model_path=os.path.join(cache_dir, "Freeze-Omni/checkpoints"),
-            llm_path=os.path.join(cache_dir, "Qwen2-7B-Instruct"),
+            model_path=os.path.join(cache_dir, "models/Freeze-Omni/checkpoints"),
+            llm_path=os.path.join(cache_dir, "models/Qwen2-7B-Instruct"),
             top_k=20,
             top_p=0.8,
             temperature=0.8,
