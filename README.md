@@ -103,7 +103,7 @@ Example cache directory structure for models:
 
 To add a new model to AudioCompass, follow these steps:
 
-1. Create a new Python file in the `src/models` directory, e.g., `newmodel.py`
+1. Create a new Python file in the `src/models` directory, e.g., `src/models/newmodel.py`
 2. Implement a class that inherits from the `VoiceAssistant` base class:
 
 ```python
@@ -136,7 +136,7 @@ from .newmodel import NewModelAssistant
 # Add to the model_cls_mapping dictionary
 model_cls_mapping = {
     # existing models...
-    'new_model': NewModelAssistant,
+    'new_model_name': ('.newmodel', 'NewModelAssistant'),
 }
 ```
 
@@ -144,7 +144,7 @@ model_cls_mapping = {
 
 To add a new benchmark to AudioCompass, follow these steps:
 
-1. Create a new directory in `src/benchmarks` for your benchmark, e.g., `src/benchmarks/newbenchmark/`
+1. Create a new Python file in the `src/benchmarks` directory, e.g., `src/benchmarks/newbenchmark.py`
 2. Implement a benchmark class that inherits from the `BaseBenchmark` class:
 
 ```python
@@ -188,6 +188,6 @@ from .newbenchmark.newbenchmark import NewBenchmark
 
 benchmark_mapping = {
     # existing benchmarks...
-    'newbenchmark': NewBenchmark,
+    'new_benchmark_name': ('.newbenchmark', 'NewBenchmark'),
 }
 ```
