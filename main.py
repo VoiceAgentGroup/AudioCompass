@@ -7,10 +7,11 @@ from src.benchmarks import load_benchmark, list_benchmarks
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('--model-name', type=str, default='checkpoint', choices=list_models())
-    parser.add_argument('--benchmark', type=str, default='commonvoice', choices=list_benchmarks())
-    parser.add_argument('--subset', type=str, default='alpacaeval')
-    parser.add_argument('--split', type=str, default='zh-CN')
+    parser.add_argument('--model-name', type=str, default='repulsar_sft', choices=list_models())
+    parser.add_argument('--ckpt', type=str, default="/inspire/hdd/project/embodied-multimodality/public/zxu/megatron_workspace/eval/ckpts/RepulsarSFT-v0.3.2-1/04000")
+    parser.add_argument('--benchmark', type=str, default='mmlu', choices=list_benchmarks())
+    parser.add_argument('--subset', type=str, default='mmsu')
+    parser.add_argument('--split', type=str, default='test')
     parser.add_argument('--timbre', type=str, default='echo')
     parser.add_argument('--output-dir', type=str, default='output')
     parser.add_argument('--cache-dir', type=str, default='cache')
@@ -22,11 +23,11 @@ def main():
 
     # load benchmark
     logger.info("Loading benchmark ...")
-    benchmark = load_benchmark(benchmark_name=args.benchmark, subset_name=args.subset, split=args.split, timbre=args.timbre, cache_dir=args.cache_dir, offline=args.offline)
+    benchmark = load_benchmark(**vars(args))
     
     # load model
-    logger.info("Loading model ...")
-    model = load_model(model_name=args.model_name, cache_dir=args.cache_dir, offline=args.offline)
+    logger.info(f"Loading model {args.model_name} ...")
+    model = load_model(**vars(args))
 
     # generate results
     result = benchmark.run(model, args.output_dir)
