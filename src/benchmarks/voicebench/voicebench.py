@@ -8,10 +8,10 @@ from ..base import BaseBenchmark
 
 
 class VoiceBench(BaseBenchmark):
-    def __init__(self, subset_name, split, data_dir='datas/voicebench', cache_dir='cache', **kwargs):
+    def __init__(self, subset, split, data_dir='datas/voicebench', cache_dir='cache', **kwargs):
         self.name = 'voicebench'
-        assert subset_name in ['alpacaeval', 'commoneval', 'wildvoice', 'sd-qa', 'ifeval', 'advbench', 'openbookqa', 'mmsu', 'bbh']
-        self.subset_name = subset_name
+        assert subset in ['alpacaeval', 'commoneval', 'wildvoice', 'sd-qa', 'ifeval', 'advbench', 'openbookqa', 'mmsu', 'bbh']
+        self.subset_name = subset
         self.split = split
         self.data_dir = os.path.join(cache_dir, data_dir)
         
@@ -46,7 +46,8 @@ class VoiceBench(BaseBenchmark):
             tmp = {k: v for k, v in item.items() if k != 'audio'}
             logger.info(item['prompt'])
             try:
-                response = model.generate_a2t(item['audio'])
+                # response = model.generate_a2t(item['audio'])
+                response = model.generate_t2t(item['prompt'])
                 logger.info(response)
                 logger.info('====================================')
                 tmp['response'] = response
