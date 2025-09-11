@@ -51,7 +51,7 @@ class MMLU(BaseBenchmark):
         meta_path = os.path.join(self.data_dir, "meta.json")
         with open(meta_path, 'r') as f:
             meta_data = json.load(f)
-        for subject, subject_item in tqdm(list(meta_data.items())[:2], desc="Loading subjects"):
+        for subject, subject_item in tqdm(meta_data.items(), desc="Loading subjects"):
             data_item = {'subject': subject, 'qa': []}
             
             if 'prompt' not in subject_item:
@@ -82,19 +82,27 @@ class MMLU(BaseBenchmark):
             tmp = {'subject': subject_item['subject'], 'response': []}
             logger.info(f"Processing subject: {subject_item['subject']}")
             qa = subject_item['qa']
-            try:
-                for idx, qa_item in enumerate(qa):
-                    audio_group = qa_item['audio_group']
-                    right_answer = qa_item['right_answer']
-                    ppl = [model.get_ppl(audio, input_type='audio') for audio in audio_group]
-                    logger.info(f"Generated ppl for audio group {idx}: {ppl}")
-                    tmp['response'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
-                logger.info('====================================')
-                results.append(tmp)
-            except Exception as e:
-                logger.error(e)
-                logger.error('====================================')
-                continue
+        #     try:
+        #         for idx, qa_item in enumerate(qa):
+        #             audio_group = qa_item['audio_group']
+        #             right_answer = qa_item['right_answer']
+        #             ppl = [model.get_ppl(audio, input_type='audio') for audio in audio_group]
+        #             logger.info(f"Generated ppl for audio group {idx}: {ppl}")
+        #             tmp['response'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
+        #         logger.info('====================================')
+        #         results.append(tmp)
+        #     except Exception as e:
+        #         logger.error(e)
+        #         logger.error('====================================')
+        #         continue
+            for idx, qa_item in enumerate(qa):
+                audio_group = qa_item['audio_group']
+                right_answer = qa_item['right_answer']
+                ppl = [model.get_ppl(audio, input_type='audio') for audio in audio_group]
+                logger.info(f"Generated ppl for audio group {idx}: {ppl}")
+                tmp['response'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
+            logger.info('====================================')
+            results.append(tmp)
         return results
 
     def evaluate(self, results):
