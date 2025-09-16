@@ -9,7 +9,7 @@ import torch
 
 class MMLU(BaseBenchmark):
     def __init__(self, data_dir="datas/mmlu", cache_dir='cache', **kwargs):
-        self.name = 'mmlu'
+        self.name = 'mmlu_ppl'
         self.data_dir = os.path.join(cache_dir, data_dir)
         import datetime
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -82,27 +82,19 @@ class MMLU(BaseBenchmark):
             tmp = {'subject': subject_item['subject'], 'response': []}
             logger.info(f"Processing subject: {subject_item['subject']}")
             qa = subject_item['qa']
-        #     try:
-        #         for idx, qa_item in enumerate(qa):
-        #             audio_group = qa_item['audio_group']
-        #             right_answer = qa_item['right_answer']
-        #             ppl = [model.get_ppl(audio, input_type='audio') for audio in audio_group]
-        #             logger.info(f"Generated ppl for audio group {idx}: {ppl}")
-        #             tmp['response'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
-        #         logger.info('====================================')
-        #         results.append(tmp)
-        #     except Exception as e:
-        #         logger.error(e)
-        #         logger.error('====================================')
-        #         continue
-            for idx, qa_item in enumerate(qa):
-                audio_group = qa_item['audio_group']
-                right_answer = qa_item['right_answer']
-                ppl = [model.get_ppl(audio, input_type='audio') for audio in audio_group]
-                logger.info(f"Generated ppl for audio group {idx}: {ppl}")
-                tmp['response'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
-            logger.info('====================================')
-            results.append(tmp)
+            try:
+                for idx, qa_item in enumerate(qa):
+                    audio_group = qa_item['audio_group']
+                    right_answer = qa_item['right_answer']
+                    ppl = [model.get_ppl(audio, input_type='audio') for audio in audio_group]
+                    logger.info(f"Generated ppl for audio group {idx}: {ppl}")
+                    tmp['result'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
+                logger.info('====================================')
+                results.append(tmp)
+            except Exception as e:
+                logger.error(e)
+                logger.error('====================================')
+                continue
         return results
 
     def evaluate(self, results):
@@ -112,7 +104,7 @@ class MMLU(BaseBenchmark):
         total = 0
         for subject_item in tqdm(results):
             logger.info("Subject: " + subject_item['subject'])
-            subject_results = subject_item['response']
+            subject_results = subject_item['result']
             for result in subject_results:
                 answer = choice_strs[np.argmax(result['ppl'])]
                 correct += (answer == result['right_answer'])

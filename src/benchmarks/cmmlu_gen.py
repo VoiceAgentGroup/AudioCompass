@@ -2,38 +2,21 @@ from loguru import logger
 from tqdm import tqdm
 import json
 import os
-import numpy as np
 from .base import BaseBenchmark
+from src.transcriptors import WhisperLargeV3
+from src.utils.extractor import Extractor
 import torchaudio
 import torch
 
 class CMMLU(BaseBenchmark):
     def __init__(self, data_dir="datas/cmmlu", cache_dir='cache', **kwargs):
-        self.name = 'cmmlu'
+        self.name = 'cmmlu_gen'
         self.data_dir = os.path.join(cache_dir, data_dir)
         import datetime
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         logger.add(f'log/{self.name}-{timestamp}.log', rotation='50MB')
+        self.transcriptor = WhisperLargeV3(**kwargs)
         self.dataset = self.load_data()
-
-    def concat_audio(self, question_path, choice_path) -> list:
-        question_path = os.path.join(self.data_dir, question_path)
-        if not os.path.exists(question_path):
-            raise ValueError(f"Audio file {question_path} not found")
-        question_audio, sample_rate = torchaudio.load(question_path)
-        if question_audio.shape[0] > 1:
-            question_audio = question_audio.mean(dim=0, keepdim=True)
-            
-        choice_path = os.path.join(self.data_dir, choice_path)
-        if not os.path.exists(choice_path):
-            raise ValueError(f"Audio file {choice_path} not found")
-        choice_audio, sample_rate = torchaudio.load(choice_path)
-        if choice_audio.shape[0] > 1:
-            choice_audio = choice_audio.mean(dim=0, keepdim=True)
-
-        complete_audio = torch.cat([question_audio, choice_audio], dim=-1)
-        
-        return complete_audio, sample_rate
     
     def concat_with_silence(self, audios, sample_rate):
         silence = torch.zeros((audios[0].shape[0], int(0.5 * sample_rate)))  # 0.5 second silence
@@ -54,6 +37,8 @@ class CMMLU(BaseBenchmark):
         for subject, subject_item in tqdm(meta_data.items(), desc="Loading subjects"):
             data_item = {'subject': subject, 'qa': []}
             
+            if 'prompt' not in subject_item:
+                continue
             prompt_path = subject_item['prompt']['path']
             prompt_audio, _ = torchaudio.load(os.path.join(self.data_dir, prompt_path))
             if prompt_audio.shape[0] > 1:
@@ -61,15 +46,15 @@ class CMMLU(BaseBenchmark):
                 
             # prepare test audios
             for test_qa in subject_item['qa']:
-                audio_group = []
                 question_path = test_qa['question']['path']
-                for choice in test_qa['choices']:
-                    choice_path = choice['path']
-                    test_audio, sample_rate = self.concat_audio(question_path, choice_path)
-                    audio = self.concat_with_silence([prompt_audio, test_audio], sample_rate)
-                    audio_group.append(audio)
+                question_audio, sample_rate = torchaudio.load(os.path.join(self.data_dir, question_path))
+                audio = self.concat_with_silence([prompt_audio, question_audio], sample_rate)
                 right_answer = test_qa['right_answer']
-                data_item['qa'].append({'audio_group': audio_group, 'right_answer': right_answer})
+                
+                question_text = test_qa['question']['text']
+                choice_text = ' '.join([t['text'] for t in test_qa['choices']])
+                text = f'{question_text} {choice_text}'
+                data_item['qa'].append({'question': text, 'audio': audio, 'right_answer': right_answer})
             dataset.append(data_item)
         return dataset
 
@@ -77,16 +62,18 @@ class CMMLU(BaseBenchmark):
         logger.info("Generating results ...")
         results = []
         for subject_item in tqdm(self.dataset, total=len(self.dataset)):
-            tmp = {'subject': subject_item['subject'], 'response': []}
+            tmp = {'subject': subject_item['subject'], 'result': []}
             logger.info(f"Processing subject: {subject_item['subject']}")
             qa = subject_item['qa']
             try:
                 for idx, qa_item in enumerate(qa):
-                    audio_group = qa_item['audio_group']
+                    logger.info(f"Question: {qa_item['question']}")
+                    audio = qa_item['audio']
                     right_answer = qa_item['right_answer']
-                    ppl = [model.get_ppl(audio, input_type='audio') for audio in audio_group]
-                    logger.info(f"Generated ppl for audio group {idx}: {ppl}")
-                    tmp['response'].append({'idx': idx, 'ppl': ppl, 'right_answer': right_answer})
+                    response_audio, sample_rate = model.generate_a2a(audio)
+                    transcription = self.transcriptor.inference(response_audio, generate_kwargs={"language": "english"})
+                    logger.info(f"Response: {transcription}")
+                    tmp['result'].append({'response': transcription, 'right_answer': right_answer})
                 logger.info('====================================')
                 results.append(tmp)
             except Exception as e:
@@ -97,15 +84,15 @@ class CMMLU(BaseBenchmark):
 
     def evaluate(self, results):
         logger.info("Evaluating results ...")
-        choice_strs = ['A', 'B', 'C', 'D']
+        extractor = Extractor()
         correct = 0
         total = 0
         for subject_item in tqdm(results):
             logger.info("Subject: " + subject_item['subject'])
-            subject_results = subject_item['response']
+            subject_results = subject_item['result']
             for result in subject_results:
-                answer = choice_strs[np.argmax(result['ppl'])]
-                correct += (answer == result['right_answer'])
+                answer = extractor.rule_extract(result['response'])
+                correct += (answer.lower() == result['right_answer'].lower())
                 logger.info(f"idx: {result['idx']} answer: {answer} right_answer: {result['right_answer']}")
                 total += 1
         acc = correct / total
