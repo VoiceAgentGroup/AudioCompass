@@ -7,7 +7,7 @@ from loguru import logger
 import json
 from .base import BaseBenchmark
 from src.transcriptors import WhisperLargeV3
-from src.utils.rule_extractor import extract_answer
+from src.utils.extractor import Extractor
 
 
 class VoxEval(BaseBenchmark):
@@ -32,7 +32,9 @@ class VoxEval(BaseBenchmark):
         self.transcriptor = WhisperLargeV3(**kwargs)
         
         self.dataset = self.load_data(**kwargs)
-        logger.add(f'log/{self.name}-{self.timbre}.log', rotation='50MB')
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        logger.add(f'log/{self.name}-{self.timbre}-{timestamp}.log', rotation='50MB')
         
     def check_timbre(self, timbre):
         available_timbre = ['alloy', 'echo', 'fable', 'nova', 'onyx', 'shimmer']
@@ -171,7 +173,7 @@ class VoxEval(BaseBenchmark):
                         'subject': subject,
                         'question_id': i,
                         'question': df.iloc[i, 0],
-                        'answer': df.iloc[i, 5],
+                        'right_answer': df.iloc[i, 5],
                         'audio': input_audio
                     })
                     
@@ -198,10 +200,7 @@ class VoxEval(BaseBenchmark):
                 
                 result_item = {k: v for k, v in item.items() if k != 'audio'}
                 result_item['idx'] = idx
-                result_item['response_audio'] = response_audio
-                result_item['sample_rate'] = sample_rate
                 result_item['response'] = transcription
-                results.append(result_item)
                 
                 logger.info(f"Response: {transcription}")
                 logger.info('====================================')
@@ -226,6 +225,8 @@ class VoxEval(BaseBenchmark):
             logger.warning("No data to evaluate")
             return results
         
+        extractor = Extractor()
+        
         # Group results by subject
         subject_results = {}
         for item in data:
@@ -242,12 +243,12 @@ class VoxEval(BaseBenchmark):
             correct = 0
             for item in items:
                 # Extract the answer from the response
-                response = item['response'].lower()
-                answer = item['answer'].lower()
-                answer = extract_answer(answer)
+                response = item['response']
+                right_answer = item['right_answer'].lower()
+                answer = extractor.llm_extract(model='gpt-5', response=response).lower()
                 
                 # Simple exact match for now (can be improved later)
-                if answer == response:
+                if answer == right_answer:
                     correct += 1
             
             accuracy = correct / len(items) if items else 0
@@ -273,19 +274,6 @@ class VoxEval(BaseBenchmark):
     def save_generated_results(self, results, output_dir, model_name):
         logger.info(f"Saving VoxEval results...")
         os.makedirs(output_dir, exist_ok=True)
-        output_dir = os.path.join(output_dir, self.name)
-        wav_dir = os.path.join(output_dir, 'wavs')
-        os.makedirs(output_dir, exist_ok=True)
-        os.makedirs(wav_dir, exist_ok=True)
-        
-        for result in results:
-            wav_path = os.path.join(wav_dir, f"{model_name}-{self.timbre}-{result['idx']}.wav")
-            wav = result['response_audio'] if result['response_audio'].ndim == 2 else result['response_audio'].unsqueeze(0)
-            torchaudio.save(wav_path, wav, result['sample_rate'])
-            result['response_audio_path'] = wav_path
-            result.pop('response_audio')
-            result.pop('sample_rate')
-            
         model_name = model_name.split('/')[-1]
         results_file = os.path.join(output_dir, f"{model_name}-{self.name}-{self.timbre}.json")
         with open(results_file, 'w') as f:
