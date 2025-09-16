@@ -2,32 +2,36 @@ benchmark_mapping = {
     'voicebench': ('.voicebench.voicebench', 'VoiceBench'),
     'mmau': ('.mmau.mmau', 'MMAU'),
     'openaudiobench': ('.openaudiobench.openaudiobench', 'OpenAudioBench'),
-    'cmmlu': ('.cmmlu', 'CMMLU'),
-    'mmlu': ('.mmlu', 'MMLU'),
+    'cmmlu_gen': ('.cmmlu_gen', 'CMMLU'),
+    'cmmlu_ppl': ('.cmmlu_ppl', 'CMMLU'),
+    'mmlu_ppl': ('.mmlu_ppl', 'MMLU'),
+    'mmlu_gen': ('.mmlu_gen', 'MMLU'),
     'zh-storycloze': ('.zh_storycloze', 'zhStoryCloze'),
     'voxeval': ('.voxeval', 'VoxEval'),
     'storycloze': ('.storycloze', 'StoryCloze'),
+    'storycloze_test': ('.storycloze_test', 'StoryCloze'),
     'airbench': ('.airbench.airbench', 'AIRBench'),
     'seedttseval': ('.seed_tts_eval.seed_tts_eval', 'SeedTTSEval'),
     'commonvoice': ('.commonvoice', 'CommonVoice'),
     'mmar': ('.mmar.mmar', 'MMAR'),
+    'fullduplexbench': ('.fullduplexbench','FullDuplexBench'),
+    # pure text benchmark as follows
+    '':('.',''),
 }
 
 
-def load_benchmark(benchmark_name, **kwargs):
+def load_benchmark(benchmark, **kwargs):
     """
     Load a dataset based on the provided benchmark name, subset name, and split.
     
     Args:
-        benchmark_name (str): The name of the benchmark to load.
-        subset_name (str): The name of the subset within the benchmark.
-        split (str): The split of the benchmark to load (e.g., 'train', 'test').
+        benchmark (str): The name of the benchmark to load.
     """
-    if benchmark_name not in benchmark_mapping:
-        raise ValueError(f"Benchmark {benchmark_name} is not supported.")
+    if benchmark not in benchmark_mapping:
+        raise ValueError(f"Benchmark {benchmark} is not supported.")
     
     import importlib
-    module_path, class_name = benchmark_mapping[benchmark_name]
+    module_path, class_name = benchmark_mapping[benchmark]
     module = importlib.import_module(module_path, package="src.benchmarks")
     dataset_class = getattr(module, class_name)
     
