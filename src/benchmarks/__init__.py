@@ -15,6 +15,7 @@ benchmark_mapping = {
     'commonvoice': ('.commonvoice', 'CommonVoice'),
     'mmar': ('.mmar.mmar', 'MMAR'),
     'fullduplexbench': ('.fullduplexbench','FullDuplexBench'),
+    'spokenqa': ('.spokenqa.spokenqa', 'SpokenQA'),
     # pure text benchmark as follows
     '':('.',''),
 }
