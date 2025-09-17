@@ -3,7 +3,7 @@ import traceback
 import multiprocessing
 import numpy as np
 from tqdm import tqdm
-from src.utils.ai_judge import OPENAI_Judge
+from src.utils.client import AIClient
 from .config import judge_model
 
 class LlamaQuestionsEvaluator:
@@ -59,7 +59,7 @@ The answer is incorrect and does not match the standard answer, the score is [In
         for data in datas:
             messages.append(self.build_eval_messages(data))
         
-        judge = OPENAI_Judge()
+        judge = AIClient()
         with multiprocessing.Pool(4) as pool:
             judged_data = list(tqdm(pool.imap(judge.generate, judge_model, messages), total=len(messages)))
         correct_count = 0

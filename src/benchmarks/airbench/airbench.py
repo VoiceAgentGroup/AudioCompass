@@ -5,7 +5,7 @@ from loguru import logger
 import pandas as pd
 import torchaudio
 from ..base import BaseBenchmark
-from src.utils.ai_judge import OPENAI_Judge
+from src.utils.client import AIClient
 
 class AIRBench(BaseBenchmark):
     """
@@ -112,7 +112,7 @@ class AIRBench(BaseBenchmark):
 
         if self.split == 'chat':
             # Use AI judge for scoring chat-style
-            judge = OPENAI_Judge()
+            judge = AIClient()
             total_score = 0
             total_count = 0
             task_scores = {}

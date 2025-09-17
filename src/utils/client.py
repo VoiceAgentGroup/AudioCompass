@@ -18,7 +18,7 @@ def generate_text_chat(client, *args, **kwargs):
             time.sleep(30)
     return None
 
-class OPENAI_Judge:
+class AIClient:
     def __init__(self):
         self.client = OpenAI(
             api_key=os.getenv('OPENAI_API_KEY'),
@@ -28,9 +28,7 @@ class OPENAI_Judge:
     def generate(self, model, prompt):
         response = generate_text_chat(client=self.client,
             model=model,
-            messages=[{"role": "system",
-                        "content": "You are a helpful assistant who tries to help answer the user's question."},
-                        {"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": prompt}],
             max_tokens=1024,
             frequency_penalty=0,
             presence_penalty=0)

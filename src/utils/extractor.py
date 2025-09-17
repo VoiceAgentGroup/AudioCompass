@@ -1,14 +1,8 @@
-import os
-import numpy as np
-import random
-from openai import OpenAI
+from .client import AIClient
 
 class Extractor:
     def __init__(self):
-        self.client = OpenAI(
-            api_key=os.getenv('OPENAI_API_KEY'),
-            base_url=os.getenv('OPENAI_URL'),
-        )
+        self.client = AIClient()
 
     def rule_extract(self, response):
         response = response.lower()
@@ -197,6 +191,7 @@ class Extractor:
             "{[CHOICE]}",
             "\n\n**[CHOICE]",
             "would be:\n\n[CHOICE]",
+            "choose option [CHOICE]",
         ]:
             for choice in ['a', 'b', 'c', 'd']:
                 if template.replace('[CHOICE]', choice) in response:
@@ -204,7 +199,7 @@ class Extractor:
         for choice in ['a', 'b', 'c', 'd']:
             if response == choice:
                 return choice.upper()
-            for punc in ['.', ',', ':', ')']:
+            for punc in ['.', ',', ':', ')', ' ']:
                 if response.startswith(choice+punc):
                     return choice.upper()
 
@@ -223,14 +218,5 @@ class Extractor:
         instruction_prompt = """# Instruction
 Above is the answer provided by an AI model for a Multiple Choice Question with four answer choices (A, B, C, or D). Based on the above text, extract the final answer from it. If you can find the answer from the above text, only output the answer choice. Do not include anything else in your output. For example, a possible output is "C". If you cannot find the answer, only output "None!"."""
         content = response + "\n\n" + instruction_prompt
-        chat_completion = self.client.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": content,
-                }
-            ],
-            model=model,
-        )
-        extracted_answer = chat_completion.choices[0].message.content
+        extracted_answer = AIClient.generate(model, content)
         return extracted_answer
