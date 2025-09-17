@@ -5,6 +5,7 @@ import pandas as pd
 from tqdm import tqdm
 from loguru import logger
 import json
+import datetime
 from .base import BaseBenchmark
 from src.transcriptors import WhisperLargeV3
 from src.utils.extractor import Extractor
@@ -32,7 +33,6 @@ class VoxEval(BaseBenchmark):
         self.transcriptor = WhisperLargeV3(**kwargs)
         
         self.dataset = self.load_data(**kwargs)
-        import datetime
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         logger.add(f'log/{self.name}-{self.timbre}-{timestamp}.log', rotation='50MB')
         
@@ -275,7 +275,8 @@ class VoxEval(BaseBenchmark):
         logger.info(f"Saving VoxEval results...")
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
-        results_file = os.path.join(output_dir, f"{model_name}-{self.name}-{self.timbre}.json")
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        results_file = os.path.join(output_dir, f"{model_name}-{self.name}-{self.timbre}-{timestamp}.json")
         with open(results_file, 'w') as f:
             json.dump(results, f, indent=4)
         
