@@ -7,14 +7,14 @@ from src.transcriptors import WhisperLargeV3
 from src.utils.extractor import Extractor
 import torchaudio
 import torch
+import datetime
 
 class CMMLU(BaseBenchmark):
     def __init__(self, data_dir="datas/cmmlu", cache_dir='cache', **kwargs):
         self.name = 'cmmlu_gen'
         self.data_dir = os.path.join(cache_dir, data_dir)
-        import datetime
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        logger.add(f'log/{self.name}-{timestamp}.log', rotation='50MB')
+        logger.add(f'log/{self.name}-{timestamp}.log', rotation='5MB')
         self.transcriptor = WhisperLargeV3(**kwargs)
         self.dataset = self.load_data()
     
@@ -73,7 +73,7 @@ class CMMLU(BaseBenchmark):
                     response_audio, sample_rate = model.generate_a2a(audio)
                     transcription = self.transcriptor.inference(response_audio, generate_kwargs={"language": "english"})
                     logger.info(f"Response: {transcription}")
-                    tmp['result'].append({'response': transcription, 'right_answer': right_answer})
+                    tmp['result'].append({'idx': idx, 'response': transcription, 'right_answer': right_answer})
                 logger.info('====================================')
                 results.append(tmp)
             except Exception as e:
@@ -102,7 +102,8 @@ class CMMLU(BaseBenchmark):
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
-        output_file = os.path.join(output_dir, f'{model_name}-{self.name}.json')
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{timestamp}.json')
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=4)
         logger.info(f"Generated results saved to {output_file}.")

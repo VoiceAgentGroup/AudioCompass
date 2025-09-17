@@ -6,14 +6,14 @@ import numpy as np
 from .base import BaseBenchmark
 import torchaudio
 import torch
+import datetime
 
 class CMMLU(BaseBenchmark):
     def __init__(self, data_dir="datas/cmmlu", cache_dir='cache', **kwargs):
         self.name = 'cmmlu_ppl'
         self.data_dir = os.path.join(cache_dir, data_dir)
-        import datetime
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        logger.add(f'log/{self.name}-{timestamp}.log', rotation='50MB')
+        logger.add(f'log/{self.name}-{timestamp}.log', rotation='5MB')
         self.dataset = self.load_data()
 
     def concat_audio(self, question_path, choice_path) -> list:
@@ -115,7 +115,8 @@ class CMMLU(BaseBenchmark):
     def save_generated_results(self, results, output_dir, model_name):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
-        output_file = os.path.join(output_dir, f'{model_name}-{self.name}.json')
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{timestamp}.json')
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=4)
         logger.info(f"Generated results saved to {output_file}.")
