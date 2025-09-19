@@ -19,15 +19,16 @@ def generate_text_chat(client, *args, **kwargs):
     return None
 
 class AIClient:
-    def __init__(self):
+    def __init__(self, model):
         self.client = OpenAI(
             api_key=os.getenv('OPENAI_API_KEY'),
             base_url=os.getenv('OPENAI_URL'),
         )
+        self.model = model
         
-    def generate(self, model, prompt):
+    def generate(self, prompt):
         response = generate_text_chat(client=self.client,
-            model=model,
+            model=self.model,
             messages=[{"role": "user", "content": prompt}],
             max_tokens=1024,
             frequency_penalty=0,
