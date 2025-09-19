@@ -92,7 +92,8 @@ class CMMLU(BaseBenchmark):
             subject_results = subject_item['result']
             for result in subject_results:
                 answer = extractor.rule_extract(result['response'])
-                correct += (answer.lower() == result['right_answer'].lower())
+                if answer is not None and answer.lower() == result['right_answer'].lower():
+                    correct += 1
                 logger.info(f"idx: {result['idx']} answer: {answer} right_answer: {result['right_answer']}")
                 total += 1
         acc = correct / total
