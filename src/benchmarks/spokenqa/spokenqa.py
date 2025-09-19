@@ -11,10 +11,11 @@ import datetime
 
 
 class SpokenQA(BaseBenchmark):
-    def __init__(self, split, data_dir="datas/spokenqa", cache_dir='cache', **kwargs):
+    def __init__(self, split, task='s2s', data_dir="datas/spokenqa", cache_dir='cache', **kwargs):
         self.name = 'spokenqa'
         self.check_split(split)
         self.split = split
+        self.task = task
         self.data_dir = os.path.join(cache_dir, data_dir)
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         logger.add(f'log/{self.name}-{self.split}-{timestamp}.log', rotation='5MB')
@@ -37,7 +38,7 @@ class SpokenQA(BaseBenchmark):
         
         for _, row in df.iterrows():
             data = row.to_dict()
-            data['answers'] = ';'.split(data['answers'])
+            data['answers'] = data['answers'].split(';')
             audio_path = os.path.join(self.data_dir, self.split, 'audios', data['audio_filename'])
             if not os.path.exists(audio_path):
                 logger.warning(f"Audio file {audio_path} not found, skipping...")
@@ -67,11 +68,14 @@ class SpokenQA(BaseBenchmark):
             tmp = {k: v for k, v in item.items() if k != 'audio'}
             logger.info(f"Question: {item['question']}")
             try:
-                response_audio, sample_rate = model.generate_a2a(item['audio'])
-                transcription = self.transcriptor.inference(response_audio, generate_kwargs={"language": "english"})
-                logger.info(f'Response: {transcription}')
+                if self.task == 's2s':
+                    response_audio, sample_rate = model.generate_a2a(item['audio'])
+                    response = self.transcriptor.inference(response_audio, generate_kwargs={"language": "english"})
+                else:
+                    response = model.generate_a2t(item['audio'])
+                logger.info(f'Response: {response}')
                 logger.info('====================================')
-                tmp['response'] = transcription
+                tmp['response'] = response
                 results.append(tmp)
             except Exception as e:
                 logger.error(e)
@@ -84,7 +88,7 @@ class SpokenQA(BaseBenchmark):
         return results
 
     def evaluate(self, data):
-        evaluator = Evaluator()
+        evaluator = Evaluator(split=self.split)
         evaluated_results = evaluator.rule_evaluate(data)
         logger.info("Evaluation completed.")
         return evaluated_results
@@ -94,7 +98,7 @@ class SpokenQA(BaseBenchmark):
         os.makedirs(output_dir, exist_ok=True)
         model_name = model_name.split('/')[-1]
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}-{datetime}.jsonl')
+        output_file = os.path.join(output_dir, f'{model_name}-{self.name}-{self.split}-{timestamp}.jsonl')
         with open(output_file, 'w') as f:
             for record in results:
                 json_line = json.dumps(record)
