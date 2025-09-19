@@ -1,11 +1,9 @@
 from .client import AIClient
 
 class Extractor:
-    def __init__(self):
-        self.client = AIClient()
-
+    
     def rule_extract(self, response):
-        response = response.lower()
+        response = response.lower().strip()
         if response.startswith('<1>') or response.startswith('<2>') or response.startswith('<3>'):
             response = response[3:].strip()
         for template in [
@@ -200,23 +198,28 @@ class Extractor:
             if response == choice:
                 return choice.upper()
             for punc in ['.', ',', ':', ')', ' ']:
-                if response.startswith(choice+punc):
+                if response.startswith(choice + punc):
                     return choice.upper()
-
-        if 'would be a.' in response:
+        
+        # for ASR flaws
+        if response.startswith(('see', 'seam')):
+            return 'C'
+        elif response.startswith(('eh', 'hey', 'ah', 'ugh', 'uh')):
+            return 'A'
+        # other special cases
+        elif 'would be a.' in response:
             return 'A'
         elif 'would be \"a.' in response:
             return 'A'
         elif 'the best option from the given choices would be a scorpion (a)' in response:
             return 'A'
         else:
-            # print({response})
-            # print('====')
             return None
         
     def llm_extract(self, model, response):
+        client = AIClient(model)
         instruction_prompt = """# Instruction
 Above is the answer provided by an AI model for a Multiple Choice Question with four answer choices (A, B, C, or D). Based on the above text, extract the final answer from it. If you can find the answer from the above text, only output the answer choice. Do not include anything else in your output. For example, a possible output is "C". If you cannot find the answer, only output "None!"."""
         content = response + "\n\n" + instruction_prompt
-        extracted_answer = AIClient.generate(model, content)
+        extracted_answer = client.generate(content)
         return extracted_answer
