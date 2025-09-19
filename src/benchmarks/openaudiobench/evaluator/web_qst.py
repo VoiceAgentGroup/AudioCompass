@@ -1,6 +1,4 @@
 import traceback
-import multiprocessing
-import numpy as np
 from tqdm import tqdm
 from src.utils.client import AIClient
 from .config import judge_model
@@ -53,16 +51,12 @@ You should respond in JSON format. First provide a one-sentence concise analysis
             return {"judgment": ""}
     
     def evaluate(self, datas):
-        messages = []
-        for data in datas:
-            messages.append(self.build_eval_messages(data))
-        
-        judge = AIClient()
-        with multiprocessing.Pool(4) as pool:
-            judged_data = list(tqdm(pool.imap(judge.generate, judge_model, messages), total=len(messages)))
-        judged_data = list(map(self.check_eval_response_format, judged_data))
+        judge = AIClient(judge_model)
         correct_count = 0
-        for item in judged_data:
-            if item["judgment"] == "correct":
+        for data in tqdm(datas):
+            message = self.build_eval_messages(data)
+            judged_result = judge.generate(message)
+            judged_result = self.check_eval_response_format(judged_result)
+            if judged_result["judgment"] == "correct":
                 correct_count += 1
-        return {'acc': correct_count / len(judged_data)}
+        return {'acc': correct_count / len(data)}

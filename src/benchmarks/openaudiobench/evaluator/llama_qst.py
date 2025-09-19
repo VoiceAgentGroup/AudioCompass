@@ -1,7 +1,5 @@
 import re
 import traceback
-import multiprocessing
-import numpy as np
 from tqdm import tqdm
 from src.utils.client import AIClient
 from .config import judge_model
@@ -55,21 +53,17 @@ The answer is incorrect and does not match the standard answer, the score is [In
         return messages
     
     def evaluate(self, datas):
-        messages = []
-        for data in datas:
-            messages.append(self.build_eval_messages(data))
-        
-        judge = AIClient()
-        with multiprocessing.Pool(4) as pool:
-            judged_data = list(tqdm(pool.imap(judge.generate, judge_model, messages), total=len(messages)))
+        judge = AIClient(judge_model)
         correct_count = 0
-        for item in judged_data:
+        for data in tqdm(datas):
+            message = self.build_eval_messages(data)
+            judged_result = judge.generate(message)
             try:
-                score = re.findall(r"[Tt]he score is \[(Correct|Incorrect)\]", item)[0]
-                if score == "Correct":
+                score = re.findall(r"[Tt]he score is \[(Correct|Incorrect)\]", judged_result)[0]
+                if score == "correct":
                     correct_count += 1
             except:
-                print(f"Error parsing score from response: {item}")
+                print(f"Error parsing score from response: {judged_result}")
                 print(traceback.format_exc())
                 assert 0
-        return {'acc': correct_count / len(datas)}
+        return {'acc': correct_count / len(data)}

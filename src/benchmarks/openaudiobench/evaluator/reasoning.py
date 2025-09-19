@@ -1,5 +1,4 @@
 import re
-import multiprocessing
 import numpy as np
 from tqdm import tqdm
 from src.utils.client import AIClient
@@ -56,22 +55,15 @@ class ReasoningQAEvaluator:
     
 
     def evaluate(self, datas):
-        messages = []
-        for data in datas:
-            messages.append(self.build_eval_messages(data))
-        
-        judge = AIClient()
-        with multiprocessing.Pool(4) as pool:
-            judged_data = list(tqdm(pool.imap(judge.generate, judge_model, messages), total=len(messages)))
+        judge = AIClient(judge_model)
         scores = []
-        for item in judged_data:
-            res = re.findall(r'\[([0-5])\]', item)
+        for data in tqdm(datas):
+            message = self.build_eval_messages(data)
+            judged_result = judge.generate(message)
+            res = re.findall(r'\[([0-5])\]', judged_result)
             if len(res) >= 1:
                 score = int(res[-1])
             else:
                 score = -1
             scores.append(score)
         return {'gpt': np.mean(scores)}
-
-            
-        

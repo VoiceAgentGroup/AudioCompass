@@ -1,6 +1,5 @@
 import re
 import traceback
-import multiprocessing
 import numpy as np
 from tqdm import tqdm
 from src.utils.client import AIClient
@@ -43,17 +42,12 @@ class AlpacaEvaluator:
             assert 0
     
     def evaluate(self, datas):
-        messages = []
-        for data in datas:
-            messages.append(self.build_eval_messages(data))
-        
-        judge = AIClient()
-        with multiprocessing.Pool(4) as pool:
-            judged_data = list(tqdm(pool.imap(judge.generate, judge_model, messages), total=len(messages)))
-        
+        judge = AIClient(judge_model)
         scores = []
-        for item in judged_data:
-            score = self.get_eval_score(item)
+        for data in tqdm(datas):
+            message = self.build_eval_messages(data)
+            judged_result = judge.generate(message)
+            score = self.get_eval_score(judged_result)
             if score:
                 scores.append(score)
         return {'gpt': np.mean(scores)}
