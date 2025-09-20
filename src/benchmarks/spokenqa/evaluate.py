@@ -104,8 +104,9 @@ The answer is incorrect and does not match the standard answer, the score is [In
                 except:
                     print(f"Error parsing score from response: {judged_result}")
                     print(traceback.format_exc())
-                    assert 0
-        return {'acc': correct_count / len(data)}
+                    # assert 0
+            print(f'correct_count: {correct_count}\n')
+        return {'acc': correct_count / len(datas)}
 
     def rule_evaluate(self, datas):
         correct_count = 0
