@@ -201,6 +201,7 @@ class VoxEval(BaseBenchmark):
                 result_item = {k: v for k, v in item.items() if k != 'audio'}
                 result_item['idx'] = idx
                 result_item['response'] = transcription
+                results.append(result_item)
                 
                 logger.info(f"Response: {transcription}")
                 logger.info('====================================')
