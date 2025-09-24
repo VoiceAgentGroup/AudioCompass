@@ -36,7 +36,7 @@ class SpokenQA(BaseBenchmark):
         df = pd.read_csv(data_csv_path)
         dataset = []
         
-        for _, row in df.iterrows():
+        for _, row in tqdm(df.iterrows(), total=len(df)):
             data = row.to_dict()
             data['answers'] = data['answers'].split(';')
             audio_path = os.path.join(self.data_dir, self.split, 'audios', data['audio_filename'])
