@@ -12,6 +12,8 @@ from .src_glm.speech_tokenizer.modeling_whisper import WhisperVQEncoder
 from .src_glm.flow_inference import AudioDecoder
 from .src_glm.audio_process import AudioStreamProcessor
 
+from typing import Dict
+
 import sys
 sys.path.append('src/models/src_glm/third_party/Matcha-TTS')
 sys.path.append('src/models/src_glm')
@@ -64,8 +66,8 @@ class GLMAssistant(VoiceAssistant):
         audio_tokens = "".join([f"<|audio_{x}|>" for x in audio_tokens])
         audio_tokens = "<|begin_of_audio|>" + audio_tokens + "<|end_of_audio|>"
         user_input = audio_tokens
-        system_prompt = "User will provide you with a speech instruction. Do it step by step. First, think about the instruction and respond in a interleaved manner, with 13 text token followed by 26 audio tokens. "
-
+        system_prompt = "User will provide you with a speech instruction. Do it step by step. First, think about the instruction and respond in a interleaved manner, with 13 text token followed by 26 audio tokens. " 
+        
         inputs = f"<|system|>\n{system_prompt}"
         inputs += f"<|user|>\n{user_input}<|assistant|>streaming_transcription\n"
         inputs = self.glm_tokenizer([inputs], return_tensors="pt")
@@ -83,6 +85,7 @@ class GLMAssistant(VoiceAssistant):
     def generate_t2t(
         self,
         text,
+        max_new_tokens=2048
     ):
         user_input = text
         system_prompt = "User will provide you with a text instruction. Do it step by step. First, think about the instruction and respond in a interleaved manner, with 13 text token followed by 26 audio tokens."
@@ -99,34 +102,6 @@ class GLMAssistant(VoiceAssistant):
                 text_tokens.append(item)
         # logger.info(text_tokens)
         return self.glm_tokenizer.decode(text_tokens, ignore_special_tokens=False)
-    
-    def generate_a2t(
-        self,
-        audio,
-        max_new_tokens=4096,
-    ):
-        audio_tokens = extract_speech_token(
-            self.whisper_model, self.feature_extractor, [tuple([torch.from_numpy(audio['array']).to(torch.float32).unsqueeze(0), audio['sampling_rate']])]
-        )[0]
-        assert len(audio_tokens) != 0
-        audio_tokens = "".join([f"<|audio_{x}|>" for x in audio_tokens])
-        audio_tokens = "<|begin_of_audio|>" + audio_tokens + "<|end_of_audio|>"
-        user_input = audio_tokens
-        system_prompt = "User will provide you with a speech instruction. Do it step by step. First, think about the instruction and respond in a interleaved manner, with 13 text token followed by 26 audio tokens. "
-
-        inputs = f"<|system|>\n{system_prompt}"
-        inputs += f"<|user|>\n{user_input}<|assistant|>streaming_transcription\n"
-        inputs = self.glm_tokenizer([inputs], return_tensors="pt")
-        inputs = inputs.to('cuda')
-
-        rtn = self.glm_model.generate(**inputs, max_new_tokens=max_new_tokens)[:, inputs.input_ids.size(1):]
-        text_tokens = []
-        audio_offset = self.glm_tokenizer.convert_tokens_to_ids('<|audio_0|>')
-        for item in rtn[0]:
-            if item < audio_offset:
-                text_tokens.append(item)
-        # logger.info(text_tokens)
-        return self.glm_tokenizer.decode(text_tokens, ignore_special_tokens=False)[:-9]
 
     def generate_at2t(
         self,
