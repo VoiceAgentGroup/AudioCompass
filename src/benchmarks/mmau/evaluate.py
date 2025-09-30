@@ -1,7 +1,7 @@
 import argparse
 import json
 from tqdm import tqdm
-from src.utils.matcher import string_match
+from src.utils.judge import string_match
 
 def _evaluate(data):
     corr, total = 0, 0

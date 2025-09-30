@@ -2,7 +2,7 @@ from tqdm import tqdm
 import multiprocessing
 import json
 from openai import OpenAI
-from src.utils.ai_judge import generate_text_chat
+from src.utils.client import generate_text_chat
 from argparse import ArgumentParser
 import os
 import httpx
